@@ -7,6 +7,7 @@ const config = {
   DATABASENAME: process.env.DATABASENAME,
   DATABASEHOST: process.env.DATABASEHOST,
   DatabaseportPORT: Number(process.env.DATABASEPORT),
+  JSONWEBSECRECT: process.env.JSONWEBSECRECT,
 };
 
 console.log(config);

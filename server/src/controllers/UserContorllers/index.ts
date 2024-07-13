@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { RejectResponse, SucessResponse } from "../../utils";
 import { Users } from "../../Models";
 import bycrptjs from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken";
+import config from "../../Config";
 const createtheuser = async (req: Request, res: Response) => {
   try {
     const { Name, Email, Password } = req.body;
@@ -54,7 +56,11 @@ const logintheuser = async (req: Request, res: Response) => {
       return RejectResponse(res, "user did not signup yet", 400);
     }
 
-    return SucessResponse(res, { message: "sucessfully log in" }, 200);
+    let token = jsonwebtoken.sign({ Email }, config.JSONWEBSECRECT as string);
+
+    res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+
+    return SucessResponse(res, { message: "sucessfully log in", token }, 200);
   } catch (error) {
     console.log("error from getting login the user");
     return RejectResponse(res, "internal server errors", 500);
