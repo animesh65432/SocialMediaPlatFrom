@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Config_1 = __importDefault(require("./Config"));
 var express_1 = __importDefault(require("express"));
 var db_1 = __importDefault(require("./db"));
+var router_1 = require("./router");
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use("/users", router_1.UserRouter);
 db_1.default
     .sync()
     .then(function (res) {
