@@ -8,6 +8,8 @@ const config = {
   DATABASEHOST: process.env.DATABASEHOST,
   DatabaseportPORT: Number(process.env.DATABASEPORT),
   JSONWEBSECRECT: process.env.JSONWEBSECRECT,
+  NODEMAILERUSER: process.env.NODEMAILERUSER,
+  NODEMAILERPASSWORD: process.env.NODEMAILERPASSWORD,
 };
 
 console.log(config);

@@ -1,8 +1,9 @@
 import config from "./Config";
 import express from "express";
 import database from "./db";
-import { UserRouter } from "./router";
+import { UserRouter, forgetPasswordrouter } from "./router";
 import cookieParser from "cookie-parser";
+import { Users, ForgetPassword } from "./Models";
 import cors from "cors";
 const app = express();
 app.use(
@@ -15,6 +16,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", UserRouter);
+app.use("/forget", forgetPasswordrouter);
+
+Users.hasMany(ForgetPassword);
+ForgetPassword.belongsTo(Users);
+
 database
   .sync()
   .then((res) => {

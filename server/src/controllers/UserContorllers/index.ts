@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RejectResponse, SucessResponse } from "../../utils";
+import { RejectResponse, SuccessResponse } from "../../utils";
 import { Users } from "../../Models";
 import bycrptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
@@ -27,7 +27,7 @@ const createtheuser = async (req: Request, res: Response) => {
       Password: hashpassword,
     });
 
-    return SucessResponse(
+    return SuccessResponse(
       res,
       {
         data: "sucessfully create the user",
@@ -58,9 +58,15 @@ const logintheuser = async (req: Request, res: Response) => {
 
     let token = jsonwebtoken.sign({ Email }, config.JSONWEBSECRECT as string);
 
+    let checkpassword = await bycrptjs.compare(Password, checktheuser.Password);
+
+    if (!checkpassword) {
+      return RejectResponse(res, "Password is wrong", 400);
+    }
+
     res.cookie("token", token, { maxAge: 900000, httpOnly: true });
 
-    return SucessResponse(res, { message: "sucessfully log in", token }, 200);
+    return SuccessResponse(res, { message: "sucessfully log in", token }, 200);
   } catch (error) {
     console.log("error from getting login the user");
     return RejectResponse(res, "internal server errors", 500);

@@ -7,10 +7,12 @@ import { addthetoken } from "../store/slices/UserSlices";
 interface USESINGINHOOKSRETURN {
   loading: boolean;
   logintheuser: (data: SinginTypes) => Promise<boolean>;
+  errorMessages: string;
 }
 
 const useSinginhook = (): USESINGINHOOKSRETURN => {
   const [loading, setloading] = useState<boolean>(false);
+  const [errorMessages, seterrorMessages] = useState<string>("");
   const dispatch = useDispatch();
 
   const logintheuser = async (data: SinginTypes) => {
@@ -22,16 +24,16 @@ const useSinginhook = (): USESINGINHOOKSRETURN => {
 
       let token = reponse?.data?.data?.token;
       dispatch(addthetoken(token));
-
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      seterrorMessages(error?.response?.data?.messages);
       return false;
     } finally {
       setloading(false);
     }
   };
 
-  return { loading, logintheuser };
+  return { loading, logintheuser, errorMessages };
 };
 
 export default useSinginhook;

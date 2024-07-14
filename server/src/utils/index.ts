@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-function SucessResponse(
+function SuccessResponse(
   res: Response,
   data: object,
   code: number,
@@ -18,4 +18,5 @@ function RejectResponse(res: Response, messages: string, code: number) {
     messages,
   });
 }
-export { SucessResponse, RejectResponse };
+
+export { SuccessResponse, RejectResponse };
