@@ -1,3 +1,4 @@
 import UserRouter from "./userRouter";
 import forgetPasswordrouter from "./forgetpassword";
-export { UserRouter, forgetPasswordrouter };
+import PostRouter from "./postrouter";
+export { UserRouter, forgetPasswordrouter, PostRouter };

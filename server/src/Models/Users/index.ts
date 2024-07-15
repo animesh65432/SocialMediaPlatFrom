@@ -1,11 +1,13 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import database from "../../db";
 
-interface UserAttributes {
+export interface UserAttributes {
   Id: number;
   Name: string;
   Email: string;
   Password: string;
+  PhotoUrl?: string;
+  Gender?: "Male" | "Female";
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "Id"> {}
@@ -32,6 +34,15 @@ const Users = database.define<UserInstance>("Users", {
   Password: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  PhotoUrl: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: "",
+  },
+  Gender: {
+    type: DataTypes.ENUM("Male", "Female"),
+    allowNull: true,
   },
 });
 

@@ -68,7 +68,7 @@ const logintheuser = async (req: Request, res: Response) => {
 
     return SuccessResponse(res, { message: "sucessfully log in", token }, 200);
   } catch (error) {
-    console.log("error from getting login the user");
+    console.log("error from getting login the user", error);
     return RejectResponse(res, "internal server errors", 500);
   }
 };

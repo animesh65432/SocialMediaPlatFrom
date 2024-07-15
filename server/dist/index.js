@@ -20,8 +20,11 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use("/users", router_1.UserRouter);
 app.use("/forget", router_1.forgetPasswordrouter);
+app.use("/post", router_1.PostRouter);
 Models_1.Users.hasMany(Models_1.ForgetPassword);
 Models_1.ForgetPassword.belongsTo(Models_1.Users);
+Models_1.Users.hasMany(Models_1.Posts);
+Models_1.Posts.belongsTo(Models_1.Users);
 db_1.default
     .sync()
     .then(function (res) {
