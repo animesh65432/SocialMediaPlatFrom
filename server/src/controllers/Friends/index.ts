@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Users, UserFriends } from "../../Models";
 import { RejectResponse, SuccessResponse } from "../../utils";
-import { Model, Op } from "sequelize";
+import { Op, literal } from "sequelize";
 import database from "../../db";
 
 const getalltheunknowfriends = async (req: Request, res: Response) => {
@@ -12,9 +12,14 @@ const getalltheunknowfriends = async (req: Request, res: Response) => {
       where: {
         Id: {
           [Op.ne]: id,
+          [Op.notIn]: literal(`(
+            SELECT FriendId FROM UserFrineds WHERE UserId = ${id}
+          )`),
         },
       },
+      attributes: ["Name", "PhotoUrl", "Id"],
     });
+
     return SuccessResponse(res, { friends: users }, 200);
   } catch (errors) {
     console.log("errors from getting the frineds");
@@ -30,7 +35,7 @@ const addthefrined = async (req: Request, res: Response) => {
     let chechuserfriend = await UserFriends.findOne({
       where: {
         UserId: currenuserid,
-        FrinedId: Number(FrinedId),
+        FriendId: Number(FrinedId),
       },
     });
 
@@ -40,7 +45,7 @@ const addthefrined = async (req: Request, res: Response) => {
     let userfreind = await UserFriends.create(
       {
         UserId: currenuserid,
-        FrinedId: Number(FrinedId),
+        FriendId: Number(FrinedId),
       },
       { transaction: t }
     );
@@ -56,53 +61,64 @@ const deletethefrined = async (req: Request, res: Response) => {
   const t = await database.transaction();
   try {
     const { FrinedId } = req.params;
+    console.log(FrinedId);
+
+    // Convert FrinedId to a number and validate
+    let friendid = Number(FrinedId);
+    if (isNaN(friendid)) {
+      console.log(friendid);
+      return RejectResponse(res, "Invalid FriendId", 400);
+    }
 
     let chechuserfriend = await UserFriends.findOne({
       where: {
         UserId: req.user?.Id,
-        FrinedId: Number(FrinedId),
+        FriendId: friendid,
       },
       transaction: t,
     });
 
     if (!chechuserfriend) {
-      return RejectResponse(res, "user is not friends", 400);
+      await t.rollback();
+      return RejectResponse(res, "User is not friends", 400);
     }
 
     await chechuserfriend.destroy({ transaction: t });
 
     await t.commit();
-    return SuccessResponse(res, { message: "sucessfully delete it" }, 200);
+    return SuccessResponse(res, { message: "Successfully deleted" }, 200);
   } catch (error) {
     await t.rollback();
     console.log(error);
-    return RejectResponse(res, "internal server errors", 500);
+    return RejectResponse(res, "Internal server error", 500);
   }
 };
+
 const getallthefriend = async (req: Request, res: Response) => {
   try {
-    let currenuserid = req.user?.Id;
+    let currentUserId = req.user?.Id;
 
-    let friends = await UserFriends.findAll({
+    let friends = await Users.findAll({
       where: {
-        id: currenuserid,
-      },
-      include: [
-        {
-          model: Users,
-          attributes: [],
+        Id: {
+          [Op.ne]: currentUserId,
+          [Op.in]: literal(
+            `(SELECT FriendId FROM UserFrineds WHERE UserId = ${currentUserId})`
+          ),
         },
-      ],
+      },
     });
 
     return SuccessResponse(res, { friends }, 200);
   } catch (error) {
-    return RejectResponse(res, "intrenal server errors", 500);
+    console.log("errors from getting all friends", error);
+    return RejectResponse(res, "internal server errors", 500);
   }
 };
+
 export {
   getalltheunknowfriends,
-  deletethefrined,
   addthefrined,
   getallthefriend,
+  deletethefrined,
 };

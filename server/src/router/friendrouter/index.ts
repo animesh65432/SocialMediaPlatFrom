@@ -14,11 +14,16 @@ friendsrouter.get(
   middleware,
   controllers.friends.getalltheunknowfriends
 );
-friendsrouter.get("/friends", middleware, controllers.friends.getallthefriend);
+
 friendsrouter.delete(
-  "delete/:FrinedId",
+  "/delete/:FrinedId",
   middleware,
   controllers.friends.deletethefrined
+);
+friendsrouter.get(
+  "/GetFriends",
+  middleware,
+  controllers.friends.getallthefriend
 );
 
 export default friendsrouter;

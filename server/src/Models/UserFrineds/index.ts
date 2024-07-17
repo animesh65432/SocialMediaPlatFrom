@@ -3,7 +3,7 @@ import { Model, DataTypes } from "sequelize";
 
 interface UsersFriendTypes {
   id?: number;
-  FrinedId?: number;
+  FriendId?: number;
   UserId?: number;
 }
 

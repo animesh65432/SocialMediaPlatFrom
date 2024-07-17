@@ -19,7 +19,6 @@ declare global {
 const middleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies.token;
-    console.log(token);
 
     if (!token) {
       return RejectResponse(res, "Token has not been provided", 400);

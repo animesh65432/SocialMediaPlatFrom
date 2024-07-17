@@ -10,6 +10,7 @@ import UpdatePassword from "./components/UpdatePassword";
 import ResetPassword from "./components/ResetPassword";
 import Header from "./components/authenticated/Header";
 import Footer from "./components/authenticated/Footer";
+import Frineds from "./components/authenticated/Frineds/Frineds";
 
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
@@ -22,6 +23,7 @@ const App: React.FC = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/friends" element={<Frineds />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
