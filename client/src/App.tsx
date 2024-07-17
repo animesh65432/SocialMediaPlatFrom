@@ -8,6 +8,8 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import UpdatePassword from "./components/UpdatePassword";
 import ResetPassword from "./components/ResetPassword";
+import Header from "./components/authenticated/Header";
+import Footer from "./components/authenticated/Footer";
 
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
@@ -15,22 +17,26 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <Routes>
-        {isLogin ? (
-          <>
+      {isLogin ? (
+        <>
+          <Header />
+          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="*" element={<NotFound />} />
-          </>
-        ) : (
-          <>
+          </Routes>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <Routes>
             <Route path="/" element={<Navigate to="/singin" />} />
             <Route path="/singin" element={<Singin />} />
             <Route path="/singup" element={<Singup />} />
             <Route path="/reset" element={<ResetPassword />}></Route>
             <Route path="/update/:id" element={<UpdatePassword />}></Route>
-          </>
-        )}
-      </Routes>
+          </Routes>
+        </>
+      )}
     </div>
   );
 };

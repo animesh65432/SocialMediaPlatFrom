@@ -1,10 +1,16 @@
 import config from "./Config";
 import express from "express";
 import database from "./db";
-import { UserRouter, forgetPasswordrouter, PostRouter } from "./router";
+import {
+  UserRouter,
+  forgetPasswordrouter,
+  PostRouter,
+  friendsrouter,
+} from "./router";
 import cookieParser from "cookie-parser";
-import { Users, ForgetPassword, Posts } from "./Models";
+import { Users, ForgetPassword, Posts, UserFriends } from "./Models";
 import cors from "cors";
+
 const app = express();
 app.use(
   cors({
@@ -18,11 +24,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/users", UserRouter);
 app.use("/forget", forgetPasswordrouter);
 app.use("/post", PostRouter);
+app.use("/friends", friendsrouter);
 
 Users.hasMany(ForgetPassword);
 ForgetPassword.belongsTo(Users);
 Users.hasMany(Posts);
 Posts.belongsTo(Users);
+Users.belongsToMany(Users, { through: UserFriends, as: "Friends" });
 
 database
   .sync()

@@ -13,5 +13,6 @@ PostRouter.delete(
 );
 
 PostRouter.get("/GetThePost", middleware, controllers.post.getthepost);
+PostRouter.put("/update/:id", middleware, controllers.post.updatePost);
 
 export default PostRouter;

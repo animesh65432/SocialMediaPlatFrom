@@ -64,7 +64,10 @@ const logintheuser = async (req: Request, res: Response) => {
       return RejectResponse(res, "Password is wrong", 400);
     }
 
-    res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+    res.cookie("token", token, {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
 
     return SuccessResponse(res, { message: "sucessfully log in", token }, 200);
   } catch (error) {

@@ -26,10 +26,6 @@ const Posts = database.define<PostdInstance>("Posts", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  comment: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   video: {
     type: DataTypes.STRING,
     allowNull: true,

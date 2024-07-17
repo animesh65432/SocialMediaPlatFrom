@@ -14,7 +14,7 @@ function SuccessResponse(
 }
 function RejectResponse(res: Response, messages: string, code: number) {
   return res.status(code).json({
-    sucess: true,
+    sucess: false,
     messages,
   });
 }

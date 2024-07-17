@@ -15,8 +15,8 @@ const createthepost = async (req: Request, res: Response) => {
     let filename;
     let url;
     if (!video) {
-      filename = `${Date.now()}.img`;
-      url = await putthefile("img", filename);
+      filename = `${Date.now()}.jpg`;
+      url = await putthefile("image/jpeg", filename);
       newpost = await Posts.create({
         UserId: req.user?.Id,
         img: filename,
@@ -24,7 +24,7 @@ const createthepost = async (req: Request, res: Response) => {
       });
     } else if (!img) {
       filename = `${Date.now()}.mp4`;
-      url = await putthefile("mp4", filename);
+      url = await putthefile("video/mp4", filename);
       newpost = await Posts.create({
         title,
         UserId: req.user?.Id,
@@ -99,4 +99,57 @@ const getthepost = async (req: Request, res: Response) => {
   }
 };
 
-export { createthepost, deletethepost, getthepost };
+const updatePost = async (req: Request, res: Response) => {
+  const t = await database.transaction();
+  try {
+    const { id } = req.params;
+    const { title, video, img } = req.body;
+
+    if (!title) {
+      return RejectResponse(res, "atleast change the title", 400);
+    }
+
+    const post = await Posts.findOne({
+      where: {
+        UserId: req.user?.Id,
+        id,
+      },
+      transaction: t,
+    });
+
+    if (!post) {
+      return RejectResponse(res, "Post not found", 400);
+    }
+
+    let filename;
+    let url;
+
+    if (video) {
+      filename = `${Date.now()}.mp4`;
+      url = await putthefile("video/mp4", filename);
+
+      if (title) {
+        await post.update({ video: filename, title }, { transaction: t });
+      } else {
+        await post.update({ video: filename }, { transaction: t });
+      }
+    } else if (img) {
+      filename = `${Date.now()}.jpg`;
+      url = await putthefile("image/jpeg", filename);
+      if (title) {
+        await post.update({ img: filename, title }, { transaction: t });
+      } else {
+        await post.update({ img: filename }, { transaction: t });
+      }
+    }
+
+    await t.commit();
+    return SuccessResponse(res, { message: "Successfully updated", url }, 202);
+  } catch (error) {
+    await t.rollback();
+    console.error("Error updating post:", error);
+    return RejectResponse(res, "Internal server error", 500);
+  }
+};
+
+export { createthepost, deletethepost, getthepost, updatePost };
