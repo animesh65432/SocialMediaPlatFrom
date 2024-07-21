@@ -4,9 +4,16 @@ import Post from "./authenticated/posts/Post";
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <PostFrom />
-      <Post />
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="container mx-auto">
+        <div className="mb-8">
+          <PostFrom />
+        </div>
+
+        <div>
+          <Post />
+        </div>
+      </div>
     </div>
   );
 };

@@ -19,6 +19,7 @@ const useGetallfriend = (): useGetallfriendtreturntypes => {
       let response = await axios.get(`${backendurl}/friends/Getfriends`, {
         withCredentials: true,
       });
+      console.log(response);
       console.log(response?.data?.data?.friends);
       dispatch(getfriendsforsate(response?.data?.data?.friends));
     } catch (error) {

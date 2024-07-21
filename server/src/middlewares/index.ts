@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import Users, { UserAttributes } from "../Models/Users";
 import { RejectResponse } from "../utils";
 
-type JwtPayload = {
+export type JwtPayload = {
   Email: string;
 };
 

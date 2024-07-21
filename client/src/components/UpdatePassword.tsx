@@ -3,6 +3,7 @@ import useUpdatePassword from "../hooks/useUpdatePassword";
 import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import NotFound from "./NotFound";
+import { Button } from "@mui/material";
 
 const UpdatePassword: React.FC = () => {
   const { id } = useParams();
@@ -45,14 +46,10 @@ const UpdatePassword: React.FC = () => {
           onChange={(e) => setpassword(e.target.value)}
           className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
         />
-        <button
-          type="submit"
-          className={`mt-6 w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {loading ? "laoding" : "Reset Password"}
-        </button>
+
+        <Button type="submit" variant="contained" className="w-full">
+          {loading ? "loading" : "Update Password"}
+        </Button>
       </form>
       <Toaster />
     </div>

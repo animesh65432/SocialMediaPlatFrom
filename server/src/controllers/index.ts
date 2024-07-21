@@ -7,6 +7,7 @@ import {
   getalltheunknowfriends,
   deletethefrined,
 } from "./Friends";
+import { sendthemessage } from "./messages";
 
 const controllers = {
   UserControllers: { createtheuser, logintheuser },
@@ -18,5 +19,6 @@ const controllers = {
     getalltheunknowfriends,
     deletethefrined,
   },
+  messages: { sendthemessage },
 };
 export default controllers;

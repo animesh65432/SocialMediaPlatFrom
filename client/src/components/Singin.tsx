@@ -3,9 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import SinginSchema from "../Schema/Singin";
 import { SinginTypes } from "../types";
-import useSinginhook from "../hooks/useSinginhook";
+import { useSinginhook } from "../hooks/customhooks";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { Button, CircularProgress } from "@mui/material";
 
 const Singin: React.FC = () => {
   const {
@@ -28,7 +29,7 @@ const Singin: React.FC = () => {
 
   const onsubmit = async (data: SinginTypes) => {
     try {
-      let res = await logintheuser(data);
+      const res = await logintheuser(data);
       console.log(res);
       if (res) {
         toast.success("Successfully signed in the user");
@@ -38,6 +39,7 @@ const Singin: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred while signing in");
     }
   };
 
@@ -47,8 +49,6 @@ const Singin: React.FC = () => {
         onSubmit={handleSubmit(onsubmit)}
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
-
         <label
           htmlFor="Email"
           className="block mb-2 text-sm font-medium text-gray-700"
@@ -81,29 +81,27 @@ const Singin: React.FC = () => {
           </span>
         )}
 
-        <button
+        <Button
+          variant="contained"
+          color="primary"
+          className="my-5 w-full"
           type="submit"
-          className={`mt-6 w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
           disabled={loading}
         >
-          {loading ? "Loading..." : "Sign In"}
-        </button>
-        <button
-          type="button"
-          className="mt-4 w-full p-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
+        </Button>
+        <span
           onClick={ongotosingup}
+          className="text-blue-600 underline block text-xl"
         >
-          Create Account
-        </button>
-        <button
-          type="button"
-          className="mt-4 w-full p-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+          Create Acoount
+        </span>
+        <span
           onClick={ongotoresetpassword}
+          className="text-blue-600 underline text-xl"
         >
           Reset Password
-        </button>
+        </span>
       </form>
       <Toaster position="top-right" reverseOrder={false} />
     </div>

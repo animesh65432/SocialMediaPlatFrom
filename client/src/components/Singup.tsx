@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SignupSchema from "../Schema/Singup";
 import { SignupTypes } from "../types";
-import useSinguphook from "../hooks/useSinguphook";
+import { useSinguphook } from "../hooks/customhooks";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const Signup: React.FC = () => {
   const {
@@ -41,7 +42,6 @@ const Signup: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
         <label
           htmlFor="UserName"
           className="block mb-2 text-sm font-medium text-gray-700"
@@ -57,7 +57,6 @@ const Signup: React.FC = () => {
         <span className="text-sm text-red-600">
           {errors.Name && errors.Name.message}
         </span>
-
         <label
           htmlFor="Email"
           className="block mb-2 text-sm font-medium text-gray-700"
@@ -73,7 +72,6 @@ const Signup: React.FC = () => {
         <span className="text-sm text-red-600">
           {errors.Email && errors.Email.message}
         </span>
-
         <label
           htmlFor="Password"
           className="block mb-2 text-sm font-medium text-gray-700"
@@ -87,7 +85,6 @@ const Signup: React.FC = () => {
           className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
         ></input>
         <span>{errors.Password && errors.Password.message}</span>
-
         <label
           htmlFor="ConfirmPassword"
           className="block mb-2 text-sm font-medium text-gray-700"
@@ -103,22 +100,17 @@ const Signup: React.FC = () => {
         <span className="text-sm text-red-600">
           {errors.ConfirmPassword && errors.ConfirmPassword.message}
         </span>
-
-        <button
-          type="submit"
-          className={`mt-6 w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
+        <Button variant="contained" className="w-full my-5" type="submit">
           {" "}
           {loading ? "Loading..." : "Sign up"}
-        </button>
-        <button
+        </Button>
+
+        <span
+          className="text-blue-600 underline text-xl"
           onClick={onlogintosingin}
-          className="mt-4 w-full p-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           login
-        </button>
+        </span>
       </form>
       <Toaster position="top-right" reverseOrder={false} />
     </div>

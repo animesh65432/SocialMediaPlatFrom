@@ -25,6 +25,8 @@ const createtheuser = async (req: Request, res: Response) => {
       Name,
       Email,
       Password: hashpassword,
+      PhotoUrl:
+        "https://tg-stockach.de/wp-content/uploads/2020/12/5f4d0f15338e20133dc69e95_dummy-profile-pic-300x300.png",
     });
 
     return SuccessResponse(

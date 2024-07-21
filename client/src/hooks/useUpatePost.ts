@@ -32,6 +32,7 @@ const useUpatePost = (): updatepostretruntypes => {
         );
         url = response?.data?.data?.url;
 
+        console.log(data.img[0]);
         await axios.put(url, data.img[0]);
       } else if (data.video) {
         response = await axios.put(

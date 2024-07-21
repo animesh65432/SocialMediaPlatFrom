@@ -7,8 +7,9 @@ import database from "../../db";
 const createthepost = async (req: Request, res: Response) => {
   try {
     const { img, title, video } = req.body;
+    let user = req.user;
 
-    if (!title) {
+    if (!title || !user) {
       return RejectResponse(res, "invaild credatonals", 400);
     }
     let newpost;
@@ -18,17 +19,21 @@ const createthepost = async (req: Request, res: Response) => {
       filename = `${Date.now()}.jpg`;
       url = await putthefile("image/jpeg", filename);
       newpost = await Posts.create({
-        UserId: req.user?.Id,
+        UserId: user.Id,
         img: filename,
         title,
+        userName: user.Name,
+        userPhotoUrl: user.PhotoUrl,
       });
     } else if (!img) {
       filename = `${Date.now()}.mp4`;
       url = await putthefile("video/mp4", filename);
       newpost = await Posts.create({
         title,
-        UserId: req.user?.Id,
+        UserId: user.Id,
         video: filename,
+        userName: user.Name,
+        userPhotoUrl: user.PhotoUrl,
       });
     }
 

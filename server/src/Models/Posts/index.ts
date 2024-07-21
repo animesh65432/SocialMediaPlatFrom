@@ -8,28 +8,42 @@ interface PostAttributes {
   comment?: string;
   UserId?: number;
   video?: string;
+  userPhotoUrl: string;
+  userName: string;
 }
 
 interface PostdInstance extends Model<PostAttributes>, PostAttributes {}
 
-const Posts = database.define<PostdInstance>("Posts", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
+const Posts = database.define<PostdInstance>(
+  "Posts",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    img: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    video: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    userPhotoUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    userName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   },
-  img: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  video: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-});
+  { timestamps: true }
+);
 
 export default Posts;

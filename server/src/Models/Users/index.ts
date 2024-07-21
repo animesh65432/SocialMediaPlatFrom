@@ -6,7 +6,7 @@ export interface UserAttributes {
   Name: string;
   Email: string;
   Password: string;
-  PhotoUrl?: string;
+  PhotoUrl: string;
   Gender?: "Male" | "Female";
 }
 
@@ -37,7 +37,7 @@ const Users = database.define<UserInstance>("Users", {
   },
   PhotoUrl: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     defaultValue: "",
   },
   Gender: {

@@ -7,6 +7,9 @@ type Post = {
   comment?: string;
   UserId?: number;
   video?: string;
+  userPhotoUrl?: string;
+  userName?: string;
+  createdAt?: string;
 };
 
 type PostsState = {

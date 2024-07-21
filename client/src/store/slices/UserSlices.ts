@@ -18,6 +18,7 @@ const UserSlices = createSlice({
       state.idtoken = "";
       localStorage.removeItem("token");
     },
+    
   },
 });
 
