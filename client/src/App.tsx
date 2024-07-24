@@ -11,9 +11,7 @@ import {
   ResetPassword,
   Header,
   Footer,
-  Frineds,
 } from "./components";
-import Messages from "./components/authenticated/Messages/Messages";
 
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
@@ -26,8 +24,6 @@ const App: React.FC = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/friends" element={<Frineds />}></Route>
-            <Route path="/messages" element={<Messages />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
