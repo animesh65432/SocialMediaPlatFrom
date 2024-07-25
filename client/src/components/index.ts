@@ -6,6 +6,7 @@ import UpdatePassword from "./UpdatePassword";
 import ResetPassword from "./ResetPassword";
 import Header from "./authenticated/Header";
 import Footer from "./authenticated/Footer";
+import Profile from "./authenticated/Profile/Profile";
 export {
   Singin,
   Home,
@@ -15,4 +16,5 @@ export {
   ResetPassword,
   Header,
   Footer,
+  Profile,
 };

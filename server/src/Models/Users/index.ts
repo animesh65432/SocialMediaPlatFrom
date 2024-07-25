@@ -38,7 +38,8 @@ const Users = database.define<UserInstance>("Users", {
   PhotoUrl: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: "",
+    defaultValue:
+      "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
   },
   Gender: {
     type: DataTypes.ENUM("Male", "Female"),

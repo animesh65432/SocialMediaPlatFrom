@@ -11,6 +11,7 @@ import {
   ResetPassword,
   Header,
   Footer,
+  Profile,
 } from "./components";
 
 const App: React.FC = () => {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/Profile" element={<Profile />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

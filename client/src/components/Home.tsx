@@ -9,7 +9,6 @@ const Home: React.FC = () => {
         <div className="mb-8">
           <PostFrom />
         </div>
-
         <div>
           <Post />
         </div>
