@@ -11,6 +11,8 @@ import {
 import cookieParser from "cookie-parser";
 import { Users, ForgetPassword, Posts } from "./Models";
 import cors from "cors";
+import { Server } from "socket.io";
+import { roomHandler } from "./roomhandler";
 
 const app = express();
 app.use(
@@ -21,6 +23,21 @@ app.use(
 );
 
 const server = http.createServer(app);
+
+let io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  roomHandler(socket);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
 
 app.use(cookieParser());
 app.use(express.json());

@@ -12,6 +12,8 @@ import {
   Header,
   Footer,
   Profile,
+  Join,
+  Roomid,
 } from "./components";
 
 const App: React.FC = () => {
@@ -26,6 +28,8 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Profile" element={<Profile />}></Route>
+            <Route path="/video" element={<Join />}></Route>
+            <Route path="/Rooms/:roomid" element={<Roomid />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />

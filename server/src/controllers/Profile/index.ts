@@ -10,7 +10,7 @@ const Gettheuserprofile = async (req: Request, res: Response) => {
 
     let user = await Users.findOne({
       where: { Id: userid },
-      attributes: ["Name", "Gender", "PhotoUrl"],
+      attributes: ["Name", "Gender", "PhotoUrl", "followers"],
     });
 
     if (!user?.PhotoUrl) {

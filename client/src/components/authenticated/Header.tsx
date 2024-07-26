@@ -12,6 +12,10 @@ const Header: React.FC = () => {
     navigate("/Profile ");
   };
 
+  const navigatetovideo = () => {
+    navigate("/video");
+  };
+
   return (
     <div>
       <div className="bg-blue-700 text-white flex flex-col sm:flex-row sm:justify-around p-4 sm:p-6 flex-reverse sm:flex-none">
@@ -20,6 +24,12 @@ const Header: React.FC = () => {
           onClick={naviagatetohome}
         >
           Home
+        </div>
+        <div
+          onClick={navigatetovideo}
+          className="p-2 sm:p-3 hover:bg-blue-400 rounded font-medium  bg-slate-200 text-black"
+        >
+          Learnininzone
         </div>
 
         <div

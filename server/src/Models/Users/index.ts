@@ -8,6 +8,7 @@ export interface UserAttributes {
   Password: string;
   PhotoUrl: string;
   Gender?: "Male" | "Female";
+  followers?: number;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "Id"> {}
@@ -44,6 +45,11 @@ const Users = database.define<UserInstance>("Users", {
   Gender: {
     type: DataTypes.ENUM("Male", "Female"),
     allowNull: true,
+  },
+  followers: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
   },
 });
 

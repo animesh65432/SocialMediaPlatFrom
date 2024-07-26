@@ -7,6 +7,8 @@ import ResetPassword from "./ResetPassword";
 import Header from "./authenticated/Header";
 import Footer from "./authenticated/Footer";
 import Profile from "./authenticated/Profile/Profile";
+import Join from "../components/authenticated/videos/Join";
+import Roomid from "./authenticated/videos/Roomid";
 export {
   Singin,
   Home,
@@ -17,4 +19,6 @@ export {
   Header,
   Footer,
   Profile,
+  Join,
+  Roomid,
 };
