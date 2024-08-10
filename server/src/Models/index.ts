@@ -11,4 +11,4 @@ Posts.belongsTo(Users);
 
 Users.belongsToMany(Room, { through: UserRooms, foreignKey: "roomid" });
 Room.belongsToMany(Users, { through: UserRooms, foreignKey: "userid" });
-export { Users, ForgetPassword, Posts };
+export { Users, ForgetPassword, Posts, UserRooms, Room };

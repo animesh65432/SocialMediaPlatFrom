@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -15,10 +15,19 @@ import {
   Join,
   Roomid,
 } from "./components";
+import { useDispatch } from "react-redux";
+import { createthepeer } from "./store/slices/SocketSlices";
 
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
   const isLogin = !!idtoken;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLogin) {
+      dispatch(createthepeer());
+    }
+  }, []);
 
   return (
     <div>

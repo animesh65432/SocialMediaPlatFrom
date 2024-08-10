@@ -3,10 +3,7 @@ import jwtwebtoken from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import Users, { UserAttributes } from "../Models/Users";
 import { RejectResponse } from "../utils";
-
-export type JwtPayload = {
-  Email: string;
-};
+import { JwtPayload } from "../types";
 
 declare global {
   namespace Express {
