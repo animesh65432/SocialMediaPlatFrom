@@ -9,3 +9,8 @@ export type SignupTypes = {
   Password: string;
   ConfirmPassword: string;
 };
+
+export type RoomFromTypes = {
+  Name: string;
+  Topics: string;
+};

@@ -1,13 +1,27 @@
+import { DataTypes, Model, Optional } from "sequelize";
 import database from "../../db";
-import { DataTypes, Model } from "sequelize";
 
-interface userroomstypes {
-  roomid?: string;
-  userid?: number;
+interface UserRoomsAttributes {
+  roomid: string;
+  userid?: number | null;
 }
 
-interface UserRoomsInstances extends Model<userroomstypes>, userroomstypes {}
+interface UserRoomsCreationAttributes
+  extends Optional<UserRoomsAttributes, "roomid"> {}
 
-const UserRooms = database.define<UserRoomsInstances>("UserRooms", {});
+interface UserRoomsInstance
+  extends Model<UserRoomsAttributes, UserRoomsCreationAttributes>,
+    UserRoomsAttributes {}
+
+const UserRooms = database.define<UserRoomsInstance>("UserRooms", {
+  roomid: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+  userid: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+});
 
 export default UserRooms;

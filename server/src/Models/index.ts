@@ -9,6 +9,6 @@ ForgetPassword.belongsTo(Users);
 Users.hasMany(Posts);
 Posts.belongsTo(Users);
 
-Users.belongsToMany(Room, { through: UserRooms, foreignKey: "roomid" });
-Room.belongsToMany(Users, { through: UserRooms, foreignKey: "userid" });
+Users.belongsToMany(Room, { through: UserRooms, foreignKey: "userid" });
+Room.belongsToMany(Users, { through: UserRooms, foreignKey: "roomid" });
 export { Users, ForgetPassword, Posts, UserRooms, Room };

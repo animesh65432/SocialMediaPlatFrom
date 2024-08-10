@@ -6,8 +6,9 @@ import { createroomtypes, joinedtheroomtypes } from "../types";
 import jsonwebtoken from "jsonwebtoken";
 import database from "../db";
 import { JwtPayload } from "../types";
+
 export const roomHandler = (socket: Socket) => {
-  const createRoom = async ({ Name, Topics }: createroomtypes) => {
+  const createRoom = async ({ Name, Topics, token }: createroomtypes) => {
     const t = await database.transaction();
     try {
       const roomId = uuidV4();
@@ -16,15 +17,14 @@ export const roomHandler = (socket: Socket) => {
         { Id: roomId, Name, Topics },
         { transaction: t }
       );
-      let userrooms = await UserRooms.create(
-        { roomid: roomId },
-        { transaction: t }
-      );
-      socket.emit("room-created", { roomId });
+
+      console.log(NewRoom.Id);
+      socket.emit("room-created", { roomId: NewRoom.Id });
       console.log("user created the room");
 
       await t.commit();
     } catch (error) {
+      console.log(error);
       await t.rollback();
     }
   };
@@ -43,6 +43,11 @@ export const roomHandler = (socket: Socket) => {
         where: { Email },
         transaction: t,
       });
+
+      let newuserrooms = await UserRooms.create(
+        { roomid, userid: user?.Id },
+        { transaction: t }
+      );
 
       await UserRooms.update(
         { userid: user?.Id },

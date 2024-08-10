@@ -47,7 +47,7 @@ app.use("/post", PostRouter);
 app.use("/profile", profilerouter);
 
 database
-  .sync()
+  .sync({ force: true })
   .then(() => {
     server.listen(config.PORT || 4000, () => {
       console.log(`Server started at port ${config.PORT || 4000}`);

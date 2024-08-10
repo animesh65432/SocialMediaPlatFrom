@@ -26,6 +26,12 @@ const middleware = async (req: Request, res: Response, next: NextFunction) => {
       config.JSONWEBSECRECT as string
     ) as JwtPayload;
 
+    if (!verify) {
+      return res.status(400).json({
+        message: "token is invaild",
+      });
+    }
+
     const checkUser = await Users.findOne({
       where: {
         Email: verify.Email,
