@@ -9,7 +9,6 @@ import {
   profilerouter,
 } from "./router";
 import cookieParser from "cookie-parser";
-import { Users, ForgetPassword, Posts } from "./Models";
 import cors from "cors";
 import { Server } from "socket.io";
 import { roomHandler } from "./roomhandler";
@@ -46,11 +45,6 @@ app.use("/users", UserRouter);
 app.use("/forget", forgetPasswordrouter);
 app.use("/post", PostRouter);
 app.use("/profile", profilerouter);
-
-Users.hasMany(ForgetPassword);
-ForgetPassword.belongsTo(Users);
-Users.hasMany(Posts);
-Posts.belongsTo(Users);
 
 database
   .sync()
