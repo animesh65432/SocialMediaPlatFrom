@@ -1,8 +1,7 @@
 import { CronJob } from "cron";
 import { Room } from "../Models";
 
-const job = new CronJob("0 0 * * *", async () => {
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+const job = new CronJob("0 */5 * * *", async () => {
   try {
     await Room.destroy({ where: {} });
     console.log("All rooms have been deleted.");

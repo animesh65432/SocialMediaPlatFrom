@@ -69,23 +69,17 @@ export const roomHandler = (socket: Socket) => {
         transaction: t,
       });
 
-      if (!user) {
-        throw new Error("User not found");
+      if (!user || user.Id === null || user.Id === undefined) {
+        throw new Error("User not found or User ID is invalid");
       }
 
-      const checkuserrooms = await UserRooms.findOne({
-        where: { roomid },
-        transaction: t,
-      });
+      const userId = user.Id;
 
-      if (!checkuserrooms) {
-        await UserRooms.create({ roomid, userid: user.Id }, { transaction: t });
-      } else {
-        await UserRooms.update(
-          { userid: user.Id },
-          { where: { roomid }, transaction: t }
-        );
-      }
+      // Use a single query to handle both cases (insert or update)
+      const [userRoom, created] = await UserRooms.upsert(
+        { roomid, userid: userId },
+        { transaction: t }
+      );
 
       socket.join(roomid);
 
@@ -98,19 +92,17 @@ export const roomHandler = (socket: Socket) => {
         transaction: t,
       });
 
-      let participantswithnames = [];
-
-      for (let i = 0; i < participants.length; i++) {
-        let userid = participants[i].userid;
-        if (userid) {
-          let user = await Users.findOne({
-            where: {
-              Id: userid,
-            },
+      const participantswithnames = await Promise.all(
+        participants.map(async (participant) => {
+          const user = await Users.findOne({
+            where: { Id: participant.userid as number }, // Ensure participant.userid is a number
           });
-          participantswithnames.push(user?.Name);
-        }
-      }
+          return {
+            Name: user?.Name,
+            Photourl: user?.PhotoUrl,
+          };
+        })
+      );
 
       console.log(participantswithnames, "users name");
 

@@ -21,13 +21,15 @@ const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
   const isLogin = !!idtoken;
   const dispatch = useDispatch();
+  const color = useSelector((state: RootState) => state.color.color);
+  console.log(color);
 
   useEffect(() => {
     dispatch(createthepeer());
   }, [idtoken, isLogin]);
 
   return (
-    <div>
+    <div className={color ? "bg-slate-800" : "bg-slate-300"}>
       {isLogin ? (
         <>
           <Header />

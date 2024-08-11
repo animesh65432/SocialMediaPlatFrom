@@ -92,13 +92,13 @@ const Singin: React.FC = () => {
         </Button>
         <span
           onClick={ongotosingup}
-          className="text-blue-600 underline block text-xl"
+          className="text-blue-600 underline block text-xl ml-28"
         >
           Create Acoount
         </span>
         <span
           onClick={ongotoresetpassword}
-          className="text-blue-600 underline text-xl"
+          className="text-blue-600 underline text-xl ml-28"
         >
           Reset Password
         </span>

@@ -1,19 +1,23 @@
 import { useEffect, useRef } from "react";
-type props = {
+
+type Props = {
   stream: MediaStream;
 };
-const UserFeedPlayer: React.FC<props> = ({ stream }) => {
+
+const UserFeedPlayer: React.FC<Props> = ({ stream }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     if (videoRef.current && stream) {
       videoRef.current.srcObject = stream;
     }
   }, [stream]);
+
   return (
     <video
       ref={videoRef}
-      style={{ width: "300px", height: "200px" }}
-      muted={true}
+      className="w-full max-w-xs rounded-lg shadow-md"
+      muted
       autoPlay
     />
   );

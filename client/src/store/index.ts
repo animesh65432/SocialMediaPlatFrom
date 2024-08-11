@@ -3,6 +3,7 @@ import user from "./slices/UserSlices";
 import posts from "./slices/PostSlices";
 import socket from "./slices/SocketSlices";
 import RoomReducer from "./slices/Room";
+import color from "./slices/Color";
 
 const customMiddleware: Middleware = (store) => (next) => (action) => {
   return next(action);
@@ -14,6 +15,7 @@ const store = configureStore({
     posts,
     socket,
     Room: RoomReducer,
+    color,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

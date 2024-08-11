@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RootState } from "../../../store";
 import { addpeer } from "../../../store/slices/SocketSlices";
 import UserFeedPlayer from "./UserFeedPlayer";
-import { useUserMedia } from "../../../hooks/customhooks";
+import { useUserMedia, useDeleteRoom } from "../../../hooks/customhooks";
+import { useNavigate } from "react-router-dom";
+import Participants from "./Participants";
 
 const Roomid: React.FC = () => {
   const { roomid } = useParams();
@@ -13,18 +15,18 @@ const Roomid: React.FC = () => {
   const peer = useSelector((state: RootState) => state.socket.peer);
   const stream = useSelector((state: RootState) => state.socket.stream);
   const peers = useSelector((state: RootState) => state.socket.peers);
+  const [participantswithnames, setparticipantswithnames] = useState<string[]>(
+    []
+  );
   const { fetchUserAudio } = useUserMedia();
+  const { deleteroom } = useDeleteRoom();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const joinRoom = async () => {
       try {
         if (socket && peer && token) {
-          console.log("Emitting joined_room with data:", {
-            roomid,
-            peerid: peer.id,
-            token,
-          });
           socket.emit("joined_room", { roomid, peerid: peer.id, token });
           await fetchUserAudio();
         }
@@ -32,6 +34,11 @@ const Roomid: React.FC = () => {
         console.error("Error joining room:", error);
       }
     };
+
+    socket.on("Get-participants", ({ participantswithnames }) => {
+      console.log(participantswithnames);
+      setparticipantswithnames(participantswithnames);
+    });
 
     joinRoom();
   }, [socket, peer, token, roomid]);
@@ -42,24 +49,19 @@ const Roomid: React.FC = () => {
         if (!peer || !stream || !socket) return;
 
         socket.on("user_joined", ({ peerid }: { peerid: string }) => {
-          console.log(peerid);
           const call = peer.call(peerid, stream);
           call.on("stream", (userStream) => {
-            console.log(`Received stream from peerid: ${peerid}`);
             dispatch(addpeer({ peerId: peerid, stream: userStream }));
           });
         });
 
         peer.on("call", (call) => {
-          console.log(`Received 'call' event from peer: ${call.peer}`);
           call.answer(stream);
           call.on("stream", (userStream) => {
-            console.log(`Received stream from peer: ${call.peer}`);
             dispatch(addpeer({ peerId: call.peer, stream: userStream }));
           });
         });
 
-        console.log("Emitting 'ready' event");
         socket.emit("ready");
       } catch (error) {
         console.error("Error setting up socket listeners:", error);
@@ -69,22 +71,48 @@ const Roomid: React.FC = () => {
     setupSocketListeners();
   }, [peer, stream, socket, dispatch, roomid]);
 
+  const deleteRoom = async () => {
+    try {
+      if (roomid) {
+        await deleteroom({ Id: roomid });
+        navigate("/video");
+      }
+    } catch (errors) {
+      console.log(errors);
+    }
+  };
+
   if (!stream) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
   }
 
-  console.log(peers);
-
   return (
-    <div>
-      <div>
-        <h3>Your Feed</h3>
+    <div className="flex flex-col items-center space-y-6 p-4 h-dvh">
+      <button
+        onClick={deleteRoom}
+        className="bg-red-600 text-white p-2 rounded hover:bg-red-500 transition"
+      >
+        Delete Room
+      </button>
+      <div className="w-full max-w-2xl">
+        <h3 className="text-xl font-semibold mb-4">Your Feed</h3>
         <UserFeedPlayer stream={stream} />
       </div>
+      <div className="w-full max-w-2xl mt-4">
+        <h3 className="text-xl font-semibold mb-4">Other Users' Feeds</h3>
+        <div className="grid grid-cols-1 gap-4">
+          {Object.keys(peers).map((peerId) => (
+            <UserFeedPlayer key={peerId} stream={peers[peerId].stream} />
+          ))}
+        </div>
+      </div>
       <div>
-        <h3>Other Users' Feeds</h3>
-        {Object.keys(peers).map((peerId) => (
-          <UserFeedPlayer key={peerId} stream={peers[peerId].stream} />
+        {participantswithnames.map((user, index) => (
+          <Participants name={user.Name} key={index} Photourl={user.Photourl} />
         ))}
       </div>
     </div>

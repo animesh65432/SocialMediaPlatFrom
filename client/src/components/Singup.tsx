@@ -106,7 +106,7 @@ const Signup: React.FC = () => {
         </Button>
 
         <span
-          className="text-blue-600 underline text-xl"
+          className="text-blue-600 underline text-xl ml-36"
           onClick={onlogintosingin}
         >
           login
