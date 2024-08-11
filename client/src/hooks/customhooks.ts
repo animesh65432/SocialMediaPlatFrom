@@ -7,6 +7,7 @@ import useSinguphook from "./useSinguphook";
 import useUpatePost from "./useUpatePost";
 import useUpdatePassword from "./useUpdatePassword";
 import useGetTheProfile from "./useGetTheProfile";
+import useUserMedia from "./usemediahook";
 
 export {
   useDeleteThePost,
@@ -18,4 +19,5 @@ export {
   useUpdatePassword,
   useUpatePost,
   useGetTheProfile,
+  useUserMedia,
 };

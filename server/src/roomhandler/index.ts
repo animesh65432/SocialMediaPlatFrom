@@ -19,8 +19,7 @@ export const roomHandler = (socket: Socket) => {
       );
 
       console.log(NewRoom.Id);
-      socket.emit("room-created", { roomId: NewRoom.Id });
-      console.log("user created the room");
+      socket.emit("room-created", { roomId });
 
       await t.commit();
     } catch (error) {
@@ -29,50 +28,53 @@ export const roomHandler = (socket: Socket) => {
     }
   };
 
-  const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
-    const t = await database.transaction();
-    try {
-      const verifythetoken = jsonwebtoken.verify(
-        token,
-        config.JSONWEBSECRECT as string
-      ) as JwtPayload;
+  const joinedroom = ({ roomid, peerid, token }: joinedtheroomtypes) => {
+    // const verifythetoken = jsonwebtoken.verify(
+    //   token,
+    //   config.JSONWEBSECRECT as string
+    // ) as JwtPayload;
 
-      const { Email } = verifythetoken;
+    // const { Email } = verifythetoken;
 
-      let user = await Users.findOne({
-        where: { Email },
-        transaction: t,
-      });
+    // let user = await Users.findOne({
+    //   where: { Email },
+    //   transaction: t,
+    // });
 
-      let newuserrooms = await UserRooms.create(
-        { roomid, userid: user?.Id },
-        { transaction: t }
-      );
+    // let checkuserrooms = await UserRooms.findOne({ where: { roomid } });
 
-      await UserRooms.update(
-        { userid: user?.Id },
-        { where: { roomid }, transaction: t }
-      );
+    // if (checkuserrooms) {
+    //   await UserRooms.update(
+    //     { userid: user?.Id },
+    //     { where: { roomid }, transaction: t }
+    //   );
+    // } else {
+    //   await UserRooms.update(
+    //     { userid: user?.Id },
+    //     { where: { roomid }, transaction: t }
+    //   );
+    // }
 
-      const getparticipants = async () => {
-        let users = await UserRooms.findAll({
-          where: { roomid },
-          include: {
-            model: Users,
-            attributes: ["Name"],
-          },
-        });
-        return users;
-      };
+    socket.join(roomid);
 
-      const participants = await getparticipants();
+    socket.on("ready", () => {
+      socket.to(roomid).emit("user_joined", { peerid });
+    });
 
-      socket.emit("Get-participants", participants);
+    // const getparticipants = async () => {
+    //   let users = await UserRooms.findAll({
+    //     where: { roomid },
+    //     include: {
+    //       model: Users,
+    //       attributes: ["Name"],
+    //     },
+    //   });
+    //   return users;
+    // };
 
-      await t.commit();
-    } catch (error) {
-      await t.rollback();
-    }
+    const participants = [{}];
+
+    socket.emit("Get-participants", { participants });
   };
 
   socket.on("create-room", createRoom);

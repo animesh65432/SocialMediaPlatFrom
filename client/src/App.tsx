@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store";
 import { Routes, Route, Navigate } from "react-router-dom";
 import {
@@ -15,7 +15,6 @@ import {
   Join,
   Roomid,
 } from "./components";
-import { useDispatch } from "react-redux";
 import { createthepeer } from "./store/slices/SocketSlices";
 
 const App: React.FC = () => {
@@ -24,10 +23,8 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isLogin) {
-      dispatch(createthepeer());
-    }
-  }, []);
+    dispatch(createthepeer());
+  }, [idtoken, isLogin]);
 
   return (
     <div>
@@ -51,6 +48,7 @@ const App: React.FC = () => {
             <Route path="/singup" element={<Singup />} />
             <Route path="/reset" element={<ResetPassword />}></Route>
             <Route path="/update/:id" element={<UpdatePassword />}></Route>
+            <Route path="*" element={<Navigate to="/singin" />}></Route>
           </Routes>
         </>
       )}
