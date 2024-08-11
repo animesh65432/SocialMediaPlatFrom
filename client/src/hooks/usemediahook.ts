@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { fetchUserFeed, removetheusefeed } from "../store/slices/SocketSlices";
+import { fetchUserFeed } from "../store/slices/SocketSlices";
 import { useCallback } from "react";
 
 const useUserMedia = () => {

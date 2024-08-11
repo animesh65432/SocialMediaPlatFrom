@@ -8,7 +8,7 @@ import database from "../db";
 import { JwtPayload } from "../types";
 
 export const roomHandler = (socket: Socket) => {
-  const createRoom = async ({ Name, Topics, token }: createroomtypes) => {
+  const createRoom = async ({ Name, Topics }: createroomtypes) => {
     const t = await database.transaction();
     try {
       const roomId = uuidV4();
@@ -28,53 +28,99 @@ export const roomHandler = (socket: Socket) => {
     }
   };
 
-  const joinedroom = ({ roomid, peerid, token }: joinedtheroomtypes) => {
-    // const verifythetoken = jsonwebtoken.verify(
-    //   token,
-    //   config.JSONWEBSECRECT as string
-    // ) as JwtPayload;
+  // const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
+  //   const t = await database.transaction();
+  //   try {
+  //     socket.join(roomid);
 
-    // const { Email } = verifythetoken;
+  //     console.log("jointheroomid", roomid);
 
-    // let user = await Users.findOne({
-    //   where: { Email },
-    //   transaction: t,
-    // });
+  //     socket.on("ready", () => {
+  //       console.log("ready for user");
+  //       socket.to(roomid).emit("user_joined", { peerid });
+  //     });
 
-    // let checkuserrooms = await UserRooms.findOne({ where: { roomid } });
+  //     const users = [{}];
 
-    // if (checkuserrooms) {
-    //   await UserRooms.update(
-    //     { userid: user?.Id },
-    //     { where: { roomid }, transaction: t }
-    //   );
-    // } else {
-    //   await UserRooms.update(
-    //     { userid: user?.Id },
-    //     { where: { roomid }, transaction: t }
-    //   );
-    // }
+  //     socket.emit("Get-participants", { users });
 
-    socket.join(roomid);
+  //     await t.commit();
+  //   } catch (error) {
+  //     console.error("Error in joinedroom function:", error);
+  //     await t.rollback();
+  //   }
+  // };
+  const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
+    const t = await database.transaction();
+    try {
+      if (!roomid || !peerid || !token) {
+        throw new Error("roomid, peerid, or token is missing");
+      }
 
-    socket.on("ready", () => {
-      socket.to(roomid).emit("user_joined", { peerid });
-    });
+      const verifythetoken = jsonwebtoken.verify(
+        token,
+        config.JSONWEBSECRECT as string
+      ) as JwtPayload;
 
-    // const getparticipants = async () => {
-    //   let users = await UserRooms.findAll({
-    //     where: { roomid },
-    //     include: {
-    //       model: Users,
-    //       attributes: ["Name"],
-    //     },
-    //   });
-    //   return users;
-    // };
+      const { Email } = verifythetoken;
 
-    const participants = [{}];
+      const user = await Users.findOne({
+        where: { Email },
+        transaction: t,
+      });
 
-    socket.emit("Get-participants", { participants });
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const checkuserrooms = await UserRooms.findOne({
+        where: { roomid },
+        transaction: t,
+      });
+
+      if (!checkuserrooms) {
+        await UserRooms.create({ roomid, userid: user.Id }, { transaction: t });
+      } else {
+        await UserRooms.update(
+          { userid: user.Id },
+          { where: { roomid }, transaction: t }
+        );
+      }
+
+      socket.join(roomid);
+
+      socket.on("ready", () => {
+        socket.to(roomid).emit("user_joined", { peerid });
+      });
+
+      const participants = await UserRooms.findAll({
+        where: { roomid },
+        transaction: t,
+      });
+
+      let participantswithnames = [];
+
+      for (let i = 0; i < participants.length; i++) {
+        let userid = participants[i].userid;
+        if (userid) {
+          let user = await Users.findOne({
+            where: {
+              Id: userid,
+            },
+          });
+          participantswithnames.push(user?.Name);
+        }
+      }
+
+      console.log(participantswithnames, "users name");
+
+      socket.emit("Get-participants", { participantswithnames });
+
+      await t.commit(); // Commit the transaction
+    } catch (error) {
+      console.error("Error in joinedroom function:", error);
+      await t.rollback(); // Rollback the transaction in case of error
+    }
   };
 
   socket.on("create-room", createRoom);

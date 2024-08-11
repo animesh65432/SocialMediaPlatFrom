@@ -7,11 +7,13 @@ import {
   forgetPasswordrouter,
   PostRouter,
   profilerouter,
+  RoomRouter,
 } from "./router";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Server } from "socket.io";
 import { roomHandler } from "./roomhandler";
+import job from "./corn";
 
 const app = express();
 app.use(
@@ -45,9 +47,12 @@ app.use("/users", UserRouter);
 app.use("/forget", forgetPasswordrouter);
 app.use("/post", PostRouter);
 app.use("/profile", profilerouter);
+app.use("/Room", RoomRouter);
+
+job.start();
 
 database
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     server.listen(config.PORT || 4000, () => {
       console.log(`Server started at port ${config.PORT || 4000}`);

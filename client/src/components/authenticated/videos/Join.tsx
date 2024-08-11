@@ -5,9 +5,14 @@ import { useForm } from "react-hook-form";
 import RoomFrom from "../../../Schema/RoomFrom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RoomFromTypes } from "../../../types";
+import { useGetRoom } from "../../../hooks/customhooks";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Join: React.FC = () => {
   const ws = useSelector((state: RootState) => state.socket.socket);
+  const Rooms = useSelector((state: RootState) => state.Room.Rooms);
+  const { GetRooms } = useGetRoom();
   const {
     register,
     handleSubmit,
@@ -15,6 +20,7 @@ const Join: React.FC = () => {
   } = useForm<RoomFromTypes>({
     resolver: zodResolver(RoomFrom),
   });
+
   const Navigate = useNavigate();
   const createRoom = (data: RoomFromTypes) => {
     console.log(data);
@@ -23,6 +29,16 @@ const Join: React.FC = () => {
       Navigate(`/Rooms/${roomId}`);
     });
   };
+
+  const fecthrooms = async () => {
+    await GetRooms();
+  };
+
+  useEffect(() => {
+    fecthrooms();
+  }, []);
+
+  console.log(Rooms);
   return (
     <div className="grid place-content-center">
       <div>
@@ -38,6 +54,14 @@ const Join: React.FC = () => {
           </button>
         </form>
       </div>
+      {Rooms.map((room) => (
+        <>
+          <Link to={`/Rooms/${room.Id}`} key={room.Id}>
+            <div>{room.Name}</div>
+            <div>{room.Topics}</div>
+          </Link>
+        </>
+      ))}
     </div>
   );
 };

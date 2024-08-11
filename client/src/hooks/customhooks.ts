@@ -8,6 +8,8 @@ import useUpatePost from "./useUpatePost";
 import useUpdatePassword from "./useUpdatePassword";
 import useGetTheProfile from "./useGetTheProfile";
 import useUserMedia from "./usemediahook";
+import useDeleteRoom from "./useDeleteRoom";
+import useGetRoom from "./useGetRoom";
 
 export {
   useDeleteThePost,
@@ -20,4 +22,6 @@ export {
   useUpatePost,
   useGetTheProfile,
   useUserMedia,
+  useDeleteRoom,
+  useGetRoom,
 };

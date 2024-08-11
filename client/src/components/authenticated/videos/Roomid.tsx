@@ -13,7 +13,7 @@ const Roomid: React.FC = () => {
   const peer = useSelector((state: RootState) => state.socket.peer);
   const stream = useSelector((state: RootState) => state.socket.stream);
   const peers = useSelector((state: RootState) => state.socket.peers);
-  const { fetchUserAudio, removeUserAudio } = useUserMedia();
+  const { fetchUserAudio } = useUserMedia();
   const dispatch = useDispatch();
 
   useEffect(() => {

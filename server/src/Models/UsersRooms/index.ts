@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import database from "../../db";
-
 interface UserRoomsAttributes {
   roomid: string;
   userid?: number | null;
@@ -20,7 +19,7 @@ const UserRooms = database.define<UserRoomsInstance>("UserRooms", {
   },
   userid: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
 });
 
