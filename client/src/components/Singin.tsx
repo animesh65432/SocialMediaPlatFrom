@@ -44,64 +44,72 @@ const Singin: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-slate-800 p-4">
       <form
         onSubmit={handleSubmit(onsubmit)}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
+        className="bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl text-slate-200"
       >
-        <label
-          htmlFor="Email"
-          className="block mb-2 text-sm font-medium text-gray-700"
-        >
-          Email
-        </label>
-        <input
-          type="text"
-          {...register("Email")}
-          className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-        />
-        {errors.Email && (
-          <span className="text-sm text-red-500">{errors.Email.message}</span>
-        )}
+        <h1 className="text-2xl font-semibold mb-6 text-center">Sign In</h1>
+        <div>
+          <label
+            htmlFor="Email"
+            className="block mb-2 text-sm font-medium text-gray-300"
+          >
+            Email
+          </label>
+          <input
+            type="text"
+            {...register("Email")}
+            className="block w-full p-3 border border-gray-600 rounded-md bg-slate-800 text-white focus:outline-none focus:ring focus:ring-indigo-300"
+          />
+          {errors.Email && (
+            <span className="text-sm text-red-500">{errors.Email.message}</span>
+          )}
+        </div>
 
-        <label
-          htmlFor="Password"
-          className="block mt-4 mb-2 text-sm font-medium text-gray-700"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          {...register("Password")}
-          className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-        />
-        {errors.Password && (
-          <span className="text-sm text-red-500">
-            {errors.Password.message}
-          </span>
-        )}
+        <div className="mt-4">
+          <label
+            htmlFor="Password"
+            className="block mb-2 text-sm font-medium text-gray-300"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            {...register("Password")}
+            className="block w-full p-3 border border-gray-600 rounded-md bg-slate-800 text-white focus:outline-none focus:ring focus:ring-indigo-300"
+          />
+          {errors.Password && (
+            <span className="text-sm text-red-500">
+              {errors.Password.message}
+            </span>
+          )}
+        </div>
 
         <Button
-          variant="contained"
+          variant="outlined"
           color="primary"
-          className="my-5 w-full"
+          className="my-6 w-full"
           type="submit"
           disabled={loading}
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
         </Button>
-        <span
-          onClick={ongotosingup}
-          className="text-blue-600 underline block text-xl ml-28"
-        >
-          Create Acoount
-        </span>
-        <span
-          onClick={ongotoresetpassword}
-          className="text-blue-600 underline text-xl ml-28"
-        >
-          Reset Password
-        </span>
+
+        <div className="text-center">
+          <span
+            onClick={ongotosingup}
+            className="text-slate-200 underline block text-lg cursor-pointer mb-2 sm:mb-4"
+          >
+            Create Account
+          </span>
+          <span
+            onClick={ongotoresetpassword}
+            className="text-slate-200 underline text-lg cursor-pointer"
+          >
+            Reset Password
+          </span>
+        </div>
       </form>
       <Toaster position="top-right" reverseOrder={false} />
     </div>

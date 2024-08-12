@@ -84,36 +84,47 @@ const Roomid: React.FC = () => {
 
   if (!stream) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="text-lg font-semibold text-gray-700">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center space-y-6 p-4 h-dvh">
+    <div className="flex flex-col items-center space-y-6 p-4 bg-gray-100 min-h-screen">
       <button
         onClick={deleteRoom}
-        className="bg-red-600 text-white p-2 rounded hover:bg-red-500 transition"
+        className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-500 transition duration-300"
       >
         Delete Room
       </button>
-      <div className="w-full max-w-2xl">
-        <h3 className="text-xl font-semibold mb-4">Your Feed</h3>
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">Your Feed</h3>
         <UserFeedPlayer stream={stream} />
       </div>
-      <div className="w-full max-w-2xl mt-4">
-        <h3 className="text-xl font-semibold mb-4">Other Users' Feeds</h3>
-        <div className="grid grid-cols-1 gap-4">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-4">
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+          Other Users' Feeds
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Object.keys(peers).map((peerId) => (
             <UserFeedPlayer key={peerId} stream={peers[peerId].stream} />
           ))}
         </div>
       </div>
-      <div>
-        {participantswithnames.map((user, index) => (
-          <Participants name={user.Name} key={index} Photourl={user.Photourl} />
-        ))}
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-4">
+        <h3 className="text-2xl font-semibold mb-4 text-gray-800">
+          Participants
+        </h3>
+        <div className="flex flex-wrap gap-4">
+          {participantswithnames.map((user, index) => (
+            <Participants
+              name={user.Name}
+              key={index}
+              Photourl={user.Photourl}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

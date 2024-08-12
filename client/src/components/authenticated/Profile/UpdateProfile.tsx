@@ -16,15 +16,16 @@ type props = {
 
 const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
   const { register, handleSubmit } = useForm<FormData>();
-  const { updateprofile, loading, upload } = useUpdateProfile();
+  const { updateprofile, loading } = useUpdateProfile();
+
   const onSubmit = async (data: FormData) => {
     try {
-      updateprofile(data);
-      toast.success("upload it");
+      await updateprofile(data);
+      toast.success("Profile updated successfully!");
       ontoggole();
     } catch (error) {
-      console.log(error);
-      toast.error("Error uploading profile.");
+      console.error(error);
+      toast.error("Error updating profile.");
     }
   };
 
@@ -44,7 +45,7 @@ const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
               type="file"
               id="photoUrl"
               {...register("PhotoUrl")}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
             />
           </div>
 
@@ -59,7 +60,7 @@ const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
               type="text"
               id="name"
               {...register("Name", { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
             />
           </div>
 
@@ -73,7 +74,7 @@ const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
             <select
               id="gender"
               {...register("Gender", { required: true })}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
             >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -86,10 +87,11 @@ const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
           >
             {loading ? "Loading..." : "Update Profile"}
           </button>
+
           <button
+            type="button"
             onClick={ontoggole}
-            type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="w-full py-2 px-4 bg-gray-500 text-white font-semibold rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
             Back
           </button>

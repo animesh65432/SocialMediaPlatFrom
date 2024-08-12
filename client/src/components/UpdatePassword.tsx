@@ -17,41 +17,51 @@ const UpdatePassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      let respose = await updatepassword({ Password, id });
+      let response = await updatepassword({ Password, id });
 
-      if (respose) {
-        toast.success("Sucessfully update it");
+      if (response) {
+        toast.success("Successfully updated the password");
       } else {
         toast.error(errorMessages);
       }
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred while updating the password");
     }
   };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-slate-800 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
+        className="bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-md text-slate-200"
       >
+        <h1 className="text-2xl font-semibold mb-6 text-center">
+          Update Password
+        </h1>
         <label
-          htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-700"
+          htmlFor="password"
+          className="block mb-2 text-sm font-medium text-gray-300"
         >
-          Password
+          New Password
         </label>
         <input
-          type="text"
+          type="password"
           value={Password}
           onChange={(e) => setpassword(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
+          className="block w-full p-3 border border-gray-600 rounded-md bg-slate-800 text-white focus:outline-none focus:ring focus:ring-indigo-300"
         />
-
-        <Button type="submit" variant="contained" className="w-full">
-          {loading ? "loading" : "Update Password"}
+        <Button
+          type="submit"
+          variant="outlined"
+          color="primary"
+          className="w-full mt-6"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Update Password"}
         </Button>
       </form>
-      <Toaster />
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };

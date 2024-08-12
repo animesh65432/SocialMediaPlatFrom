@@ -9,7 +9,7 @@ const Header: React.FC = () => {
   };
 
   const navigaetotheprofile = () => {
-    navigate("/Profile ");
+    navigate("/Profile");
   };
 
   const navigatetovideo = () => {
@@ -17,24 +17,23 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="bg-blue-700 text-white flex flex-col sm:flex-row sm:justify-around p-4 sm:p-6 flex-reverse sm:flex-none">
+    <div className="bg-slate-900 text-slate-200">
+      <div className="flex flex-col sm:flex-row sm:justify-between items-center p-4">
         <div
-          className="p-2 sm:p-3 bg-slate-200 rounded font-medium hover:bg-blue-400 text-black"
+          className="p-3 rounded-lg font-medium cursor-pointer transition-colors duration-300 hover:bg-slate-700 hover:text-slate-100 bg-slate-800"
           onClick={naviagatetohome}
         >
           Home
         </div>
         <div
           onClick={navigatetovideo}
-          className="p-2 sm:p-3 hover:bg-blue-400 rounded font-medium  bg-slate-200 text-black"
+          className="p-3 rounded-lg font-medium cursor-pointer transition-colors duration-300 hover:bg-blue-500 hover:text-slate-100 bg-slate-800 mt-4 sm:mt-0"
         >
-          Learnininzone
+          Learninzone
         </div>
-
         <div
           onClick={navigaetotheprofile}
-          className="p-2 sm:p-3 hover:bg-blue-400 rounded font-medium  bg-slate-200 text-black"
+          className="p-3 rounded-lg font-medium cursor-pointer transition-colors duration-300 hover:bg-blue-500 hover:text-slate-100 bg-slate-800 mt-4 sm:mt-0"
         >
           Profile
         </div>

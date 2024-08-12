@@ -36,14 +36,17 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-slate-800 p-4">
       <form
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm"
+        className="bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-md text-slate-200"
         onSubmit={handleSubmit}
       >
+        <h1 className="text-2xl font-semibold mb-6 text-center">
+          Reset Password
+        </h1>
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-700"
+          className="block mb-2 text-sm font-medium text-gray-300"
         >
           Email
         </label>
@@ -51,17 +54,25 @@ const ResetPassword: React.FC = () => {
           type="text"
           value={Email}
           onChange={(e) => setEmail(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
+          className="block w-full p-3 border border-gray-600 rounded-md bg-slate-800 text-white focus:outline-none focus:ring focus:ring-indigo-300"
         />
-        <Button variant="contained" type="submit" className="w-full mt-4">
+        <Button
+          variant="outlined"
+          color="primary"
+          type="submit"
+          className="w-full mt-6"
+          disabled={loading}
+        >
           {loading ? "Loading..." : "Reset Password"}
         </Button>
-        <span
-          className="text-blue-700 underline text-center mt-4 cursor-pointer text-xl"
-          onClick={ongotosinginpage}
-        >
-          Sign in
-        </span>
+        <div className="text-center mt-4">
+          <span
+            className="text-slate-200 underline text-lg cursor-pointer"
+            onClick={ongotosinginpage}
+          >
+            Sign in
+          </span>
+        </div>
       </form>
 
       <Toaster position="top-right" reverseOrder={false} />

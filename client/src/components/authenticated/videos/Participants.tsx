@@ -7,11 +7,13 @@ type props = {
 
 const Participants: React.FC<props> = ({ name, Photourl }) => {
   return (
-    <div>
-      <div>
-        <img src={Photourl} />
-        {name}
-      </div>
+    <div className="flex items-center space-x-4 p-4 bg-white shadow-md rounded-lg w-full max-w-xs">
+      <img
+        src={Photourl}
+        alt={name}
+        className="w-12 h-12 rounded-full object-cover"
+      />
+      <div className="text-lg font-medium text-gray-700">{name}</div>
     </div>
   );
 };

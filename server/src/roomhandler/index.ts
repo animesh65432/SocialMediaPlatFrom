@@ -75,7 +75,6 @@ export const roomHandler = (socket: Socket) => {
 
       const userId = user.Id;
 
-      // Use a single query to handle both cases (insert or update)
       const [userRoom, created] = await UserRooms.upsert(
         { roomid, userid: userId },
         { transaction: t }
@@ -95,7 +94,7 @@ export const roomHandler = (socket: Socket) => {
       const participantswithnames = await Promise.all(
         participants.map(async (participant) => {
           const user = await Users.findOne({
-            where: { Id: participant.userid as number }, // Ensure participant.userid is a number
+            where: { Id: participant.userid as number },
           });
           return {
             Name: user?.Name,
@@ -108,10 +107,10 @@ export const roomHandler = (socket: Socket) => {
 
       socket.emit("Get-participants", { participantswithnames });
 
-      await t.commit(); // Commit the transaction
+      await t.commit();
     } catch (error) {
       console.error("Error in joinedroom function:", error);
-      await t.rollback(); // Rollback the transaction in case of error
+      await t.rollback();
     }
   };
 

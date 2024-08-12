@@ -39,54 +39,68 @@ const Join: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center space-y-6 p-4">
+    <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
       <form
         onSubmit={handleSubmit(createRoom)}
-        className="w-full max-w-sm bg-white shadow-md rounded-lg p-6"
+        className="w-full max-w-md bg-white shadow-lg rounded-lg p-6 mb-6"
       >
-        <label htmlFor="Name" className="block text-gray-700">
-          Name
-        </label>
-        <input
-          type="text"
-          {...register("Name")}
-          className="w-full border border-gray-300 p-2 rounded mb-2"
-        />
-        <span className="text-red-500">
-          {errors.Name && errors.Name.message}
-        </span>
+        <h1 className="text-2xl font-bold mb-4 text-center">Create Room</h1>
 
-        <label htmlFor="Topics" className="block text-gray-700 mt-4">
-          Topics
-        </label>
-        <input
-          type="text"
-          {...register("Topics")}
-          className="w-full border border-gray-300 p-2 rounded mb-2"
-        />
-        <span className="text-red-500">
-          {errors.Topics && errors.Topics.message}
-        </span>
+        <div className="mb-4">
+          <label
+            htmlFor="Name"
+            className="block text-gray-700 text-sm font-medium mb-1"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            {...register("Name")}
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <span className="text-red-500 text-sm">
+            {errors.Name && errors.Name.message}
+          </span>
+        </div>
+
+        <div className="mb-4">
+          <label
+            htmlFor="Topics"
+            className="block text-gray-700 text-sm font-medium mb-1"
+          >
+            Topics
+          </label>
+          <input
+            type="text"
+            {...register("Topics")}
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <span className="text-red-500 text-sm">
+            {errors.Topics && errors.Topics.message}
+          </span>
+        </div>
 
         <button
-          className="w-full bg-rose-900 text-white p-2 rounded mt-4 hover:bg-rose-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 transition"
           type="submit"
         >
           Create Room
         </button>
       </form>
 
-      <div className="w-full">
-        <h2 className="text-2xl font-bold mb-4">Available Rooms</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="w-full max-w-5xl">
+        <h2 className="text-2xl font-bold mb-4 text-center">Available Rooms</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {Rooms.map((room) => (
             <Link
               to={`/Rooms/${room.Id}`}
               key={room.Id}
-              className="block p-4 bg-gray-100 rounded-lg shadow hover:bg-gray-200 transition"
+              className="block p-4 bg-white rounded-lg shadow-md hover:bg-gray-50 transition"
             >
-              <div className="font-semibold text-lg">{room.Name}</div>
-              <div className="text-gray-600">{room.Topics}</div>
+              <div className="font-semibold text-lg text-gray-800">
+                {room.Name}
+              </div>
+              <div className="text-gray-600 mt-1">{room.Topics}</div>
             </Link>
           ))}
         </div>

@@ -16,7 +16,7 @@ const Post: React.FC = () => {
   const { updatethepost } = useUpatePost();
   const [showupdate, setshowupdate] = useState<number | null>(null);
 
-  const fecthallthedata = async () => {
+  const fetchAllTheData = async () => {
     try {
       await getposts();
     } catch (error) {
@@ -25,11 +25,11 @@ const Post: React.FC = () => {
   };
 
   useEffect(() => {
-    fecthallthedata();
+    fetchAllTheData();
   }, []);
 
   if (posts.length === 0) {
-    return <div>There are no posts</div>;
+    return <div className="text-center text-gray-500">There are no posts</div>;
   }
 
   const formatDate = (dateString: string | undefined) => {
@@ -41,36 +41,46 @@ const Post: React.FC = () => {
       {posts.map((post) => (
         <div
           key={post.id}
-          className="bg-white shadow-md rounded-lg p-4 space-y-4 max-w-xl mx-auto"
+          className="bg-white shadow-lg rounded-lg p-6 space-y-4 max-w-full md:max-w-3xl mx-auto"
         >
           <div className="flex items-center space-x-4">
             <Avatar src={post?.userPhotoUrl} alt="User Profile" />
             <div>
-              <p className="font-bold">{post?.userName}</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-semibold text-lg">{post?.userName}</p>
+              <p className="text-sm text-gray-600">
                 {formatDate(post?.createdAt)}
               </p>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {post?.img && (
               <img
                 src={post?.img}
                 alt="Post"
-                className="w-full rounded-md object-cover"
+                className="w-full rounded-md object-cover max-h-80"
               />
             )}
             {post?.video && (
-              <video src={post?.video} controls className="w-full rounded-md" />
+              <video
+                src={post?.video}
+                controls
+                className="w-full rounded-md max-h-80"
+              />
             )}
-            <p>{post?.title}</p>
+            <p className="text-gray-700">{post?.title}</p>
           </div>
-          <div className="flex justify-between">
-            <div>
-              <IconButton onClick={() => setshowupdate(post.id)}>
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="flex space-x-2">
+              <IconButton
+                onClick={() => setshowupdate(post.id)}
+                aria-label="Edit Post"
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => deletethepost({ id: post.id })}>
+              <IconButton
+                onClick={() => deletethepost({ id: post.id })}
+                aria-label="Delete Post"
+              >
                 <DeleteIcon />
               </IconButton>
             </div>

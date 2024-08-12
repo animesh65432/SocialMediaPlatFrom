@@ -17,7 +17,7 @@ const PostForm: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<PostsTypes>();
-  const { createnewpost, loading, errorMessages } = usePosthook();
+  const { createnewpost, loading } = usePosthook();
 
   const onSubmit = async (data: PostsTypes) => {
     if (data.images?.length === 0 && data.videos.length === 0) {
@@ -47,12 +47,12 @@ const PostForm: React.FC = () => {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="p-4 mx-auto bg-white rounded-lg shadow-md mt-4 w-full max-w-2xl"
+        className="p-4 mx-auto bg-white rounded-lg shadow-md mt-4 w-full max-w-lg sm:max-w-xl lg:max-w-2xl"
       >
         <textarea
           id="title"
           placeholder="What's on your mind?"
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200 mb-2"
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200 mb-2 resize-none"
           rows={4}
           {...register("title", { required: "Please enter a title" })}
         />
@@ -60,7 +60,7 @@ const PostForm: React.FC = () => {
           <span className="text-sm text-red-500">{errors.title.message}</span>
         )}
 
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-4">
           <input
             type="file"
             id="images"
@@ -76,21 +76,23 @@ const PostForm: React.FC = () => {
             accept="video/*"
           />
 
-          <IconButton
-            color="primary"
-            onClick={() => document.getElementById("images")?.click()}
-            aria-label="Upload Image"
-          >
-            <PhotoCamera />
-          </IconButton>
+          <div className="flex space-x-2 mb-2 sm:mb-0">
+            <IconButton
+              color="primary"
+              onClick={() => document.getElementById("images")?.click()}
+              aria-label="Upload Image"
+            >
+              <PhotoCamera />
+            </IconButton>
 
-          <IconButton
-            color="primary"
-            onClick={() => document.getElementById("videos")?.click()}
-            aria-label="Upload Video"
-          >
-            <Videocam />
-          </IconButton>
+            <IconButton
+              color="primary"
+              onClick={() => document.getElementById("videos")?.click()}
+              aria-label="Upload Video"
+            >
+              <Videocam />
+            </IconButton>
+          </div>
 
           <button
             type="submit"
