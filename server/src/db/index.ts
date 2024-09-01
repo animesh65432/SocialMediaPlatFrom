@@ -6,9 +6,16 @@ const database = new Sequelize(
   config.USERNAME as string,
   config.PASSWORD as string,
   {
-    host: config.DATABASEHOST,
-    dialect: "mysql",
-    port: config.DatabaseportPORT,
+    host: config.DATABASEHOST as string,
+    port: 15391,
+    dialect: "postgres",
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   }
 );
 
