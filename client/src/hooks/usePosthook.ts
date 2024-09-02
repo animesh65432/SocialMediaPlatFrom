@@ -64,7 +64,7 @@ const usePosthook = (): UsePostHookReturn => {
         await fetch(url, { method: "PUST", body: video });
       }
       let response = await axios.get(`${backendurl}/post/GetThePost`, {
-        withCredentials: true,
+        headers: { token },
       });
       let posts = response?.data?.data?.data;
       dispatch(GetallTheposts(posts));
