@@ -2,7 +2,7 @@ const { PeerServer } = require("peer");
 //https://socialmediaplatfrom-2.onrender.com
 
 const server = PeerServer({
-  port: port,
+  port: 9000,
   path: "/myapp",
   cors: {
     origin: "*", // Adjust this to restrict access to specific domains if needed
@@ -10,4 +10,4 @@ const server = PeerServer({
   },
 });
 
-console.log("PeerJS server started on port:", process.env.PORT || 9000);
+console.log("PeerJS server started on port:", 9000);
