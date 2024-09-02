@@ -1,4 +1,8 @@
-var PeerServer = require("peer").PeerServer;
-var server = PeerServer({ host: "localhost", port: 9000, path: "/myapp" });
+const { PeerServer } = require("peer");
 
-console.log("start the peer js server");
+const server = PeerServer({
+  port: process.env.PORT || 9000,
+  path: "/myapp",
+});
+
+console.log("PeerJS server started on port:", process.env.PORT || 9000);

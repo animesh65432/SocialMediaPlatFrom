@@ -15,9 +15,7 @@ const Roomid: React.FC = () => {
   const peer = useSelector((state: RootState) => state.socket.peer);
   const stream = useSelector((state: RootState) => state.socket.stream);
   const peers = useSelector((state: RootState) => state.socket.peers);
-  const [participantswithnames, setparticipantswithnames] = useState<string[]>(
-    []
-  );
+  const [participantswithnames, setparticipantswithnames] = useState<any[]>([]);
   const { fetchUserAudio } = useUserMedia();
   const { deleteroom } = useDeleteRoom();
   const navigate = useNavigate();
