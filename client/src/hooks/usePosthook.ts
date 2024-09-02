@@ -3,6 +3,8 @@ import axios from "axios";
 import { backendurl } from "../utils";
 import { useDispatch } from "react-redux";
 import { GetallTheposts } from "../store/slices/PostSlices";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type CreateNewPostPayload = {
   img?: FileList;
@@ -20,6 +22,7 @@ const usePosthook = (): UsePostHookReturn => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<string>("");
   const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.user.idtoken);
 
   const createnewpost = async (data: CreateNewPostPayload) => {
     setLoading(true);
@@ -29,7 +32,9 @@ const usePosthook = (): UsePostHookReturn => {
           `${backendurl}/post/createpost`,
           { ...data, img: "images" },
           {
-            withCredentials: true,
+            headers: {
+              token,
+            },
           }
         );
         console.log(data.img[0]);
@@ -48,7 +53,9 @@ const usePosthook = (): UsePostHookReturn => {
           `${backendurl}/post/createpost`,
           { ...data, video: "video" },
           {
-            withCredentials: true,
+            headers: {
+              token,
+            },
           }
         );
         let url = response?.data?.data?.url;

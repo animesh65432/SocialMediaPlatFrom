@@ -18,9 +18,7 @@ const useSinginhook = (): USESINGINHOOKSRETURN => {
   const logintheuser = async (data: SinginTypes) => {
     setloading(true);
     try {
-      let reponse = await axios.post(`${backendurl}/users/login`, data, {
-        withCredentials: true,
-      });
+      let reponse = await axios.post(`${backendurl}/users/login`, data);
 
       let token = reponse?.data?.data?.token;
       dispatch(addthetoken(token));

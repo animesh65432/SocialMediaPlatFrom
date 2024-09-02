@@ -1,6 +1,8 @@
 import axios from "axios";
 import { backendurl } from "../utils";
+import { useSelector } from "react-redux";
 import { useState } from "react";
+import { RootState } from "../store";
 type useUpdateFunciondata = {
   PhotoUrl: FileList;
   Name: string;
@@ -16,6 +18,7 @@ interface useUpdateProfiletypes {
 const useUpdateProfile = (): useUpdateProfiletypes => {
   const [upload, setupload] = useState<boolean>(false);
   const [loading, setloading] = useState<boolean>(false);
+  const token = useSelector((state: RootState) => state.user.idtoken);
   let updateprofile = async (data: useUpdateFunciondata) => {
     let Response;
     setloading(true);
@@ -27,7 +30,11 @@ const useUpdateProfile = (): useUpdateProfiletypes => {
           withCredentials: true,
         });
       }
-      await axios.put(Response?.data?.data?.url, data.PhotoUrl[0]);
+      await axios.put(Response?.data?.data?.url, data.PhotoUrl[0], {
+        headers: {
+          token,
+        },
+      });
       setupload(true);
     } catch (error) {
       console.log(error);

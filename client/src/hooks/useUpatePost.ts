@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { backendurl } from "../utils";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type updatePostpayloadtypes = {
   id: number;
@@ -16,6 +18,7 @@ interface updatepostretruntypes {
 
 const useUpatePost = (): updatepostretruntypes => {
   const [loading, setloading] = useState<boolean>(false);
+  const token = useSelector((state: RootState) => state.user.idtoken);
 
   const updatethepost = async (data: updatePostpayloadtypes) => {
     setloading(false);
@@ -27,7 +30,7 @@ const useUpatePost = (): updatepostretruntypes => {
           `${backendurl}/post/update/${data.id}`,
           { ...data, img: "images" },
           {
-            withCredentials: true,
+            headers: { token },
           }
         );
         url = response?.data?.data?.url;
@@ -39,7 +42,7 @@ const useUpatePost = (): updatepostretruntypes => {
           `${backendurl}/post/update/${data.id}`,
           { ...data, video: "video" },
           {
-            withCredentials: true,
+            headers: { token },
           }
         );
 

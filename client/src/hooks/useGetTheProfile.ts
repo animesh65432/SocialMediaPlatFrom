@@ -2,6 +2,8 @@ import axios from "axios";
 import { backendurl } from "../utils";
 import { useDispatch } from "react-redux";
 import { gettheuser } from "../store/slices/UserSlices";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 interface useGetTheProfileReturnTypes {
   GetProfile: () => void;
@@ -9,10 +11,13 @@ interface useGetTheProfileReturnTypes {
 
 const useGetTheProfile = (): useGetTheProfileReturnTypes => {
   const dispacth = useDispatch();
+  const token = useSelector((state: RootState) => state.user.idtoken);
   const GetProfile = async () => {
     try {
       let Response = await axios.get(`${backendurl}/profile/Get`, {
-        withCredentials: true,
+        headers: {
+          token,
+        },
       });
       console.log(Response?.data?.data?.data?.dataValues);
       dispacth(gettheuser(Response?.data?.data?.data?.dataValues));

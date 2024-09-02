@@ -20,7 +20,6 @@ app.use(
   cors({
     origin:
       "https://social-media-plat-from-4xni-ec384c6yk-animesh-duttas-projects.vercel.app",
-    credentials: true,
   })
 );
 
