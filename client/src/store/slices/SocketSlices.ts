@@ -22,8 +22,8 @@ const SocketSlices = createSlice({
     createthepeer: (state) => {
       let id = uuidv4();
       state.peer = new Peer(id, {
-        host: "localhost",
-        port: 9000,
+        host: "https://socialmediaplatfrom-2.onrender.com",
+        port: 443,
         path: "/myapp",
       });
     },

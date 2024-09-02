@@ -1,4 +1,4 @@
-export const backendurl = "http://localhost:3000";
+export const backendurl = "https://socialmediaplatfrom-server.onrender.com";
 export const socialmediaicons = [
   "https://cdn.punchng.com/wp-content/uploads/2023/07/24084806/Twitter-new-logo.jpeg",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRhtmZnxlAEvLTwqyu6_T3O8w4OdyqmXhiIg&s",
