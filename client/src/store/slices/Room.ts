@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type RoomType = { Id: string; Name: string; Topics: string };
 
-interface RoomState {
+export interface RoomState {
   Rooms: RoomType[];
 }
 

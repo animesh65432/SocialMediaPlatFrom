@@ -12,7 +12,7 @@ type Post = {
   createdAt?: string;
 };
 
-type PostsState = {
+export type PostsState = {
   value: Post[];
 };
 

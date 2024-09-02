@@ -1,26 +1,24 @@
-import { configureStore, Middleware } from "@reduxjs/toolkit";
-import user from "./slices/UserSlices";
-import posts from "./slices/PostSlices";
-import socket from "./slices/SocketSlices";
-import RoomReducer from "./slices/Room";
-import color from "./slices/Color";
+import { configureStore } from "@reduxjs/toolkit";
+import user, { Userstates } from "./slices/UserSlices";
+import posts, { PostsState } from "./slices/PostSlices";
+import socket, { socketslicestypes } from "./slices/SocketSlices";
+import Room, { RoomState } from "./slices/Room";
+import color, { ColorSlices } from "./slices/Color";
 
-const customMiddleware: Middleware = (store) => (next) => (action) => {
-  return next(action);
-};
-
-const store = configureStore({
+const store = configureStore<{
+  user: Userstates;
+  posts: PostsState;
+  socket: socketslicestypes;
+  color: ColorSlices;
+  Room: RoomState;
+}>({
   reducer: {
     user,
     posts,
     socket,
-    Room: RoomReducer,
     color,
+    Room,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }).concat(customMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

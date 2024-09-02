@@ -6,7 +6,7 @@ type userTypes = {
   PhotoUrl: string;
 };
 
-type Userstates = {
+export type Userstates = {
   idtoken: string;
   user: userTypes;
 };
