@@ -49,7 +49,7 @@ var middleware = function (req, res, next) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                token = req.cookies.token;
+                token = req.header("token");
                 if (!token) {
                     return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Token has not been provided", 400)];
                 }

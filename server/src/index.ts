@@ -18,7 +18,9 @@ import job from "./corn";
 const app = express();
 app.use(
   cors({
-    origin: "*",
+    origin:
+      "https://social-media-plat-from-4xni-l9uf9ynpl-animesh-duttas-projects.vercel.app",
+    credentials: true,
   })
 );
 
@@ -26,7 +28,8 @@ const server = http.createServer(app);
 
 let io = new Server(server, {
   cors: {
-    origin: "*",
+    origin:
+      "https://social-media-plat-from-4xni-l9uf9ynpl-animesh-duttas-projects.vercel.app",
     methods: ["GET", "POST"],
   },
 });
