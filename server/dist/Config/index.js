@@ -15,6 +15,7 @@ var config = {
     S3ACESSKEYID: process.env.S3ACESSKEYID,
     S3BUCKETNAME: process.env.S3BUCKETNAME,
     S3REGION: process.env.S3REGION,
+    Frontendurl: process.env.FRONTENDURL,
 };
-console.log(config);
+console.log(config.Frontendurl);
 exports.default = config;

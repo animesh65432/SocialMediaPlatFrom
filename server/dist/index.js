@@ -16,13 +16,13 @@ var corn_1 = __importDefault(require("./corn"));
 // https://social-media-plat-from.vercel.app
 var app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "*",
+    origin: Config_1.default.Frontendurl,
     credentials: true,
 }));
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*",
+        origin: Config_1.default.Frontendurl,
         methods: ["GET", "POST"],
     },
 });

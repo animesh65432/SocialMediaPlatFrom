@@ -85,11 +85,12 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                         pass: Config_1.default.NODEMAILERPASSWORD,
                     },
                 });
+                console.log(Config_1.default.Frontendurl);
                 mailOptions = {
                     from: Config_1.default.NODEMAILERUSER,
                     to: Email,
                     subject: "Password Reset Request",
-                    html: "<a href='http://localhost:5173/update/".concat(forgetPassword.id, "'>Click here to reset your password</a>"),
+                    html: "<a href='".concat(Config_1.default.Frontendurl, "\n/update/").concat(forgetPassword.id, "'>Click here to reset your password</a>"),
                 };
                 return [4 /*yield*/, transporter.sendMail(mailOptions)];
             case 5:
