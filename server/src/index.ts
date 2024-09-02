@@ -14,6 +14,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { roomHandler } from "./roomhandler";
 import job from "./corn";
+// https://social-media-plat-from.vercel.app
 
 const app = express();
 app.use(

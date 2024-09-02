@@ -13,15 +13,16 @@ var cors_1 = __importDefault(require("cors"));
 var socket_io_1 = require("socket.io");
 var roomhandler_1 = require("./roomhandler");
 var corn_1 = __importDefault(require("./corn"));
+// https://social-media-plat-from.vercel.app
 var app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "https://social-media-plat-from.vercel.app",
+    origin: "*",
     credentials: true,
 }));
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "https://social-media-plat-from.vercel.app",
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });
