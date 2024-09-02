@@ -48,7 +48,7 @@ const sendEmail = async (req: Request, res: Response) => {
       from: config.NODEMAILERUSER,
       to: Email,
       subject: "Password Reset Request",
-      html: `<a href='https://social-media-plat-from.vercel.app
+      html: `<a href='${config.Frontendurl}
 /update/${forgetPassword.id}'>Click here to reset your password</a>`,
     };
 

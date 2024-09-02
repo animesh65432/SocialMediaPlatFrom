@@ -19,7 +19,7 @@ import job from "./corn";
 const app = express();
 app.use(
   cors({
-    origin: "https://social-media-plat-from.vercel.app",
+    origin: config.Frontendurl,
     credentials: true,
   })
 );
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 let io = new Server(server, {
   cors: {
-    origin: "https://social-media-plat-from.vercel.app",
+    origin: config.Frontendurl,
     methods: ["GET", "POST"],
   },
 });

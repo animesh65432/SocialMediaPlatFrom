@@ -14,6 +14,7 @@ const config = {
   S3ACESSKEYID: process.env.S3ACESSKEYID,
   S3BUCKETNAME: process.env.S3BUCKETNAME,
   S3REGION: process.env.S3REGION,
+  Frontendurl: "https://social-media-plat-from.vercel.app",
 };
 
 console.log(config);
