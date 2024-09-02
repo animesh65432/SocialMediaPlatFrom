@@ -48,12 +48,8 @@ const sendEmail = async (req: Request, res: Response) => {
       from: config.NODEMAILERUSER,
       to: Email,
       subject: "Password Reset Request",
-<<<<<<< HEAD
       html: `<a href='https://social-media-plat-from.vercel.app
 /update/${forgetPassword.id}'>Click here to reset your password</a>`,
-=======
-      html: `<a href='https://social-media-plat-from.vercel.app/update/${forgetPassword.id}'>Click here to reset your password</a>`,
->>>>>>> bb60abec9299d739441103a1513a8361cf18a1db
     };
 
     await transporter.sendMail(mailOptions);
