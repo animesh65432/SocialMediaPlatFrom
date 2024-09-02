@@ -44,6 +44,8 @@ const sendEmail = async (req: Request, res: Response) => {
       },
     });
 
+    console.log(config.Frontendurl);
+
     const mailOptions = {
       from: config.NODEMAILERUSER,
       to: Email,
