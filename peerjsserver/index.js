@@ -5,7 +5,7 @@ const server = PeerServer({
   port: 9000,
   path: "/myapp",
   cors: {
-    origin: "*", // Adjust this to restrict access to specific domains if needed
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });

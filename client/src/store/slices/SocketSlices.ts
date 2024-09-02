@@ -22,9 +22,10 @@ const SocketSlices = createSlice({
     createthepeer: (state) => {
       let id = uuidv4();
       state.peer = new Peer(id, {
-        host: "https://socialmediaplatfrom-2.onrender.com",
+        host: "socialmediaplatfrom-2.onrender.com",
         port: 443,
         path: "/myapp",
+        secure: true,
       });
     },
     fetchUserFeed: (state, action: PayloadAction<MediaStream>) => {
