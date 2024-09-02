@@ -15,13 +15,13 @@ var roomhandler_1 = require("./roomhandler");
 var corn_1 = __importDefault(require("./corn"));
 var app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
+    origin: "https://social-media-plat-from-4xni-ec384c6yk-animesh-duttas-projects.vercel.app",
     credentials: true,
 }));
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "*",
+        origin: "https://social-media-plat-from-4xni-ec384c6yk-animesh-duttas-projects.vercel.app",
         methods: ["GET", "POST"],
     },
 });
