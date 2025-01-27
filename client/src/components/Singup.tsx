@@ -6,7 +6,8 @@ import { SignupTypes } from "../types";
 import { useSinguphook } from "../hooks/customhooks";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button"
+import { CircularProgress } from "@mui/material";
 import { hero } from "../utils";
 
 const Signup: React.FC = () => {
@@ -38,7 +39,7 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-700 text-white p-4">
+    <div className="flex items-center justify-center min-h-screen bg-slate-100 text-black p-4">
       <div className="flex flex-col md:flex-row w-full max-w-6xl">
         <div className="md:w-1/2 flex items-center justify-center mb-6 md:mb-0">
           <img
@@ -47,7 +48,7 @@ const Signup: React.FC = () => {
             alt="Hero"
           />
         </div>
-        <div className="md:w-1/2 bg-slate-950 p-6 rounded-lg shadow-md md:ml-12">
+        <div className="md:w-1/2  p-6 rounded-lg shadow-md md:ml-12 text-black bg-white">
           <h1 className="text-3xl mb-6 text-pretty text-center">
             Family Gossip
           </h1>
@@ -55,7 +56,7 @@ const Signup: React.FC = () => {
             <div>
               <label
                 htmlFor="UserName"
-                className="block mb-2 text-sm font-medium text-gray-300"
+                className="block mb-2 text-sm font-medium  text-black"
               >
                 UserName:
               </label>
@@ -63,9 +64,9 @@ const Signup: React.FC = () => {
                 type="text"
                 id="UserName"
                 {...register("Name")}
-                className="block w-full p-2 border border-gray-500 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:ring-indigo-200"
+                className="block w-full p-2 border border-gray-600 rounded-md bg-white text-black focus:outline-none focus:ring focus:ring-gray-300"
               />
-              <span className="text-sm text-red-400">
+              <span className="text-sm text-red-600">
                 {errors.Name && errors.Name.message}
               </span>
             </div>
@@ -73,7 +74,7 @@ const Signup: React.FC = () => {
             <div>
               <label
                 htmlFor="Email"
-                className="block mb-2 text-sm font-medium text-gray-300"
+                className="block mb-2 text-sm font-medium "
               >
                 Email:
               </label>
@@ -81,9 +82,9 @@ const Signup: React.FC = () => {
                 type="email"
                 id="Email"
                 {...register("Email")}
-                className="block w-full p-2 border border-gray-500 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:ring-indigo-200"
+                className="block w-full p-2 border border-gray-600 rounded-md bg-white text-black focus:outline-none focus:ring focus:ring-gray-300"
               />
-              <span className="text-sm text-red-400">
+              <span className="text-sm text-red-600">
                 {errors.Email && errors.Email.message}
               </span>
             </div>
@@ -91,7 +92,7 @@ const Signup: React.FC = () => {
             <div>
               <label
                 htmlFor="Password"
-                className="block mb-2 text-sm font-medium text-gray-300"
+                className="block mb-2 text-sm font-medium "
               >
                 Password:
               </label>
@@ -99,9 +100,9 @@ const Signup: React.FC = () => {
                 type="password"
                 id="Password"
                 {...register("Password")}
-                className="block w-full p-2 border border-gray-500 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:ring-indigo-200"
+                className="block w-full p-2 border border-gray-600 rounded-md bg-white text-black focus:outline-none focus:ring focus:ring-gray-300"
               />
-              <span className="text-sm text-red-400">
+              <span className="text-sm text-red-600">
                 {errors.Password && errors.Password.message}
               </span>
             </div>
@@ -109,7 +110,7 @@ const Signup: React.FC = () => {
             <div>
               <label
                 htmlFor="ConfirmPassword"
-                className="block mb-2 text-sm font-medium text-gray-300"
+                className="block mb-2 text-sm font-medium "
               >
                 Confirm Password:
               </label>
@@ -117,24 +118,28 @@ const Signup: React.FC = () => {
                 type="password"
                 id="ConfirmPassword"
                 {...register("ConfirmPassword")}
-                className="block w-full p-2 border border-gray-500 rounded-md bg-gray-700 text-white focus:outline-none focus:ring focus:ring-indigo-200"
+                className="block w-full p-2 border border-gray-600 rounded-md bg-white text-black focus:outline-none focus:ring focus:ring-gray-300"
               />
-              <span className="text-sm text-red-400">
+              <span className="text-sm text-red-600">
                 {errors.ConfirmPassword && errors.ConfirmPassword.message}
               </span>
             </div>
+            <div className="flex justify-center">
+              {!loading && <Button type="submit">
+                Sign up
+              </Button>}
 
-            <Button variant="outlined" className="w-full my-4" type="submit">
-              {loading ? "Loading..." : "Sign up"}
-            </Button>
+              {loading && <CircularProgress />}
+            </div>
 
             <div className="text-center">
-              <span
-                className="text-slate-200 underline text-lg cursor-pointer"
-                onClick={onlogintosingin}
-              >
-                Login
-              </span>
+              <p>
+                do you have an account? <span
+                  className="text-gray-700 underline text-lg cursor-pointer"
+                  onClick={onlogintosingin}
+                >
+                  Login
+                </span></p>
             </div>
           </form>
         </div>

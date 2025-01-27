@@ -17,7 +17,7 @@ exports.UserRooms = UsersRooms_1.default;
 Users_1.default.hasMany(ForgetPassword_1.default);
 ForgetPassword_1.default.belongsTo(Users_1.default);
 Users_1.default.hasMany(Posts_1.default);
-Posts_1.default.belongsTo(Users_1.default);
+Posts_1.default.belongsTo(Users_1.default, { foreignKey: "UserId" });
 Users_1.default.belongsToMany(Rooms_1.default, {
     through: UsersRooms_1.default,
     foreignKey: "userid",

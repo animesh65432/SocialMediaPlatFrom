@@ -79,23 +79,6 @@ var roomHandler = function (socket) {
             }
         });
     }); };
-    // const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
-    //   const t = await database.transaction();
-    //   try {
-    //     socket.join(roomid);
-    //     console.log("jointheroomid", roomid);
-    //     socket.on("ready", () => {
-    //       console.log("ready for user");
-    //       socket.to(roomid).emit("user_joined", { peerid });
-    //     });
-    //     const users = [{}];
-    //     socket.emit("Get-participants", { users });
-    //     await t.commit();
-    //   } catch (error) {
-    //     console.error("Error in joinedroom function:", error);
-    //     await t.rollback();
-    //   }
-    // };
     var joinedroom = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
         var t, verifythetoken, Email, user, userId, _c, userRoom, created, participants, participantswithnames, error_2;
         var roomid = _b.roomid, peerid = _b.peerid, token = _b.token;
@@ -108,6 +91,7 @@ var roomHandler = function (socket) {
                 case 2:
                     _d.trys.push([2, 8, , 10]);
                     if (!roomid || !peerid || !token) {
+                        console.log(roomid, peerid, token, "from joined function");
                         throw new Error("roomid, peerid, or token is missing");
                     }
                     verifythetoken = jsonwebtoken_1.default.verify(token, Config_1.default.JSONWEBSECRECT);
@@ -126,6 +110,10 @@ var roomHandler = function (socket) {
                 case 4:
                     _c = _d.sent(), userRoom = _c[0], created = _c[1];
                     socket.join(roomid);
+                    // Store user information in socket for later use
+                    socket.data.userId = userId;
+                    socket.data.roomId = roomid;
+                    socket.data.peerId = peerid;
                     socket.on("ready", function () {
                         socket.to(roomid).emit("user_joined", { peerid: peerid });
                     });
@@ -147,6 +135,7 @@ var roomHandler = function (socket) {
                                         return [2 /*return*/, {
                                                 Name: user === null || user === void 0 ? void 0 : user.Name,
                                                 Photourl: user === null || user === void 0 ? void 0 : user.PhotoUrl,
+                                                peerId: peerid, // Include peerId for identification
                                             }];
                                 }
                             });
@@ -155,6 +144,12 @@ var roomHandler = function (socket) {
                     participantswithnames = _d.sent();
                     console.log(participantswithnames, "users name");
                     socket.emit("Get-participants", { participantswithnames: participantswithnames });
+                    // Broadcast to others that a new user has joined
+                    socket.to(roomid).emit("participant_joined", {
+                        Name: user.Name,
+                        Photourl: user.PhotoUrl,
+                        peerId: peerid,
+                    });
                     return [4 /*yield*/, t.commit()];
                 case 7:
                     _d.sent();
@@ -170,7 +165,75 @@ var roomHandler = function (socket) {
             }
         });
     }); };
+    // Handle disconnection
+    var handleDisconnect = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var t, _a, userId, roomId, peerId, user, remainingParticipants, error_3;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, db_1.default.transaction()];
+                case 1:
+                    t = _b.sent();
+                    _b.label = 2;
+                case 2:
+                    _b.trys.push([2, 9, , 11]);
+                    _a = socket.data, userId = _a.userId, roomId = _a.roomId, peerId = _a.peerId;
+                    if (!(userId && roomId)) return [3 /*break*/, 7];
+                    // Remove user from UserRooms table
+                    return [4 /*yield*/, Models_1.UserRooms.destroy({
+                            where: {
+                                userid: userId,
+                                roomid: roomId,
+                            },
+                            transaction: t,
+                        })];
+                case 3:
+                    // Remove user from UserRooms table
+                    _b.sent();
+                    return [4 /*yield*/, Models_1.Users.findOne({
+                            where: { Id: userId },
+                            transaction: t,
+                        })];
+                case 4:
+                    user = _b.sent();
+                    // Notify others in the room that user has left
+                    socket.to(roomId).emit("participant_left", {
+                        peerId: peerId,
+                        Name: user === null || user === void 0 ? void 0 : user.Name,
+                        Photourl: user === null || user === void 0 ? void 0 : user.PhotoUrl,
+                    });
+                    return [4 /*yield*/, Models_1.UserRooms.count({
+                            where: { roomid: roomId },
+                            transaction: t,
+                        })];
+                case 5:
+                    remainingParticipants = _b.sent();
+                    if (!(remainingParticipants === 0)) return [3 /*break*/, 7];
+                    // Optional: Delete the room if it's empty
+                    return [4 /*yield*/, Models_1.Room.destroy({
+                            where: { Id: roomId },
+                            transaction: t,
+                        })];
+                case 6:
+                    // Optional: Delete the room if it's empty
+                    _b.sent();
+                    _b.label = 7;
+                case 7: return [4 /*yield*/, t.commit()];
+                case 8:
+                    _b.sent();
+                    return [3 /*break*/, 11];
+                case 9:
+                    error_3 = _b.sent();
+                    console.error("Error in disconnect handler:", error_3);
+                    return [4 /*yield*/, t.rollback()];
+                case 10:
+                    _b.sent();
+                    return [3 /*break*/, 11];
+                case 11: return [2 /*return*/];
+            }
+        });
+    }); };
     socket.on("create-room", createRoom);
     socket.on("joined_room", joinedroom);
+    socket.on("disconnect", handleDisconnect);
 };
 exports.roomHandler = roomHandler;

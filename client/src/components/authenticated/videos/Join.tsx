@@ -8,6 +8,7 @@ import { RoomFromTypes } from "../../../types";
 import { useGetRoom } from "../../../hooks/customhooks";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button"
 
 const Join: React.FC = () => {
   const ws = useSelector((state: RootState) => state.socket.socket);
@@ -39,7 +40,7 @@ const Join: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center p-4 bg-gray-100 h-[90vh] ">
       <form
         onSubmit={handleSubmit(createRoom)}
         className="w-full max-w-md bg-white shadow-lg rounded-lg p-6 mb-6"
@@ -79,18 +80,16 @@ const Join: React.FC = () => {
             {errors.Topics && errors.Topics.message}
           </span>
         </div>
-
-        <button
-          className="w-full bg-blue-600 text-white py-2 rounded-md mt-4 hover:bg-blue-700 transition"
-          type="submit"
-        >
-          Create Room
-        </button>
+        <div className="flex justify-center items-center">
+          <Button>
+            Create Room
+          </Button>
+        </div>
       </form>
 
       <div className="w-full max-w-5xl">
         <h2 className="text-2xl font-bold mb-4 text-center">Available Rooms</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-x-auto">
           {Rooms.map((room) => (
             <Link
               to={`/Rooms/${room.Id}`}

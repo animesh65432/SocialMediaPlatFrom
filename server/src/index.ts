@@ -14,12 +14,12 @@ import cors from "cors";
 import { Server } from "socket.io";
 import { roomHandler } from "./roomhandler";
 import job from "./corn";
-// https://social-media-plat-from.vercel.app
+import { CreatedummyUser } from "./utils"
 
 const app = express();
 app.use(
   cors({
-    origin: config.Frontendurl,
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 let io = new Server(server, {
   cors: {
-    origin: config.Frontendurl,
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
 });
@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 });
 
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use("/users", UserRouter);
 app.use("/forget", forgetPasswordrouter);
@@ -53,8 +53,13 @@ app.use("/Room", RoomRouter);
 job.start();
 
 database
-  .sync({ alter: true })
-  .then(() => {
+  .sync({ force: true })
+  .then(async () => {
+    await CreatedummyUser({
+      Name: "testname",
+      Email: "test@gmail.com",
+      Password: "testPassword"
+    })
     server.listen(config.PORT || 4000, () => {
       console.log(`Server started at port ${config.PORT || 4000}`);
     });

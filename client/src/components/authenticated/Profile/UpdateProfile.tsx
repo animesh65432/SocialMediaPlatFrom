@@ -1,105 +1,164 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import useUpdateProfile from "../../../hooks/useUpdateProfile";
 import toast, { Toaster } from "react-hot-toast";
-import { createPortal } from "react-dom";
+import UpdateProfileSchema from "@/Schema/UpdateProfile";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Avatar } from "@mui/material"
+import { Select, SelectItem, SelectTrigger, SelectValue, SelectContent } from "@/components/ui/select"
+interface UpdateProfileArguments {
+  Gender?: string;
+  Name?: string;
+  PhotoUrl?: string;
+}
 
-type FormData = {
-  PhotoUrl: FileList;
-  Name: string;
-  Gender: string;
-};
-
-type props = {
-  ontoggole: () => void;
-};
-
-const UpdateProfile: React.FC<props> = ({ ontoggole }) => {
-  const { register, handleSubmit } = useForm<FormData>();
+const UpdateProfile: React.FC = () => {
+  const Currentuser = useSelector((state: RootState) => state.user.user);
+  const [imageprivew, setimageprivew] = useState<string>("")
+  const form = useForm<z.infer<typeof UpdateProfileSchema>>({
+    resolver: zodResolver(UpdateProfileSchema),
+    defaultValues: {
+      Name: Currentuser.Name,
+      PhotoUrl: Currentuser.PhotoUrl,
+      Gender: Currentuser.Gender,
+    },
+  });
   const { updateprofile, loading } = useUpdateProfile();
 
-  const onSubmit = async (data: FormData) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        if (typeof reader.result === "string") {
+          setimageprivew(reader.result)
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = async (data: z.infer<typeof UpdateProfileSchema>) => {
     try {
-      await updateprofile(data);
-      toast.success("Profile updated successfully!");
-      ontoggole();
+      if (data.Gender?.length === 0 || data.Name?.length === 0 || imageprivew.length === 0) {
+        toast.error("did not chnage anything")
+      }
+      else {
+        const agruments: UpdateProfileArguments = {}
+        if (data.Gender) agruments.Gender = data.Gender
+        if (data.Name) agruments.Name = data.Name
+        if (imageprivew.length > 0) agruments.PhotoUrl = imageprivew
+        await updateprofile(agruments)
+        toast.success("update the profile")
+
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error updating profile.");
     }
   };
 
-  return createPortal(
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Update Profile</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label
-              htmlFor="photoUrl"
-              className="block text-sm font-medium text-gray-700"
+  return (
+    <>
+      <div className="h-[80vh] flex items-center justify-center">
+        <div className="w-full max-w-md p-4 bg-white shadow-md rounded-lg">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4"
             >
-              Photo URL
-            </label>
-            <input
-              type="file"
-              id="photoUrl"
-              {...register("PhotoUrl")}
-              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-            />
-          </div>
+              <div className="flex justify-center">
+                {
+                  !imageprivew &&
+                  <>{Currentuser.PhotoUrl ? <Avatar src={Currentuser.PhotoUrl} alt="User Profile" style={{ height: "15vh", width: "15vw" }} /> : <>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkr94Z9oGA_KuzX9ghnsctIEudavAJJht_VUyCDUw6c8eBeijX1Hg1RA6ckmWhBVNUlx4&usqp=CAU" className="w-20 h-20 rounded-lg" /></>
+                  }</>
+                }
+                {
+                  imageprivew && <img src={imageprivew} className="w-20 h-20 rounded-lg" />
+                }
+              </div>
+              <FormField
+                control={form.control}
+                name="PhotoUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Photo</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChangeCapture={handleFileChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              {...register("Name", { required: true })}
-              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-            />
-          </div>
+              <FormField
+                control={form.control}
+                name="Name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Name" {...field} value={field.value ? field.value : ""} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div>
-            <label
-              htmlFor="gender"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Gender
-            </label>
-            <select
-              id="gender"
-              {...register("Gender", { required: true })}
-              className="mt-1 block w-full text-sm border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
+              <FormField
+                control={form.control}
+                name="Gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => field.onChange(value)}
+                        value={field.value ? field.value : ""}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            {loading ? "Loading..." : "Update Profile"}
-          </button>
-
-          <button
-            type="button"
-            onClick={ontoggole}
-            className="w-full py-2 px-4 bg-gray-500 text-white font-semibold rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            Back
-          </button>
-        </form>
-        <Toaster position="top-right" reverseOrder={false} />
+              <div className="flex justify-center">
+                <Button type="submit" disabled={loading} >
+                  {loading ? "Updating..." : "Update Profile"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
       </div>
-    </div>,
-    document.getElementById("overlays") as HTMLElement
+      <Toaster />
+    </>
   );
 };
 

@@ -1,13 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 import database from "../../db";
+import { RoomsTypes } from "../../types/models/Rooms"
 
-interface RoomsTypes {
-  Id: string;
-  Name: string;
-  Topics: string;
-}
-
-interface Roomsinstances extends Model<RoomsTypes>, RoomsTypes {}
+interface Roomsinstances extends Model<RoomsTypes>, RoomsTypes { }
 
 const Room = database.define<Roomsinstances>("Room", {
   Id: {

@@ -23,13 +23,12 @@ var Posts = db_1.default.define("Posts", {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
     },
-    userPhotoUrl: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
-    userName: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-    },
+    UserId: {
+        type: sequelize_1.DataTypes.INTEGER,
+        references: {
+            model: "Users",
+            key: "Id"
+        }
+    }
 }, { timestamps: true });
 exports.default = Posts;

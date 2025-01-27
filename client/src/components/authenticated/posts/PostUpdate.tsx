@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import { Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
 
 type updatePostpayloadtypes = {
   id: number;
@@ -86,9 +86,8 @@ const PostUpdate: React.FC<props> = ({ updatethepostmethod, id }) => {
 
         <Button
           type="submit"
-          variant="contained"
-          color="primary"
-          className="w-full mt-4 py-2"
+
+          className="mt-4"
         >
           Update
         </Button>

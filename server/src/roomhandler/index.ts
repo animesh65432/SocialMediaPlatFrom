@@ -28,32 +28,11 @@ export const roomHandler = (socket: Socket) => {
     }
   };
 
-  // const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
-  //   const t = await database.transaction();
-  //   try {
-  //     socket.join(roomid);
-
-  //     console.log("jointheroomid", roomid);
-
-  //     socket.on("ready", () => {
-  //       console.log("ready for user");
-  //       socket.to(roomid).emit("user_joined", { peerid });
-  //     });
-
-  //     const users = [{}];
-
-  //     socket.emit("Get-participants", { users });
-
-  //     await t.commit();
-  //   } catch (error) {
-  //     console.error("Error in joinedroom function:", error);
-  //     await t.rollback();
-  //   }
-  // };
   const joinedroom = async ({ roomid, peerid, token }: joinedtheroomtypes) => {
     const t = await database.transaction();
     try {
       if (!roomid || !peerid || !token) {
+        console.log(roomid, peerid, token, "from joined function");
         throw new Error("roomid, peerid, or token is missing");
       }
 
@@ -82,6 +61,11 @@ export const roomHandler = (socket: Socket) => {
 
       socket.join(roomid);
 
+      // Store user information in socket for later use
+      socket.data.userId = userId;
+      socket.data.roomId = roomid;
+      socket.data.peerId = peerid;
+
       socket.on("ready", () => {
         socket.to(roomid).emit("user_joined", { peerid });
       });
@@ -99,13 +83,20 @@ export const roomHandler = (socket: Socket) => {
           return {
             Name: user?.Name,
             Photourl: user?.PhotoUrl,
+            peerId: peerid, // Include peerId for identification
           };
         })
       );
 
       console.log(participantswithnames, "users name");
-
       socket.emit("Get-participants", { participantswithnames });
+
+      // Broadcast to others that a new user has joined
+      socket.to(roomid).emit("participant_joined", {
+        Name: user.Name,
+        Photourl: user.PhotoUrl,
+        peerId: peerid,
+      });
 
       await t.commit();
     } catch (error) {
@@ -114,6 +105,58 @@ export const roomHandler = (socket: Socket) => {
     }
   };
 
+  // Handle disconnection
+  const handleDisconnect = async () => {
+    const t = await database.transaction();
+    try {
+      const { userId, roomId, peerId } = socket.data;
+
+      if (userId && roomId) {
+        // Remove user from UserRooms table
+        await UserRooms.destroy({
+          where: {
+            userid: userId,
+            roomid: roomId,
+          },
+          transaction: t,
+        });
+
+        // Get user information to send in the disconnect event
+        const user = await Users.findOne({
+          where: { Id: userId },
+          transaction: t,
+        });
+
+        // Notify others in the room that user has left
+        socket.to(roomId).emit("participant_left", {
+          peerId,
+          Name: user?.Name,
+          Photourl: user?.PhotoUrl,
+        });
+
+        // Check if room is empty
+        const remainingParticipants = await UserRooms.count({
+          where: { roomid: roomId },
+          transaction: t,
+        });
+
+        if (remainingParticipants === 0) {
+          // Optional: Delete the room if it's empty
+          await Room.destroy({
+            where: { Id: roomId },
+            transaction: t,
+          });
+        }
+      }
+
+      await t.commit();
+    } catch (error) {
+      console.error("Error in disconnect handler:", error);
+      await t.rollback();
+    }
+  };
+
   socket.on("create-room", createRoom);
   socket.on("joined_room", joinedroom);
+  socket.on("disconnect", handleDisconnect);
 };

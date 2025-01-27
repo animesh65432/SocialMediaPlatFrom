@@ -1,18 +1,8 @@
 import { DataTypes, Model } from "sequelize";
 import database from "../../db";
+import { PostAttributes } from "../../types/models/Post"
 
-interface PostAttributes {
-  id?: number;
-  img?: string;
-  title?: string;
-  comment?: string;
-  UserId?: number;
-  video?: string;
-  userPhotoUrl: string;
-  userName: string;
-}
-
-interface PostdInstance extends Model<PostAttributes>, PostAttributes {}
+interface PostdInstance extends Model<PostAttributes>, PostAttributes { }
 
 const Posts = database.define<PostdInstance>(
   "Posts",
@@ -34,14 +24,13 @@ const Posts = database.define<PostdInstance>(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    userPhotoUrl: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    userName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    UserId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Users",
+        key: "Id"
+      }
+    }
   },
   { timestamps: true }
 );

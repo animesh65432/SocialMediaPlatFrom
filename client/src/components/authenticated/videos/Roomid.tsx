@@ -25,6 +25,7 @@ const Roomid: React.FC = () => {
     const joinRoom = async () => {
       try {
         if (socket && peer && token) {
+          console.log(peer.id, "peerId")
           socket.emit("joined_room", { roomid, peerid: peer.id, token });
           await fetchUserAudio();
         }

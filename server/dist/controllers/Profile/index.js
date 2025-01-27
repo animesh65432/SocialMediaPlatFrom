@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,66 +36,58 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Gettheuserprofile = exports.updatetheprofile = void 0;
+exports.updatetheprofile = void 0;
 var Models_1 = require("../../Models");
 var utils_1 = require("../../utils");
-var services_1 = require("../../services");
-var Gettheuserprofile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userid, data, user, img, error_1;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 2, , 3]);
-                userid = (_a = req.user) === null || _a === void 0 ? void 0 : _a.Id;
-                data = {};
-                return [4 /*yield*/, Models_1.Users.findOne({
-                        where: { Id: userid },
-                        attributes: ["Name", "Gender", "PhotoUrl", "followers"],
-                    })];
-            case 1:
-                user = _b.sent();
-                if (!(user === null || user === void 0 ? void 0 : user.PhotoUrl)) {
-                    data = __assign(__assign({}, user), { PhotoUrl: "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain" });
-                }
-                else {
-                    img = (0, services_1.gethefile)(user.PhotoUrl);
-                    data = __assign(__assign({}, user), { PhotoUrl: img });
-                }
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { data: data }, 200)];
-            case 2:
-                error_1 = _b.sent();
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 500)];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.Gettheuserprofile = Gettheuserprofile;
+var utils_2 = require("../../utils");
+// const Gettheuserprofile = async (req: Request, res: Response) => {
+//   try {
+//     let userid = req.user?.Id;
+//     let data = {};
+//     let user = await Users.findOne({
+//       where: { Id: userid },
+//       attributes: ["Name", "Gender", "PhotoUrl", "followers"],
+//     });
+//     if (!user?.PhotoUrl) {
+//       data = {
+//         ...user,
+//         PhotoUrl:
+//           "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
+//       };
+//     } else {
+//       let img = gethefile(user.PhotoUrl);
+//       data = { ...user, PhotoUrl: img };
+//     }
+//     return SuccessResponse(res, { data }, 200);
+//   } catch (error) {
+//     return RejectResponse(res, "internal server errors", 500);
+//   }
+// };
 var updatetheprofile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, Name, Gender, PhotoUrl, updateData, filename, url, error_2;
+    var _a, Name, Gender, PhotoUrl, updateData, url, error_1;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _c.trys.push([0, 4, , 5]);
                 _a = req.body, Name = _a.Name, Gender = _a.Gender, PhotoUrl = _a.PhotoUrl;
-                console.log(Name, Gender, PhotoUrl);
+                if (!Name && !Gender && !PhotoUrl) {
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "did not get name ,gender,photourl  ", 400)];
+                }
                 updateData = {};
                 if (Name)
                     updateData.Name = Name;
                 if (Gender)
                     updateData.Gender = Gender;
+                url = void 0;
                 if (!PhotoUrl) return [3 /*break*/, 2];
-                filename = "".concat(Date.now(), ".jpg");
-                return [4 /*yield*/, (0, services_1.putthefile)("image/jpeg", filename)];
+                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(PhotoUrl)];
             case 1:
                 url = _c.sent();
-                updateData.PhotoUrl = filename;
+                updateData.PhotoUrl = url;
                 _c.label = 2;
             case 2:
-                if (Object.keys(updateData).length === 0) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "No data provided for update", 400)];
-                }
+                console.log(updateData);
                 return [4 /*yield*/, Models_1.Users.update(updateData, {
                         where: {
                             Id: (_b = req.user) === null || _b === void 0 ? void 0 : _b.Id,
@@ -116,8 +97,8 @@ var updatetheprofile = function (req, res) { return __awaiter(void 0, void 0, vo
                 _c.sent();
                 return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "Successfully updated", updateData: updateData }, 202)];
             case 4:
-                error_2 = _c.sent();
-                console.error(error_2);
+                error_1 = _c.sent();
+                console.error(error_1);
                 return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal server error", 500)];
             case 5: return [2 /*return*/];
         }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { SinginTypes } from "../types";
 import { backendurl } from "../utils";
 import { useDispatch } from "react-redux";
-import { addthetoken } from "../store/slices/UserSlices";
+import { addthetoken, gettheuser } from "../store/slices/UserSlices";
 interface USESINGINHOOKSRETURN {
   loading: boolean;
   logintheuser: (data: SinginTypes) => Promise<boolean>;
@@ -19,9 +19,11 @@ const useSinginhook = (): USESINGINHOOKSRETURN => {
     setloading(true);
     try {
       let reponse = await axios.post(`${backendurl}/users/login`, data);
-
+      console.log(reponse)
       let token = reponse?.data?.data?.token;
+      const user = reponse?.data?.data?.user
       dispatch(addthetoken(token));
+      dispatch(gettheuser(user))
       return true;
     } catch (error: any) {
       seterrorMessages(error?.response?.data?.messages);

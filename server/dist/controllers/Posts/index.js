@@ -42,10 +42,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePost = exports.getthepost = exports.deletethepost = exports.createthepost = void 0;
 var utils_1 = require("../../utils");
 var Models_1 = require("../../Models");
-var services_1 = require("../../services");
 var db_1 = __importDefault(require("../../db"));
+var utils_2 = require("../../utils");
+var Models_2 = require("../../Models");
 var createthepost = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, img, title, video, user, newpost, filename, url, error_1;
+    var _a, img, title, video, user, newpost, url, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -56,35 +57,28 @@ var createthepost = function (req, res) { return __awaiter(void 0, void 0, void 
                     return [2 /*return*/, (0, utils_1.RejectResponse)(res, "invaild credatonals", 400)];
                 }
                 newpost = void 0;
-                filename = void 0;
                 url = void 0;
                 if (!!video) return [3 /*break*/, 3];
-                filename = "".concat(Date.now(), ".jpg");
-                return [4 /*yield*/, (0, services_1.putthefile)("image/jpeg", filename)];
+                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(img)];
             case 1:
                 url = _b.sent();
                 return [4 /*yield*/, Models_1.Posts.create({
                         UserId: user.Id,
-                        img: filename,
-                        title: title,
-                        userName: user.Name,
-                        userPhotoUrl: user.PhotoUrl,
+                        img: url,
+                        title: title
                     })];
             case 2:
                 newpost = _b.sent();
                 return [3 /*break*/, 6];
             case 3:
                 if (!!img) return [3 /*break*/, 6];
-                filename = "".concat(Date.now(), ".mp4");
-                return [4 /*yield*/, (0, services_1.putthefile)("video/mp4", filename)];
+                return [4 /*yield*/, (0, utils_2.store_the_videos_into_cloudinary)(video)];
             case 4:
                 url = _b.sent();
                 return [4 /*yield*/, Models_1.Posts.create({
                         title: title,
                         UserId: user.Id,
-                        video: filename,
-                        userName: user.Name,
-                        userPhotoUrl: user.PhotoUrl,
+                        video: url,
                     })];
             case 5:
                 newpost = _b.sent();
@@ -147,47 +141,31 @@ var deletethepost = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.deletethepost = deletethepost;
 var getthepost = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var posts, i, url, url, error_3;
+    var posts, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 8, , 9]);
-                return [4 /*yield*/, Models_1.Posts.findAll({})];
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Models_1.Posts.findAll({
+                        include: {
+                            model: Models_2.Users,
+                            attributes: ["Name", "PhotoUrl", "Id"]
+                        }
+                    })];
             case 1:
-                posts = (_a.sent()) || [];
-                if (!(Array.isArray(posts) && posts.length > 0)) return [3 /*break*/, 7];
-                i = 0;
-                _a.label = 2;
+                posts = _a.sent();
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { data: posts }, 202)];
             case 2:
-                if (!(i < posts.length)) return [3 /*break*/, 7];
-                if (!posts[i].img) return [3 /*break*/, 4];
-                return [4 /*yield*/, (0, services_1.gethefile)(posts[i].img)];
-            case 3:
-                url = _a.sent();
-                posts[i].img = url;
-                return [3 /*break*/, 6];
-            case 4:
-                if (!posts[i].video) return [3 /*break*/, 6];
-                return [4 /*yield*/, (0, services_1.gethefile)(posts[i].img)];
-            case 5:
-                url = _a.sent();
-                posts[i].video = url;
-                _a.label = 6;
-            case 6:
-                i++;
-                return [3 /*break*/, 2];
-            case 7: return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { data: posts }, 202)];
-            case 8:
                 error_3 = _a.sent();
                 console.log("getting errors from get the posts");
                 return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 5000)];
-            case 9: return [2 /*return*/];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.getthepost = getthepost;
 var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var t, id, _a, title, video, img, post, filename, url, error_4;
+    var t, id, _a, title, video, img, post, url, error_4;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -214,35 +192,32 @@ var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 if (!post) {
                     return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Post not found", 400)];
                 }
-                filename = void 0;
                 url = void 0;
                 if (!video) return [3 /*break*/, 9];
-                filename = "".concat(Date.now(), ".mp4");
-                return [4 /*yield*/, (0, services_1.putthefile)("video/mp4", filename)];
+                return [4 /*yield*/, (0, utils_2.store_the_videos_into_cloudinary)(video)];
             case 4:
                 url = _c.sent();
                 if (!title) return [3 /*break*/, 6];
-                return [4 /*yield*/, post.update({ video: filename, title: title }, { transaction: t })];
+                return [4 /*yield*/, post.update({ video: url, title: title }, { transaction: t })];
             case 5:
                 _c.sent();
                 return [3 /*break*/, 8];
-            case 6: return [4 /*yield*/, post.update({ video: filename }, { transaction: t })];
+            case 6: return [4 /*yield*/, post.update({ video: url }, { transaction: t })];
             case 7:
                 _c.sent();
                 _c.label = 8;
             case 8: return [3 /*break*/, 14];
             case 9:
                 if (!img) return [3 /*break*/, 14];
-                filename = "".concat(Date.now(), ".jpg");
-                return [4 /*yield*/, (0, services_1.putthefile)("image/jpeg", filename)];
+                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(img)];
             case 10:
                 url = _c.sent();
                 if (!title) return [3 /*break*/, 12];
-                return [4 /*yield*/, post.update({ img: filename, title: title }, { transaction: t })];
+                return [4 /*yield*/, post.update({ img: url, title: title }, { transaction: t })];
             case 11:
                 _c.sent();
                 return [3 /*break*/, 14];
-            case 12: return [4 /*yield*/, post.update({ img: filename }, { transaction: t })];
+            case 12: return [4 /*yield*/, post.update({ img: url }, { transaction: t })];
             case 13:
                 _c.sent();
                 _c.label = 14;

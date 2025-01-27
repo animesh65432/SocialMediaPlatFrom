@@ -44,11 +44,11 @@ var client_s3_1 = require("@aws-sdk/client-s3");
 var s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 var Config_1 = __importDefault(require("../Config"));
 var s3client = new client_s3_1.S3Client({
+    region: process.env.AWS_REGION || 'us-east-1',
     credentials: {
         secretAccessKey: Config_1.default.S3SERECTACESSKEY || "",
         accessKeyId: Config_1.default.S3ACESSKEYID || "",
-    },
-    region: Config_1.default.S3REGION || "",
+    }
 });
 var gethefile = function (key) { return __awaiter(void 0, void 0, void 0, function () {
     var command, url, error_1;

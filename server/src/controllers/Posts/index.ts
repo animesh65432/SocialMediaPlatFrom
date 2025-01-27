@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { RejectResponse, SuccessResponse } from "../../utils";
 import { Posts } from "../../Models";
-import { gethefile, putthefile } from "../../services";
 import database from "../../db";
-
+import { store_the_images_into_cloudinary, store_the_videos_into_cloudinary } from "../../utils"
+import { Users } from "../../Models"
 const createthepost = async (req: Request, res: Response) => {
   try {
     const { img, title, video } = req.body;
@@ -12,28 +12,21 @@ const createthepost = async (req: Request, res: Response) => {
     if (!title || !user) {
       return RejectResponse(res, "invaild credatonals", 400);
     }
-    let newpost;
-    let filename;
+    let newpost
     let url;
     if (!video) {
-      filename = `${Date.now()}.jpg`;
-      url = await putthefile("image/jpeg", filename);
+      url = await store_the_images_into_cloudinary(img)
       newpost = await Posts.create({
         UserId: user.Id,
-        img: filename,
-        title,
-        userName: user.Name,
-        userPhotoUrl: user.PhotoUrl,
+        img: url,
+        title
       });
     } else if (!img) {
-      filename = `${Date.now()}.mp4`;
-      url = await putthefile("video/mp4", filename);
+      url = await store_the_videos_into_cloudinary(video)
       newpost = await Posts.create({
         title,
         UserId: user.Id,
-        video: filename,
-        userName: user.Name,
-        userPhotoUrl: user.PhotoUrl,
+        video: url,
       });
     }
 
@@ -84,19 +77,12 @@ const deletethepost = async (req: Request, res: Response) => {
 };
 const getthepost = async (req: Request, res: Response) => {
   try {
-    const posts = (await Posts.findAll({})) || [];
-
-    if (Array.isArray(posts) && posts.length > 0) {
-      for (let i = 0; i < posts.length; i++) {
-        if (posts[i].img) {
-          let url = await gethefile(posts[i].img as string);
-          posts[i].img = url;
-        } else if (posts[i].video) {
-          let url = await gethefile(posts[i].img as string);
-          posts[i].video = url;
-        }
+    const posts = await Posts.findAll({
+      include: {
+        model: Users,
+        attributes: ["Name", "PhotoUrl", "Id"]
       }
-    }
+    })
     return SuccessResponse(res, { data: posts }, 202);
   } catch (error) {
     console.log("getting errors from get the posts");
@@ -126,25 +112,22 @@ const updatePost = async (req: Request, res: Response) => {
       return RejectResponse(res, "Post not found", 400);
     }
 
-    let filename;
     let url;
 
     if (video) {
-      filename = `${Date.now()}.mp4`;
-      url = await putthefile("video/mp4", filename);
+      url = await store_the_videos_into_cloudinary(video)
 
       if (title) {
-        await post.update({ video: filename, title }, { transaction: t });
+        await post.update({ video: url, title }, { transaction: t });
       } else {
-        await post.update({ video: filename }, { transaction: t });
+        await post.update({ video: url }, { transaction: t });
       }
     } else if (img) {
-      filename = `${Date.now()}.jpg`;
-      url = await putthefile("image/jpeg", filename);
+      url = await store_the_images_into_cloudinary(img)
       if (title) {
-        await post.update({ img: filename, title }, { transaction: t });
+        await post.update({ img: url, title }, { transaction: t });
       } else {
-        await post.update({ img: filename }, { transaction: t });
+        await post.update({ img: url }, { transaction: t });
       }
     }
 

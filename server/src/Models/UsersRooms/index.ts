@@ -1,16 +1,13 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import database from "../../db";
-interface UserRoomsAttributes {
-  roomid: string;
-  userid?: number | null;
-}
+import { UserRoomsAttributes } from "../../types/models/UsersRooms"
 
 interface UserRoomsCreationAttributes
-  extends Optional<UserRoomsAttributes, "roomid"> {}
+  extends Optional<UserRoomsAttributes, "roomid"> { }
 
 interface UserRoomsInstance
   extends Model<UserRoomsAttributes, UserRoomsCreationAttributes>,
-    UserRoomsAttributes {}
+  UserRoomsAttributes { }
 
 const UserRooms = database.define<UserRoomsInstance>("UserRooms", {
   roomid: {

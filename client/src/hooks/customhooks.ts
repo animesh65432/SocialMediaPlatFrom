@@ -10,6 +10,8 @@ import useGetTheProfile from "./useGetTheProfile";
 import useUserMedia from "./usemediahook";
 import useDeleteRoom from "./useDeleteRoom";
 import useGetRoom from "./useGetRoom";
+import useSeetheUser from "./useSeetheUser";
+import useUpdatefollowers from "./useUpdatefollowers";
 
 export {
   useDeleteThePost,
@@ -24,4 +26,6 @@ export {
   useUserMedia,
   useDeleteRoom,
   useGetRoom,
+  useSeetheUser,
+  useUpdatefollowers
 };

@@ -1,22 +1,22 @@
-import { Sequelize } from "sequelize";
-import config from "../Config";
+import { Sequelize } from 'sequelize';
 
 const database = new Sequelize(
-  config.DATABASENAME as string,
-  config.USERNAME as string,
-  config.PASSWORD as string,
+  "meetup", // Database name
+  "postgres", // Username
+  "new_password", // Password
   {
-    host: config.DATABASEHOST,
-    port: 15391,
-    dialect: "postgres",
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-    },
+    host: "localhost", // Database host
+    dialect: "postgres", // Dialect
+    logging: console.log, // Enable logging for debugging
   }
 );
 
-export default database;
+// Test the connection
+database.authenticate()
+  .then(() => {
+    console.log('Connection to the database has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+export default database

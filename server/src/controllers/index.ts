@@ -1,14 +1,14 @@
-import { createtheuser, logintheuser } from "./UserContorllers";
+import { createtheuser, logintheuser, Others_Peoples_See, addfollowers } from "./UserContorllers";
 import { sendEmail, updatePassword } from "./ForgetPassword";
 import { createthepost, deletethepost, getthepost, updatePost } from "./Posts";
-import { Gettheuserprofile, updatetheprofile } from "./Profile";
+import { updatetheprofile } from "./Profile";
 import { GetalltheRooms, deletetherooms } from "./Rooms";
 
 const controllers = {
-  UserControllers: { createtheuser, logintheuser },
+  UserControllers: { createtheuser, logintheuser, Others_Peoples_See, addfollowers },
   forgetpassword: { sendEmail, updatePassword },
   post: { createthepost, deletethepost, getthepost, updatePost },
-  Profile: { Gettheuserprofile, updatetheprofile },
-  Room: { GetalltheRooms, deletethepost },
+  Profile: { updatetheprofile },
+  Room: { GetalltheRooms, deletetherooms },
 };
 export default controllers;

@@ -5,5 +5,5 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/Get", middleware, controllers.Room.GetalltheRooms);
-router.delete("/delete/:Id", middleware, controllers.Room.deletethepost);
+router.delete("/delete/:Id", middleware, controllers.Room.deletetherooms);
 export default router;

@@ -10,37 +10,46 @@ import {
   UpdatePassword,
   ResetPassword,
   Header,
-  Footer,
-  Profile,
+  UpdateProfile,
   Join,
   Roomid,
+  MobileNavbar,
+  Others
 } from "./components";
+
+
 import { createthepeer } from "./store/slices/SocketSlices";
 
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
+  console.log(idtoken)
   const isLogin = !!idtoken;
   const dispatch = useDispatch();
   const color = useSelector((state: RootState) => state.color.color);
-  console.log(color);
+  console.log(color, isLogin);
 
   useEffect(() => {
     dispatch(createthepeer());
   }, [idtoken, isLogin]);
 
   return (
-    <div className={color ? "bg-slate-800" : "bg-slate-300"}>
+    <div className="bg-slate-300 font-mono h-[100vh]">
       {isLogin ? (
         <>
-          <Header />
+          <div className="md:block hidden">
+            <Header />
+          </div>
+          <div className="md:hidden block">
+            <MobileNavbar />
+          </div>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/Profile" element={<Profile />}></Route>
+            <Route path="/Profile" element={<Others />}></Route>
             <Route path="/video" element={<Join />}></Route>
             <Route path="/Rooms/:roomid" element={<Roomid />}></Route>
+            <Route path="/updateprofile" element={<UpdateProfile />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Footer />
         </>
       ) : (
         <>

@@ -26,8 +26,7 @@ var Users = db_1.default.define("Users", {
     },
     PhotoUrl: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        defaultValue: "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
+        allowNull: true,
     },
     Gender: {
         type: sequelize_1.DataTypes.ENUM("Male", "Female"),

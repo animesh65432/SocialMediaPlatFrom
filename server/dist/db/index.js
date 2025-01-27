@@ -1,20 +1,20 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var sequelize_1 = require("sequelize");
-var Config_1 = __importDefault(require("../Config"));
-var database = new sequelize_1.Sequelize(Config_1.default.DATABASENAME, Config_1.default.USERNAME, Config_1.default.PASSWORD, {
-    host: Config_1.default.DATABASEHOST,
-    port: 15391,
-    dialect: "postgres",
-    logging: false,
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false,
-        },
-    },
+var database = new sequelize_1.Sequelize("meetup", // Database name
+"postgres", // Username
+"new_password", // Password
+{
+    host: "localhost", // Database host
+    dialect: "postgres", // Dialect
+    logging: console.log, // Enable logging for debugging
+});
+// Test the connection
+database.authenticate()
+    .then(function () {
+    console.log('Connection to the database has been established successfully.');
+})
+    .catch(function (err) {
+    console.error('Unable to connect to the database:', err);
 });
 exports.default = database;

@@ -2,16 +2,16 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
-  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import config from "../Config";
+import config from "../../Config";
 const s3client = new S3Client({
+  region: process.env.AWS_REGION || 'us-east-1',
   credentials: {
     secretAccessKey: config.S3SERECTACESSKEY || "",
     accessKeyId: config.S3ACESSKEYID || "",
-  },
-  region: config.S3REGION || "",
+
+  }
 });
 
 export const gethefile = async (key: string) => {

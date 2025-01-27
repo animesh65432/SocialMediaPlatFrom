@@ -4,6 +4,7 @@ import { Users } from "../../Models";
 import bycrptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 import config from "../../Config";
+
 const createtheuser = async (req: Request, res: Response) => {
   try {
     const { Name, Email, Password } = req.body;
@@ -50,17 +51,17 @@ const logintheuser = async (req: Request, res: Response) => {
       return RejectResponse(res, "invaild credationals", 400);
     }
 
-    let checktheuser = await Users.findOne({
+    let user = await Users.findOne({
       where: { Email },
     });
 
-    if (!checktheuser) {
+    if (!user) {
       return RejectResponse(res, "user did not signup yet", 400);
     }
 
     let token = jsonwebtoken.sign({ Email }, config.JSONWEBSECRECT as string);
 
-    let checkpassword = await bycrptjs.compare(Password, checktheuser.Password);
+    let checkpassword = await bycrptjs.compare(Password, user.Password);
 
     if (!checkpassword) {
       return RejectResponse(res, "Password is wrong", 400);
@@ -71,11 +72,72 @@ const logintheuser = async (req: Request, res: Response) => {
       httpOnly: true,
     });
 
-    return SuccessResponse(res, { message: "sucessfully log in", token }, 200);
+    return SuccessResponse(res, { message: "sucessfully log in", token, user }, 200);
   } catch (error) {
     console.log("error from getting login the user", error);
     return RejectResponse(res, "internal server errors", 500);
   }
 };
 
-export { createtheuser, logintheuser };
+const Others_Peoples_See = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params
+    if (!userId) {
+      return res.status(400).json({
+        message: "userId is required"
+      })
+    }
+
+
+    const user = await Users.findOne({
+      where: {
+        Id: userId
+      },
+      attributes: ["Id", "Name", "PhotoUrl", "followers", "Gender", "Email"]
+    })
+
+    return res.status(200).json({
+      user
+    })
+  } catch (error) {
+    console.log(error, `errors in Others Peoples see`)
+    return res.status(5000).json({
+      message: `internal server errors`
+    })
+  }
+}
+
+
+const addfollowers = async (req: Request, res: Response) => {
+  try {
+
+    const { userId } = req.params
+    console.log(userId, req.user.followers)
+
+    if (userId === undefined || req.user.followers === undefined) {
+      return res.status(400).json({
+        message: "userId and user is undefined"
+      })
+    }
+    const count = req.user.followers += 1
+
+    const connvertuserIdtoNumber = Number(userId)
+    await Users.update({ followers: count }, {
+      where: {
+        Id: connvertuserIdtoNumber
+      }
+    })
+
+    return res.status(200).json({
+      messages: "sucessfully update it"
+    })
+
+  } catch (error) {
+    console.log(error, `errors in addfollowers`)
+    res.status(500).json({
+      message: "internal server errors"
+    })
+
+  }
+}
+export { createtheuser, logintheuser, Others_Peoples_See, addfollowers };

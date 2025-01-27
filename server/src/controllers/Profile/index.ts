@@ -1,53 +1,54 @@
 import { Request, Response } from "express";
 import { Users } from "../../Models";
 import { SuccessResponse, RejectResponse } from "../../utils";
-import { putthefile, gethefile } from "../../services";
+import { putthefile } from "../../services/aws";
+import { store_the_images_into_cloudinary } from "../../utils"
 
-const Gettheuserprofile = async (req: Request, res: Response) => {
-  try {
-    let userid = req.user?.Id;
-    let data = {};
+// const Gettheuserprofile = async (req: Request, res: Response) => {
+//   try {
+//     let userid = req.user?.Id;
+//     let data = {};
 
-    let user = await Users.findOne({
-      where: { Id: userid },
-      attributes: ["Name", "Gender", "PhotoUrl", "followers"],
-    });
+//     let user = await Users.findOne({
+//       where: { Id: userid },
+//       attributes: ["Name", "Gender", "PhotoUrl", "followers"],
+//     });
 
-    if (!user?.PhotoUrl) {
-      data = {
-        ...user,
-        PhotoUrl:
-          "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
-      };
-    } else {
-      let img = gethefile(user.PhotoUrl);
-      data = { ...user, PhotoUrl: img };
-    }
+//     if (!user?.PhotoUrl) {
+//       data = {
+//         ...user,
+//         PhotoUrl:
+//           "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
+//       };
+//     } else {
+//       let img = gethefile(user.PhotoUrl);
+//       data = { ...user, PhotoUrl: img };
+//     }
 
-    return SuccessResponse(res, { data }, 200);
-  } catch (error) {
-    return RejectResponse(res, "internal server errors", 500);
-  }
-};
+//     return SuccessResponse(res, { data }, 200);
+//   } catch (error) {
+//     return RejectResponse(res, "internal server errors", 500);
+//   }
+// };
 
 const updatetheprofile = async (req: Request, res: Response) => {
   try {
     const { Name, Gender, PhotoUrl } = req.body;
-    console.log(Name, Gender, PhotoUrl);
+    if (!Name && !Gender && !PhotoUrl) {
+      return RejectResponse(res, "did not get name ,gender,photourl  ", 400)
+    }
     const updateData: any = {};
 
     if (Name) updateData.Name = Name;
     if (Gender) updateData.Gender = Gender;
 
+    let url
     if (PhotoUrl) {
-      const filename = `${Date.now()}.jpg`;
-      const url = await putthefile("image/jpeg", filename);
-      updateData.PhotoUrl = filename;
+      url = await store_the_images_into_cloudinary(PhotoUrl)
+      updateData.PhotoUrl = url
     }
 
-    if (Object.keys(updateData).length === 0) {
-      return RejectResponse(res, "No data provided for update", 400);
-    }
+    console.log(updateData)
 
     await Users.update(updateData, {
       where: {
@@ -65,4 +66,4 @@ const updatetheprofile = async (req: Request, res: Response) => {
     return RejectResponse(res, "Internal server error", 500);
   }
 };
-export { updatetheprofile, Gettheuserprofile };
+export { updatetheprofile };

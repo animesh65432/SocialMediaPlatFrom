@@ -1,17 +1,9 @@
 import config from "../Config";
 import jwtwebtoken from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import Users, { UserAttributes } from "../Models/Users";
+import Users from "../Models/Users";
 import { RejectResponse } from "../utils";
 import { JwtPayload } from "../types";
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: UserAttributes;
-    }
-  }
-}
 
 const middleware = async (req: Request, res: Response, next: NextFunction) => {
   try {

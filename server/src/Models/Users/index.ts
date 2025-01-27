@@ -1,21 +1,12 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import database from "../../db";
+import { UserAttributes } from "../../types/models/Users"
 
-export interface UserAttributes {
-  Id: number;
-  Name: string;
-  Email: string;
-  Password: string;
-  PhotoUrl: string;
-  Gender?: "Male" | "Female";
-  followers?: number;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, "Id"> {}
+interface UserCreationAttributes extends Optional<UserAttributes, "Id"> { }
 
 interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
-    UserAttributes {}
+  UserAttributes { }
 
 const Users = database.define<UserInstance>("Users", {
   Id: {
@@ -38,9 +29,7 @@ const Users = database.define<UserInstance>("Users", {
   },
   PhotoUrl: {
     type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue:
-      "https://th.bing.com/th/id/OIP.ADA-vGQMw0K3Bzbn9ZOhPgHaE8?rs=1&pid=ImgDetMain",
+    allowNull: true,
   },
   Gender: {
     type: DataTypes.ENUM("Male", "Female"),

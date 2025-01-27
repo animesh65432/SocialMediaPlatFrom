@@ -1,49 +1,46 @@
 import axios from "axios";
 import { backendurl } from "../utils";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { RootState } from "../store";
+import { gettheuser } from "@/store/slices/UserSlices"
 type useUpdateFunciondata = {
-  PhotoUrl: FileList;
-  Name: string;
-  Gender: string;
+  PhotoUrl?: string;
+  Name?: string;
+  Gender?: string;
 };
 
 interface useUpdateProfiletypes {
   updateprofile: (data: useUpdateFunciondata) => void;
-  upload: boolean;
   loading: boolean;
 }
 
 const useUpdateProfile = (): useUpdateProfiletypes => {
-  const [upload, setupload] = useState<boolean>(false);
   const [loading, setloading] = useState<boolean>(false);
+  const dispatch = useDispatch()
   const token = useSelector((state: RootState) => state.user.idtoken);
   let updateprofile = async (data: useUpdateFunciondata) => {
-    let Response;
     setloading(true);
     try {
-      let usersdata = { ...data, PhotoUrl: "" };
-      console.log(usersdata);
-      if (data.PhotoUrl.length > 0) {
-        Response = await axios.put(`${backendurl}/profile/update`, usersdata, {
-          withCredentials: true,
-        });
-      }
-      await axios.put(Response?.data?.data?.url, data.PhotoUrl[0], {
+      console.log(data, "updateprofile")
+
+      const response = await axios.put(`${backendurl}/profile/update`, data, {
         headers: {
-          token,
-        },
-      });
-      setupload(true);
-    } catch (error) {
-      console.log(error);
+          token
+        }
+      })
+
+      const update = response?.data?.data?.updateData
+      dispatch(gettheuser(update))
+      return response
+    } catch (error: any) {
+      throw new Error(error)
     } finally {
       setloading(false);
     }
   };
 
-  return { updateprofile, upload, loading };
+  return { updateprofile, loading };
 };
 
 export default useUpdateProfile;

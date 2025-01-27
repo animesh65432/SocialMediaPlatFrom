@@ -1,14 +1,10 @@
 import database from "../../db";
 import { Model, DataTypes } from "sequelize";
-interface ForgstpasswordAttributes {
-  id: string;
-  active: boolean;
-  UserId?: number;
-}
+import { ForgstpasswordAttributes } from "../../types/models/Forgetpassword"
 
 interface ForgetPasswordInstance
   extends Model<ForgstpasswordAttributes>,
-    ForgstpasswordAttributes {}
+  ForgstpasswordAttributes { }
 
 const ForGetPassword = database.define<ForgetPasswordInstance>(
   "ForgetPassword",

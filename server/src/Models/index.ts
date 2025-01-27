@@ -7,7 +7,7 @@ import UserRooms from "./UsersRooms";
 Users.hasMany(ForgetPassword);
 ForgetPassword.belongsTo(Users);
 Users.hasMany(Posts);
-Posts.belongsTo(Users);
+Posts.belongsTo(Users, { foreignKey: "UserId" });
 Users.belongsToMany(Room, {
   through: UserRooms,
   foreignKey: "userid",

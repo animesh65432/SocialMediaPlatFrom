@@ -5,11 +5,10 @@ import { useDispatch } from "react-redux";
 import { GetallTheposts } from "../store/slices/PostSlices";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-
 type CreateNewPostPayload = {
-  img?: FileList;
+  img?: string;
   title: string;
-  video?: FileList;
+  video?: string;
 };
 
 interface UsePostHookReturn {
@@ -30,42 +29,30 @@ const usePosthook = (): UsePostHookReturn => {
       if (data.img) {
         let response = await axios.post(
           `${backendurl}/post/createpost`,
-          { ...data, img: "images" },
+          data,
           {
             headers: {
               token,
             },
           }
         );
-        console.log(data.img[0]);
-
-        let url = response?.data?.data?.url;
-        let img = data?.img[0];
-        await fetch(url, {
-          method: "PUT",
-          body: img,
-          headers: {
-            "Content-Type": img.type,
-          },
-        });
+        console.log(response)
       } else if (data.video) {
         let response = await axios.post(
           `${backendurl}/post/createpost`,
-          { ...data, video: "video" },
+          data,
           {
             headers: {
               token,
             },
           }
         );
-        let url = response?.data?.data?.url;
-        let video = data?.video[0];
-
-        await fetch(url, { method: "PUST", body: video });
+        console.log(response, "response")
       }
       let response = await axios.get(`${backendurl}/post/GetThePost`, {
         headers: { token },
       });
+      console.log(response, "all the posts")
       let posts = response?.data?.data?.data;
       dispatch(GetallTheposts(posts));
       return true;

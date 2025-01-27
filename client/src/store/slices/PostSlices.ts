@@ -5,11 +5,13 @@ type Post = {
   img?: string;
   title?: string;
   comment?: string;
-  UserId?: number;
   video?: string;
-  userPhotoUrl?: string;
-  userName?: string;
   createdAt?: string;
+  User: {
+    Name: string;
+    PhotoUrl: string | null;
+    Id: number
+  }
 };
 
 export type PostsState = {

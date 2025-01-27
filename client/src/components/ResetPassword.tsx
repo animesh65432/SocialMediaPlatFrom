@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useResetPassword } from "../hooks/customhooks";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-
+import { Button } from "@/components/ui/button"
+import { CircularProgress } from "@mui/material"
 const ResetPassword: React.FC = () => {
   const [Email, setEmail] = useState<string>("");
   const { resetpassword, loading, errorMessages } = useResetPassword();
@@ -36,17 +36,17 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-800 p-4">
+    <div className="flex items-center justify-center min-h-screen  p-4">
       <form
-        className="bg-slate-900 p-6 rounded-lg shadow-lg w-full max-w-md text-slate-200"
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md  text-black"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-2xl font-semibold mb-6 text-center">
+        <h1 className="text-2xl font-semibold mb-6 text-center text-black">
           Reset Password
         </h1>
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-300"
+          className="block mb-2 text-sm font-medium "
         >
           Email
         </label>
@@ -54,20 +54,22 @@ const ResetPassword: React.FC = () => {
           type="text"
           value={Email}
           onChange={(e) => setEmail(e.target.value)}
-          className="block w-full p-3 border border-gray-600 rounded-md bg-slate-800 text-white focus:outline-none focus:ring focus:ring-indigo-300"
+          className="block w-full p-3 border border-black text-black focus:outline-none focus:ring focus:stroke-slate-600 rounded-md"
         />
-        <Button
-          variant="outlined"
-          color="primary"
-          type="submit"
-          className="w-full mt-6"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Reset Password"}
-        </Button>
+        <div className="flex justify-center">
+          {!loading && <Button
+            disabled={loading}
+            className="mt-3"
+
+          >
+            Reset Password
+          </Button>}
+          {loading && <CircularProgress />}
+
+        </div>
         <div className="text-center mt-4">
           <span
-            className="text-slate-200 underline text-lg cursor-pointer"
+            className=" underline text-lg cursor-pointer"
             onClick={ongotosinginpage}
           >
             Sign in
