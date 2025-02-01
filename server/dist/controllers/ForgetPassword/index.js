@@ -59,7 +59,7 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 _a.trys.push([2, 7, , 9]);
                 Email = req.body.Email;
                 if (!Email) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Invalid credentials", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Invalid credentials', 400)];
                 }
                 return [4 /*yield*/, Models_1.Users.findOne({
                         where: { Email: Email },
@@ -68,7 +68,7 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 3:
                 checkUser = _a.sent();
                 if (!checkUser) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "User has not signed up yet", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'User has not signed up yet', 400)];
                 }
                 id = (0, uuid_1.v4)();
                 return [4 /*yield*/, Models_1.ForgetPassword.create({
@@ -79,7 +79,7 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 4:
                 forgetPassword = _a.sent();
                 transporter = nodemailer_1.default.createTransport({
-                    service: "gmail",
+                    service: 'gmail',
                     auth: {
                         user: Config_1.default.NODEMAILERUSER,
                         pass: Config_1.default.NODEMAILERPASSWORD,
@@ -89,7 +89,7 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 mailOptions = {
                     from: Config_1.default.NODEMAILERUSER,
                     to: Email,
-                    subject: "Password Reset Request",
+                    subject: 'Password Reset Request',
                     html: "<a href='".concat(Config_1.default.Frontendurl, "\n/update/").concat(forgetPassword.id, "'>Click here to reset your password</a>"),
                 };
                 return [4 /*yield*/, transporter.sendMail(mailOptions)];
@@ -98,14 +98,14 @@ var sendEmail = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, t.commit()];
             case 6:
                 _a.sent();
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "Email sent successfully" }, 201)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'Email sent successfully' }, 201)];
             case 7:
                 error_1 = _a.sent();
                 return [4 /*yield*/, t.rollback()];
             case 8:
                 _a.sent();
-                console.error("Error sending email:", error_1);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal server error", 500)];
+                console.error('Error sending email:', error_1);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Internal server error', 500)];
             case 9: return [2 /*return*/];
         }
     });
@@ -123,10 +123,10 @@ var updatePassword = function (req, res) { return __awaiter(void 0, void 0, void
                 _b.trys.push([2, 9, , 11]);
                 _a = req.body, Password = _a.Password, id = _a.id;
                 if (!id) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "No ID provided", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'No ID provided', 400)];
                 }
                 if (!Password) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "No password provided", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'No password provided', 400)];
                 }
                 return [4 /*yield*/, Models_1.ForgetPassword.findOne({
                         where: { id: id },
@@ -136,7 +136,7 @@ var updatePassword = function (req, res) { return __awaiter(void 0, void 0, void
                 forgetPassword = _b.sent();
                 console.log(forgetPassword);
                 if (!forgetPassword || forgetPassword.active) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Password reset link is invalid or expired", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Password reset link is invalid or expired', 400)];
                 }
                 return [4 /*yield*/, Models_1.Users.findOne({
                         where: { Id: forgetPassword.UserId },
@@ -145,7 +145,7 @@ var updatePassword = function (req, res) { return __awaiter(void 0, void 0, void
             case 4:
                 user = _b.sent();
                 if (!user) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "User not found", 404)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'User not found', 404)];
                 }
                 return [4 /*yield*/, bcryptjs_1.default.hash(Password, 10)];
             case 5:
@@ -159,14 +159,14 @@ var updatePassword = function (req, res) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, t.commit()];
             case 8:
                 _b.sent();
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "Password updated successfully" }, 200)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'Password updated successfully' }, 200)];
             case 9:
                 error_2 = _b.sent();
                 return [4 /*yield*/, t.rollback()];
             case 10:
                 _b.sent();
-                console.error("Error updating password:", error_2);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal server error", 500)];
+                console.error('Error updating password:', error_2);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Internal server error', 500)];
             case 11: return [2 /*return*/];
         }
     });

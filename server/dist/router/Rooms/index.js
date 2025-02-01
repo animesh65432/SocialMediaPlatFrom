@@ -7,6 +7,6 @@ var controllers_1 = __importDefault(require("../../controllers"));
 var middlewares_1 = __importDefault(require("../../middlewares"));
 var express_1 = require("express");
 var router = (0, express_1.Router)();
-router.get("/Get", middlewares_1.default, controllers_1.default.Room.GetalltheRooms);
-router.delete("/delete/:Id", middlewares_1.default, controllers_1.default.Room.deletetherooms);
+router.get('/Get', middlewares_1.default, controllers_1.default.Room.GetalltheRooms);
+router.delete('/delete/:Id', middlewares_1.default, controllers_1.default.Room.deletetherooms);
 exports.default = router;

@@ -6,7 +6,7 @@ var Posts_1 = require("./Posts");
 var Profile_1 = require("./Profile");
 var Rooms_1 = require("./Rooms");
 var controllers = {
-    UserControllers: { createtheuser: UserContorllers_1.createtheuser, logintheuser: UserContorllers_1.logintheuser, Others_Peoples_See: UserContorllers_1.Others_Peoples_See, addfollowers: UserContorllers_1.addfollowers },
+    UserControllers: { createtheuser: UserContorllers_1.createtheuser, logintheuser: UserContorllers_1.logintheuser, OthersPeoplesSee: UserContorllers_1.OthersPeoplesSee, addfollowers: UserContorllers_1.addfollowers },
     forgetpassword: { sendEmail: ForgetPassword_1.sendEmail, updatePassword: ForgetPassword_1.updatePassword },
     post: { createthepost: Posts_1.createthepost, deletethepost: Posts_1.deletethepost, getthepost: Posts_1.getthepost, updatePost: Posts_1.updatePost },
     Profile: { updatetheprofile: Profile_1.updatetheprofile },

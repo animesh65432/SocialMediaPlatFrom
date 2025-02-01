@@ -40,48 +40,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.roomHandler = void 0;
-var Config_1 = __importDefault(require("../Config"));
 var uuid_1 = require("uuid");
 var Models_1 = require("../Models");
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var db_1 = __importDefault(require("../db"));
+var sequelize_1 = require("sequelize");
 var roomHandler = function (socket) {
-    var createRoom = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
+    var createRoom = function () { return __awaiter(void 0, void 0, void 0, function () {
         var t, roomId, NewRoom, error_1;
-        var Name = _b.Name, Topics = _b.Topics;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0: return [4 /*yield*/, db_1.default.transaction()];
                 case 1:
-                    t = _c.sent();
-                    _c.label = 2;
+                    t = _a.sent();
+                    _a.label = 2;
                 case 2:
-                    _c.trys.push([2, 5, , 7]);
+                    _a.trys.push([2, 5, , 7]);
                     roomId = (0, uuid_1.v4)();
                     socket.join(roomId);
-                    return [4 /*yield*/, Models_1.Room.create({ Id: roomId, Name: Name, Topics: Topics }, { transaction: t })];
+                    return [4 /*yield*/, Models_1.Room.create({ Id: roomId }, { transaction: t })];
                 case 3:
-                    NewRoom = _c.sent();
-                    console.log(NewRoom.Id);
-                    socket.emit("room-created", { roomId: roomId });
+                    NewRoom = _a.sent();
+                    console.log('room Id', NewRoom.Id);
+                    socket.emit('room-created', { roomId: roomId });
                     return [4 /*yield*/, t.commit()];
                 case 4:
-                    _c.sent();
+                    _a.sent();
                     return [3 /*break*/, 7];
                 case 5:
-                    error_1 = _c.sent();
+                    error_1 = _a.sent();
                     console.log(error_1);
                     return [4 /*yield*/, t.rollback()];
                 case 6:
-                    _c.sent();
+                    _a.sent();
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
             }
         });
     }); };
     var joinedroom = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
-        var t, verifythetoken, Email, user, userId, _c, userRoom, created, participants, participantswithnames, error_2;
-        var roomid = _b.roomid, peerid = _b.peerid, token = _b.token;
+        var t, room, checkuserroomalredypresent, userrooms, users, error_2;
+        var _c;
+        var roomId = _b.roomId, userId = _b.userId, peerId = _b.peerId;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0: return [4 /*yield*/, db_1.default.transaction()];
@@ -90,73 +89,58 @@ var roomHandler = function (socket) {
                     _d.label = 2;
                 case 2:
                     _d.trys.push([2, 8, , 10]);
-                    if (!roomid || !peerid || !token) {
-                        console.log(roomid, peerid, token, "from joined function");
-                        throw new Error("roomid, peerid, or token is missing");
-                    }
-                    verifythetoken = jsonwebtoken_1.default.verify(token, Config_1.default.JSONWEBSECRECT);
-                    Email = verifythetoken.Email;
-                    return [4 /*yield*/, Models_1.Users.findOne({
-                            where: { Email: Email },
+                    console.log("new user joined in these room roomid:".concat(roomId, " peerId :").concat(peerId, " userId ").concat(userId));
+                    return [4 /*yield*/, Models_1.Room.findOne({
+                            where: {
+                                Id: roomId,
+                            },
                             transaction: t,
                         })];
                 case 3:
-                    user = _d.sent();
-                    if (!user || user.Id === null || user.Id === undefined) {
-                        throw new Error("User not found or User ID is invalid");
-                    }
-                    userId = user.Id;
-                    return [4 /*yield*/, Models_1.UserRooms.upsert({ roomid: roomid, userid: userId }, { transaction: t })];
+                    room = _d.sent();
+                    if (!room)
+                        throw new Error('Room did not found');
+                    return [4 /*yield*/, Models_1.UserRooms.findOne({
+                            where: {
+                                roomid: roomId,
+                                userid: userId,
+                            },
+                        })];
                 case 4:
-                    _c = _d.sent(), userRoom = _c[0], created = _c[1];
-                    socket.join(roomid);
-                    // Store user information in socket for later use
-                    socket.data.userId = userId;
-                    socket.data.roomId = roomid;
-                    socket.data.peerId = peerid;
-                    socket.on("ready", function () {
-                        socket.to(roomid).emit("user_joined", { peerid: peerid });
-                    });
+                    checkuserroomalredypresent = _d.sent();
+                    if (checkuserroomalredypresent) {
+                        throw new Error('user alredy present');
+                    }
+                    return [4 /*yield*/, Models_1.UserRooms.upsert({ roomid: roomId, userid: userId }, { transaction: t })];
+                case 5:
+                    userrooms = _d.sent();
                     return [4 /*yield*/, Models_1.UserRooms.findAll({
-                            where: { roomid: roomid },
+                            where: {
+                                roomid: roomId,
+                                userid: (_c = {}, _c[sequelize_1.Op.ne] = userId, _c),
+                            },
+                            include: {
+                                model: Models_1.Users,
+                                attributes: ['Id', 'Name', 'PhotoUrl'],
+                            },
                             transaction: t,
                         })];
-                case 5:
-                    participants = _d.sent();
-                    return [4 /*yield*/, Promise.all(participants.map(function (participant) { return __awaiter(void 0, void 0, void 0, function () {
-                            var user;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, Models_1.Users.findOne({
-                                            where: { Id: participant.userid },
-                                        })];
-                                    case 1:
-                                        user = _a.sent();
-                                        return [2 /*return*/, {
-                                                Name: user === null || user === void 0 ? void 0 : user.Name,
-                                                Photourl: user === null || user === void 0 ? void 0 : user.PhotoUrl,
-                                                peerId: peerid, // Include peerId for identification
-                                            }];
-                                }
-                            });
-                        }); }))];
                 case 6:
-                    participantswithnames = _d.sent();
-                    console.log(participantswithnames, "users name");
-                    socket.emit("Get-participants", { participantswithnames: participantswithnames });
-                    // Broadcast to others that a new user has joined
-                    socket.to(roomid).emit("participant_joined", {
-                        Name: user.Name,
-                        Photourl: user.PhotoUrl,
-                        peerId: peerid,
+                    users = _d.sent();
+                    socket.join(roomId);
+                    socket.on('ready', function () {
+                        console.log('call the ready');
+                        socket.to(roomId).emit('user-joined', { peerId: peerId });
                     });
+                    socket.emit('Get-Users', { users: users });
+                    socket.to(roomId).emit('Get-Users', { userId: userId, peerId: peerId });
                     return [4 /*yield*/, t.commit()];
                 case 7:
                     _d.sent();
                     return [3 /*break*/, 10];
                 case 8:
                     error_2 = _d.sent();
-                    console.error("Error in joinedroom function:", error_2);
+                    console.error('Error in joinedroom function:', error_2);
                     return [4 /*yield*/, t.rollback()];
                 case 9:
                     _d.sent();
@@ -165,75 +149,69 @@ var roomHandler = function (socket) {
             }
         });
     }); };
-    // Handle disconnection
-    var handleDisconnect = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var t, _a, userId, roomId, peerId, user, remainingParticipants, error_3;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+    var removeroom = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
+        var t, room, users, error_3;
+        var roomId = _b.roomId, userId = _b.userId, peerId = _b.peerId;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0: return [4 /*yield*/, db_1.default.transaction()];
                 case 1:
-                    t = _b.sent();
-                    _b.label = 2;
+                    t = _c.sent();
+                    _c.label = 2;
                 case 2:
-                    _b.trys.push([2, 9, , 11]);
-                    _a = socket.data, userId = _a.userId, roomId = _a.roomId, peerId = _a.peerId;
-                    if (!(userId && roomId)) return [3 /*break*/, 7];
-                    // Remove user from UserRooms table
-                    return [4 /*yield*/, Models_1.UserRooms.destroy({
+                    _c.trys.push([2, 7, , 9]);
+                    console.log("roomId :".concat(roomId, " pperId :").concat(peerId, " ,userId ").concat(userId, " remove room get called"));
+                    if (!roomId || !userId || !peerId) {
+                        throw new Error('roomId and userId needed');
+                    }
+                    return [4 /*yield*/, Models_1.Room.findOne({
                             where: {
-                                userid: userId,
-                                roomid: roomId,
+                                Id: roomId,
                             },
                             transaction: t,
                         })];
                 case 3:
-                    // Remove user from UserRooms table
-                    _b.sent();
-                    return [4 /*yield*/, Models_1.Users.findOne({
-                            where: { Id: userId },
+                    room = _c.sent();
+                    if (!room)
+                        throw new Error('Room did not found');
+                    return [4 /*yield*/, Models_1.UserRooms.destroy({
+                            where: {
+                                roomid: roomId,
+                                userid: userId,
+                            },
                             transaction: t,
                         })];
                 case 4:
-                    user = _b.sent();
-                    // Notify others in the room that user has left
-                    socket.to(roomId).emit("participant_left", {
-                        peerId: peerId,
-                        Name: user === null || user === void 0 ? void 0 : user.Name,
-                        Photourl: user === null || user === void 0 ? void 0 : user.PhotoUrl,
-                    });
-                    return [4 /*yield*/, Models_1.UserRooms.count({
+                    _c.sent();
+                    return [4 /*yield*/, Models_1.UserRooms.findAll({
                             where: { roomid: roomId },
+                            include: {
+                                model: Models_1.Users,
+                                attributes: ['Id', 'Name', 'PhotoUrl'],
+                            },
                             transaction: t,
                         })];
                 case 5:
-                    remainingParticipants = _b.sent();
-                    if (!(remainingParticipants === 0)) return [3 /*break*/, 7];
-                    // Optional: Delete the room if it's empty
-                    return [4 /*yield*/, Models_1.Room.destroy({
-                            where: { Id: roomId },
-                            transaction: t,
-                        })];
+                    users = _c.sent();
+                    socket.to(roomId).emit('user-left', { users: users, peerId: peerId });
+                    console.log('users', users, peerId);
+                    return [4 /*yield*/, t.commit()];
                 case 6:
-                    // Optional: Delete the room if it's empty
-                    _b.sent();
-                    _b.label = 7;
-                case 7: return [4 /*yield*/, t.commit()];
-                case 8:
-                    _b.sent();
-                    return [3 /*break*/, 11];
-                case 9:
-                    error_3 = _b.sent();
-                    console.error("Error in disconnect handler:", error_3);
+                    _c.sent();
+                    return [3 /*break*/, 9];
+                case 7:
+                    error_3 = _c.sent();
                     return [4 /*yield*/, t.rollback()];
-                case 10:
-                    _b.sent();
-                    return [3 /*break*/, 11];
-                case 11: return [2 /*return*/];
+                case 8:
+                    _c.sent();
+                    console.log("error in removeromom");
+                    return [3 /*break*/, 9];
+                case 9: return [2 /*return*/];
             }
         });
     }); };
-    socket.on("create-room", createRoom);
-    socket.on("joined_room", joinedroom);
-    socket.on("disconnect", handleDisconnect);
+    socket.on('create-room', createRoom);
+    socket.on('joined_room', joinedroom);
+    socket.on("remove-room", removeroom);
 };
 exports.roomHandler = roomHandler;

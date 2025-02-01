@@ -2,16 +2,16 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import config from "../../Config";
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import config from '../../Config';
 const s3client = new S3Client({
   region: process.env.AWS_REGION || 'us-east-1',
   credentials: {
-    secretAccessKey: config.S3SERECTACESSKEY || "",
-    accessKeyId: config.S3ACESSKEYID || "",
+    secretAccessKey: config.S3SERECTACESSKEY || '',
+    accessKeyId: config.S3ACESSKEYID || '',
 
-  }
+  },
 });
 
 export const gethefile = async (key: string) => {
@@ -21,7 +21,7 @@ export const gethefile = async (key: string) => {
       Key: key,
     });
 
-    let url = await getSignedUrl(s3client, command);
+    const url = await getSignedUrl(s3client, command);
 
     return url;
   } catch (error) {
@@ -35,7 +35,7 @@ export const putthefile = async (ContentType: string, key: string) => {
     const command = new PutObjectCommand({
       Bucket: config.S3BUCKETNAME,
       Key: key,
-      ContentType: ContentType,
+      ContentType,
     });
 
     const url = await getSignedUrl(s3client, command);

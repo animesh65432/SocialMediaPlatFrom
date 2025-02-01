@@ -1,26 +1,26 @@
-import config from "../Config";
-import jwtwebtoken from "jsonwebtoken";
-import { NextFunction, Request, Response } from "express";
-import Users from "../Models/Users";
-import { RejectResponse } from "../utils";
-import { JwtPayload } from "../types";
+import config from '../Config';
+import jwtwebtoken from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express';
+import Users from '../Models/Users';
+import { RejectResponse } from '../utils';
+import { JwtPayload } from '../types';
 
 const middleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.header("token");
+    const token = req.header('token');
 
     if (!token) {
-      return RejectResponse(res, "Token has not been provided", 400);
+      return RejectResponse(res, 'Token has not been provided', 400);
     }
 
     const verify = jwtwebtoken.verify(
       token,
-      config.JSONWEBSECRECT as string
+      config.JSONWEBSECRECT as string,
     ) as JwtPayload;
 
     if (!verify) {
       return res.status(400).json({
-        message: "token is invaild",
+        message: 'token is invaild',
       });
     }
 
@@ -31,15 +31,15 @@ const middleware = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     if (!checkUser) {
-      return RejectResponse(res, "User does not exist", 400);
+      return RejectResponse(res, 'User does not exist', 400);
     }
 
     req.user = checkUser;
 
     next();
   } catch (error) {
-    console.error("Error from middleware:", error);
-    return RejectResponse(res, "Internal Server Error from middleware", 500);
+    console.error('Error from middleware:', error);
+    return RejectResponse(res, 'Internal Server Error from middleware', 500);
   }
 };
 

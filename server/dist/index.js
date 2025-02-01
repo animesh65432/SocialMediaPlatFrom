@@ -52,41 +52,41 @@ var corn_1 = __importDefault(require("./corn"));
 var utils_1 = require("./utils");
 var app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
+    origin: 'http://localhost:5173',
     credentials: true,
 }));
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST"],
+        origin: 'http://localhost:5173',
+        credentials: true,
+        methods: ['GET', 'POST'],
     },
 });
-io.on("connection", function (socket) {
-    console.log("a user connected");
+io.on('connection', function (socket) {
     (0, roomhandler_1.roomHandler)(socket);
-    socket.on("disconnect", function () {
-        console.log("user disconnected");
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
     });
 });
 app.use((0, cookie_parser_1.default)());
-app.use(express_1.default.json({ limit: "100mb" }));
+app.use(express_1.default.json({ limit: '100mb' }));
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use("/users", router_1.UserRouter);
-app.use("/forget", router_1.forgetPasswordrouter);
-app.use("/post", router_1.PostRouter);
-app.use("/profile", router_1.profilerouter);
-app.use("/Room", router_1.RoomRouter);
+app.use('/users', router_1.UserRouter);
+app.use('/forget', router_1.forgetPasswordrouter);
+app.use('/post', router_1.PostRouter);
+app.use('/profile', router_1.profilerouter);
+app.use('/Room', router_1.RoomRouter);
 corn_1.default.start();
 db_1.default
     .sync({ force: true })
     .then(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, utils_1.CreatedummyUser)({
-                    Name: "testname",
-                    Email: "test@gmail.com",
-                    Password: "testPassword"
+            case 0: return [4 /*yield*/, (0, utils_1.Createdummyuser)({
+                    Name: 'testname',
+                    Email: 'test@gmail.com',
+                    Password: 'testPassword',
                 })];
             case 1:
                 _a.sent();
@@ -98,5 +98,5 @@ db_1.default
     });
 }); })
     .catch(function (errors) {
-    console.error("Database sync error:", errors);
+    console.error('Database sync error:', errors);
 });

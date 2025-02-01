@@ -4,5 +4,5 @@ export interface PostAttributes {
     title?: string;
     comment?: string;
     video?: string;
-    UserId: number
+    UserId: number;
 }

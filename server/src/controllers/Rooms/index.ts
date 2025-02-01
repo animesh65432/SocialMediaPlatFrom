@@ -1,14 +1,14 @@
-import { Room } from "../../Models";
-import { Request, Response } from "express";
+import { Room } from '../../Models';
+import { Request, Response } from 'express';
 
 const GetalltheRooms = async (req: Request, res: Response) => {
   try {
-    let Rooms = await Room.findAll({});
+    const Rooms = await Room.findAll({});
     return res.status(200).json({
       Rooms,
     });
   } catch (error) {
-    return res.status(400).json({ message: "internal server errors" });
+    return res.status(400).json({ message: 'internal server errors' });
   }
 };
 
@@ -23,11 +23,11 @@ const deletetherooms = async (req: Request, res: Response) => {
     });
 
     return res.status(200).json({
-      message: "delete the rooms",
+      message: 'delete the rooms',
     });
   } catch (error) {
     return res.status(400).json({
-      message: "internal server errors",
+      message: 'internal server errors',
     });
   }
 };

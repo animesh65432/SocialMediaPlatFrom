@@ -49,14 +49,14 @@ var middleware = function (req, res, next) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                token = req.header("token");
+                token = req.header('token');
                 if (!token) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Token has not been provided", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Token has not been provided', 400)];
                 }
                 verify = jsonwebtoken_1.default.verify(token, Config_1.default.JSONWEBSECRECT);
                 if (!verify) {
                     return [2 /*return*/, res.status(400).json({
-                            message: "token is invaild",
+                            message: 'token is invaild',
                         })];
                 }
                 return [4 /*yield*/, Users_1.default.findOne({
@@ -67,15 +67,15 @@ var middleware = function (req, res, next) { return __awaiter(void 0, void 0, vo
             case 1:
                 checkUser = _a.sent();
                 if (!checkUser) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "User does not exist", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'User does not exist', 400)];
                 }
                 req.user = checkUser;
                 next();
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                console.error("Error from middleware:", error_1);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal Server Error from middleware", 500)];
+                console.error('Error from middleware:', error_1);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Internal Server Error from middleware', 500)];
             case 3: return [2 /*return*/];
         }
     });

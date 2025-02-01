@@ -17,14 +17,16 @@ exports.UserRooms = UsersRooms_1.default;
 Users_1.default.hasMany(ForgetPassword_1.default);
 ForgetPassword_1.default.belongsTo(Users_1.default);
 Users_1.default.hasMany(Posts_1.default);
-Posts_1.default.belongsTo(Users_1.default, { foreignKey: "UserId" });
+Posts_1.default.belongsTo(Users_1.default, { foreignKey: 'UserId' });
 Users_1.default.belongsToMany(Rooms_1.default, {
     through: UsersRooms_1.default,
-    foreignKey: "userid",
-    otherKey: "roomid",
+    foreignKey: 'userid',
+    otherKey: 'roomid',
 });
 Rooms_1.default.belongsToMany(Users_1.default, {
     through: UsersRooms_1.default,
-    foreignKey: "roomid",
-    otherKey: "userid",
+    foreignKey: 'roomid',
+    otherKey: 'userid',
 });
+UsersRooms_1.default.belongsTo(Users_1.default, { foreignKey: 'userid' });
+UsersRooms_1.default.belongsTo(Rooms_1.default, { foreignKey: 'roomid' });

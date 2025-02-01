@@ -1,14 +1,14 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import database from "../../db";
-import { UserAttributes } from "../../types/models/Users"
+import { DataTypes, Model, Optional } from 'sequelize';
+import database from '../../db';
+import { UserAttributes } from '../../types/models/Users';
 
-interface UserCreationAttributes extends Optional<UserAttributes, "Id"> { }
+interface UserCreationAttributes extends Optional<UserAttributes, 'Id'> { }
 
 interface UserInstance
   extends Model<UserAttributes, UserCreationAttributes>,
   UserAttributes { }
 
-const Users = database.define<UserInstance>("Users", {
+const Users = database.define<UserInstance>('Users', {
   Id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -32,7 +32,7 @@ const Users = database.define<UserInstance>("Users", {
     allowNull: true,
   },
   Gender: {
-    type: DataTypes.ENUM("Male", "Female"),
+    type: DataTypes.ENUM('Male', 'Female'),
     allowNull: true,
   },
   followers: {

@@ -54,25 +54,25 @@ var createthepost = function (req, res) { return __awaiter(void 0, void 0, void 
                 _a = req.body, img = _a.img, title = _a.title, video = _a.video;
                 user = req.user;
                 if (!title || !user) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "invaild credatonals", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'invaild credatonals', 400)];
                 }
                 newpost = void 0;
                 url = void 0;
                 if (!!video) return [3 /*break*/, 3];
-                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(img)];
+                return [4 /*yield*/, (0, utils_2.storetheimagesintocloudinary)(img)];
             case 1:
                 url = _b.sent();
                 return [4 /*yield*/, Models_1.Posts.create({
                         UserId: user.Id,
                         img: url,
-                        title: title
+                        title: title,
                     })];
             case 2:
                 newpost = _b.sent();
                 return [3 /*break*/, 6];
             case 3:
                 if (!!img) return [3 /*break*/, 6];
-                return [4 /*yield*/, (0, utils_2.store_the_videos_into_cloudinary)(video)];
+                return [4 /*yield*/, (0, utils_2.storethevideosintocloudinary)(video)];
             case 4:
                 url = _b.sent();
                 return [4 /*yield*/, Models_1.Posts.create({
@@ -83,11 +83,11 @@ var createthepost = function (req, res) { return __awaiter(void 0, void 0, void 
             case 5:
                 newpost = _b.sent();
                 _b.label = 6;
-            case 6: return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "sucessfully create the post", url: url }, 201)];
+            case 6: return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'sucessfully create the post', url: url }, 201)];
             case 7:
                 error_1 = _b.sent();
-                console.log("getting errors from createing the post", error_1);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 500)];
+                console.log('getting errors from createing the post', error_1);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'internal server errors', 500)];
             case 8: return [2 /*return*/];
         }
     });
@@ -107,7 +107,7 @@ var deletethepost = function (req, res) { return __awaiter(void 0, void 0, void 
                 id = req.params.id;
                 UserId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.Id;
                 if (!id || !UserId) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "invaild credationals", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'invaild credationals', 400)];
                 }
                 return [4 /*yield*/, Models_1.Posts.findOne({
                         where: {
@@ -119,7 +119,7 @@ var deletethepost = function (req, res) { return __awaiter(void 0, void 0, void 
             case 3:
                 post = _b.sent();
                 if (!post) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "did not find the post", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'did not find the post', 400)];
                 }
                 return [4 /*yield*/, post.destroy({ transaction: t })];
             case 4:
@@ -127,14 +127,14 @@ var deletethepost = function (req, res) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, t.commit()];
             case 5:
                 _b.sent();
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "suceesfully delete the post" }, 200)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'suceesfully delete the post' }, 200)];
             case 6:
                 error_2 = _b.sent();
                 return [4 /*yield*/, t.rollback()];
             case 7:
                 _b.sent();
-                console.log("getting errors from deletepost", error_2);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 500)];
+                console.log('getting errors from deletepost', error_2);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'internal server errors', 500)];
             case 8: return [2 /*return*/];
         }
     });
@@ -149,16 +149,16 @@ var getthepost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, Models_1.Posts.findAll({
                         include: {
                             model: Models_2.Users,
-                            attributes: ["Name", "PhotoUrl", "Id"]
-                        }
+                            attributes: ['Name', 'PhotoUrl', 'Id'],
+                        },
                     })];
             case 1:
                 posts = _a.sent();
                 return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { data: posts }, 202)];
             case 2:
                 error_3 = _a.sent();
-                console.log("getting errors from get the posts");
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 5000)];
+                console.log('getting errors from get the posts');
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'internal server errors', 5000)];
             case 3: return [2 /*return*/];
         }
     });
@@ -178,7 +178,7 @@ var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 id = req.params.id;
                 _a = req.body, title = _a.title, video = _a.video, img = _a.img;
                 if (!title) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "atleast change the title", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'atleast change the title', 400)];
                 }
                 return [4 /*yield*/, Models_1.Posts.findOne({
                         where: {
@@ -190,11 +190,11 @@ var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 3:
                 post = _c.sent();
                 if (!post) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Post not found", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Post not found', 400)];
                 }
                 url = void 0;
                 if (!video) return [3 /*break*/, 9];
-                return [4 /*yield*/, (0, utils_2.store_the_videos_into_cloudinary)(video)];
+                return [4 /*yield*/, (0, utils_2.storethevideosintocloudinary)(video)];
             case 4:
                 url = _c.sent();
                 if (!title) return [3 /*break*/, 6];
@@ -209,7 +209,7 @@ var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 8: return [3 /*break*/, 14];
             case 9:
                 if (!img) return [3 /*break*/, 14];
-                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(img)];
+                return [4 /*yield*/, (0, utils_2.storetheimagesintocloudinary)(img)];
             case 10:
                 url = _c.sent();
                 if (!title) return [3 /*break*/, 12];
@@ -224,14 +224,14 @@ var updatePost = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 14: return [4 /*yield*/, t.commit()];
             case 15:
                 _c.sent();
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "Successfully updated", url: url }, 202)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'Successfully updated', url: url }, 202)];
             case 16:
                 error_4 = _c.sent();
                 return [4 /*yield*/, t.rollback()];
             case 17:
                 _c.sent();
-                console.error("Error updating post:", error_4);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal server error", 500)];
+                console.error('Error updating post:', error_4);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Internal server error', 500)];
             case 18: return [2 /*return*/];
         }
     });

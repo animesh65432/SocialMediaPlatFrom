@@ -72,7 +72,7 @@ var updatetheprofile = function (req, res) { return __awaiter(void 0, void 0, vo
                 _c.trys.push([0, 4, , 5]);
                 _a = req.body, Name = _a.Name, Gender = _a.Gender, PhotoUrl = _a.PhotoUrl;
                 if (!Name && !Gender && !PhotoUrl) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "did not get name ,gender,photourl  ", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'did not get name ,gender,photourl  ', 400)];
                 }
                 updateData = {};
                 if (Name)
@@ -81,7 +81,7 @@ var updatetheprofile = function (req, res) { return __awaiter(void 0, void 0, vo
                     updateData.Gender = Gender;
                 url = void 0;
                 if (!PhotoUrl) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, utils_2.store_the_images_into_cloudinary)(PhotoUrl)];
+                return [4 /*yield*/, (0, utils_2.storetheimagesintocloudinary)(PhotoUrl)];
             case 1:
                 url = _c.sent();
                 updateData.PhotoUrl = url;
@@ -95,11 +95,11 @@ var updatetheprofile = function (req, res) { return __awaiter(void 0, void 0, vo
                     })];
             case 3:
                 _c.sent();
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "Successfully updated", updateData: updateData }, 202)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'Successfully updated', updateData: updateData }, 202)];
             case 4:
                 error_1 = _c.sent();
                 console.error(error_1);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Internal server error", 500)];
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Internal server error', 500)];
             case 5: return [2 /*return*/];
         }
     });

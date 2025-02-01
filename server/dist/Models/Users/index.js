@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var sequelize_1 = require("sequelize");
 var db_1 = __importDefault(require("../../db"));
-var Users = db_1.default.define("Users", {
+var Users = db_1.default.define('Users', {
     Id: {
         type: sequelize_1.DataTypes.INTEGER,
         autoIncrement: true,
@@ -29,7 +29,7 @@ var Users = db_1.default.define("Users", {
         allowNull: true,
     },
     Gender: {
-        type: sequelize_1.DataTypes.ENUM("Male", "Female"),
+        type: sequelize_1.DataTypes.ENUM('Male', 'Female'),
         allowNull: true,
     },
     followers: {

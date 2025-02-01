@@ -1,11 +1,11 @@
-import { DataTypes, Model } from "sequelize";
-import database from "../../db";
-import { PostAttributes } from "../../types/models/Post"
+import { DataTypes, Model } from 'sequelize';
+import database from '../../db';
+import { PostAttributes } from '../../types/models/Post';
 
 interface PostdInstance extends Model<PostAttributes>, PostAttributes { }
 
 const Posts = database.define<PostdInstance>(
-  "Posts",
+  'Posts',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -27,12 +27,12 @@ const Posts = database.define<PostdInstance>(
     UserId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Users",
-        key: "Id"
-      }
-    }
+        model: 'Users',
+        key: 'Id',
+      },
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default Posts;

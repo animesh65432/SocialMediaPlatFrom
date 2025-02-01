@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { RejectResponse, SuccessResponse } from "../../utils";
-import { Users, ForgetPassword } from "../../Models";
-import { v4 as uuidv4 } from "uuid";
-import nodemailer from "nodemailer";
-import config from "../../Config";
-import bcrypt from "bcryptjs";
-import database from "../../db";
+import { Request, Response } from 'express';
+import { RejectResponse, SuccessResponse } from '../../utils';
+import { Users, ForgetPassword } from '../../Models';
+import { v4 as uuidv4 } from 'uuid';
+import nodemailer from 'nodemailer';
+import config from '../../Config';
+import bcrypt from 'bcryptjs';
+import database from '../../db';
 
 const sendEmail = async (req: Request, res: Response) => {
   const t = await database.transaction();
@@ -13,7 +13,7 @@ const sendEmail = async (req: Request, res: Response) => {
     const { Email } = req.body;
 
     if (!Email) {
-      return RejectResponse(res, "Invalid credentials", 400);
+      return RejectResponse(res, 'Invalid credentials', 400);
     }
 
     const checkUser = await Users.findOne({
@@ -22,7 +22,7 @@ const sendEmail = async (req: Request, res: Response) => {
     });
 
     if (!checkUser) {
-      return RejectResponse(res, "User has not signed up yet", 400);
+      return RejectResponse(res, 'User has not signed up yet', 400);
     }
 
     const id = uuidv4();
@@ -33,11 +33,11 @@ const sendEmail = async (req: Request, res: Response) => {
         id,
         active: false,
       },
-      { transaction: t }
+      { transaction: t },
     );
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       auth: {
         user: config.NODEMAILERUSER,
         pass: config.NODEMAILERPASSWORD,
@@ -49,7 +49,7 @@ const sendEmail = async (req: Request, res: Response) => {
     const mailOptions = {
       from: config.NODEMAILERUSER,
       to: Email,
-      subject: "Password Reset Request",
+      subject: 'Password Reset Request',
       html: `<a href='${config.Frontendurl}
 /update/${forgetPassword.id}'>Click here to reset your password</a>`,
     };
@@ -58,11 +58,11 @@ const sendEmail = async (req: Request, res: Response) => {
 
     await t.commit();
 
-    return SuccessResponse(res, { message: "Email sent successfully" }, 201);
+    return SuccessResponse(res, { message: 'Email sent successfully' }, 201);
   } catch (error) {
     await t.rollback();
-    console.error("Error sending email:", error);
-    return RejectResponse(res, "Internal server error", 500);
+    console.error('Error sending email:', error);
+    return RejectResponse(res, 'Internal server error', 500);
   }
 };
 
@@ -72,11 +72,11 @@ const updatePassword = async (req: Request, res: Response) => {
     const { Password, id } = req.body;
 
     if (!id) {
-      return RejectResponse(res, "No ID provided", 400);
+      return RejectResponse(res, 'No ID provided', 400);
     }
 
     if (!Password) {
-      return RejectResponse(res, "No password provided", 400);
+      return RejectResponse(res, 'No password provided', 400);
     }
 
     const forgetPassword = await ForgetPassword.findOne({
@@ -89,8 +89,8 @@ const updatePassword = async (req: Request, res: Response) => {
     if (!forgetPassword || forgetPassword.active) {
       return RejectResponse(
         res,
-        "Password reset link is invalid or expired",
-        400
+        'Password reset link is invalid or expired',
+        400,
       );
     }
 
@@ -100,7 +100,7 @@ const updatePassword = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return RejectResponse(res, "User not found", 404);
+      return RejectResponse(res, 'User not found', 404);
     }
 
     const hashPassword = await bcrypt.hash(Password, 10);
@@ -113,13 +113,13 @@ const updatePassword = async (req: Request, res: Response) => {
 
     return SuccessResponse(
       res,
-      { message: "Password updated successfully" },
-      200
+      { message: 'Password updated successfully' },
+      200,
     );
   } catch (error) {
     await t.rollback();
-    console.error("Error updating password:", error);
-    return RejectResponse(res, "Internal server error", 500);
+    console.error('Error updating password:', error);
+    return RejectResponse(res, 'Internal server error', 500);
   }
 };
 

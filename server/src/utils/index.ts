@@ -1,13 +1,16 @@
-import { Response } from "express";
-import cloudinary from "../services/cloudinary";
-import { Users } from "../Models"
-import bcrypt from "bcryptjs"
+import { Response } from 'express';
+import cloudinary from '../services/cloudinary';
+import { Users } from '../Models';
+import bcrypt from 'bcryptjs';
+import jwtwebtoken from 'jsonwebtoken';
+import { JwtPayload } from '../types';
+import { UserAttributes } from '../types/models/Users';
 
 function SuccessResponse(
   res: Response,
   data: object,
   code: number,
-  messages?: string
+  messages?: string,
 ) {
   return res.status(code).json({
     sucess: true,
@@ -23,47 +26,65 @@ function RejectResponse(res: Response, messages: string, code: number) {
 }
 
 
-const store_the_images_into_cloudinary = async (images: any): Promise<string> => {
+const storetheimagesintocloudinary = async (images: any): Promise<string> => {
   try {
 
-    let response = await cloudinary.uploader.upload(images, {
-      folder: `/Videoapplication_images`
-    })
+    const response = await cloudinary.uploader.upload(images, {
+      folder: `/Videoapplication_images`,
+    });
 
-    return response.url
+    return response.url;
 
   } catch (error) {
-    console.log(error, "Gettings errors store images into the cloudinary", error)
-    return ""
+    console.log(error, 'Gettings errors store images into the cloudinary', error);
+    return '';
 
   }
-}
+};
 
-const store_the_videos_into_cloudinary = async (video: any): Promise<string> => {
+const storethevideosintocloudinary = async (video: any): Promise<string> => {
   try {
-    const response = await cloudinary.uploader.upload(video, { resource_type: "video" })
-    return response?.url
+    const response = await cloudinary.uploader.upload(video, { resource_type: 'video' });
+    return response?.url;
   } catch (error) {
-    console.log("store_the_videos_clodinary_errors", error)
-    return ""
+    console.log('store_the_videos_clodinary_errors', error);
+    return '';
   }
-}
+};
 
-const CreatedummyUser = async ({ Name, Email, Password }: { Name: string, Email: string, Password: string }) => {
+const Createdummyuser = async ({ Name, Email, Password }: { Name: string, Email: string, Password: string }) => {
   try {
 
-    const hashpassword = await bcrypt.hash(Password, 8)
+    const hashpassword = await bcrypt.hash(Password, 8);
     const user = await Users.create({
       Name,
       Email,
       Password: hashpassword,
 
-    })
-    console.log(`Sucessfully create dummy User ${user}`)
+    });
+    console.log(`Sucessfully create dummy User ${user}`);
   } catch (error) {
-    console.log(`errors creaateing dummy User ${error}`)
+    console.log(`errors creaateing dummy User ${error}`);
   }
-}
+};
 
 
-export { SuccessResponse, RejectResponse, store_the_images_into_cloudinary, store_the_videos_into_cloudinary, CreatedummyUser };
+const jsonwebtokentoGetUser = async (token: string): Promise<UserAttributes | null> => {
+  try {
+
+    const { Email } = jwtwebtoken.verify(token, process.env.JSONWEBSECRECT as string) as JwtPayload;
+
+    const user = await Users.findOne({
+      where: {
+        Email,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.log(error, 'errors in jsonwebtoken_to_GetUser');
+    return null;
+  }
+};
+
+export { SuccessResponse, RejectResponse, Createdummyuser, storetheimagesintocloudinary, storethevideosintocloudinary, jsonwebtokentoGetUser };

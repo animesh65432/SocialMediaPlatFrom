@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { Users } from "../../Models";
-import { SuccessResponse, RejectResponse } from "../../utils";
-import { putthefile } from "../../services/aws";
-import { store_the_images_into_cloudinary } from "../../utils"
+import { Request, Response } from 'express';
+import { Users } from '../../Models';
+import { SuccessResponse, RejectResponse } from '../../utils';
+import { putthefile } from '../../services/aws';
+import { storetheimagesintocloudinary } from '../../utils';
 
 // const Gettheuserprofile = async (req: Request, res: Response) => {
 //   try {
@@ -35,20 +35,20 @@ const updatetheprofile = async (req: Request, res: Response) => {
   try {
     const { Name, Gender, PhotoUrl } = req.body;
     if (!Name && !Gender && !PhotoUrl) {
-      return RejectResponse(res, "did not get name ,gender,photourl  ", 400)
+      return RejectResponse(res, 'did not get name ,gender,photourl  ', 400);
     }
     const updateData: any = {};
 
     if (Name) updateData.Name = Name;
     if (Gender) updateData.Gender = Gender;
 
-    let url
+    let url;
     if (PhotoUrl) {
-      url = await store_the_images_into_cloudinary(PhotoUrl)
-      updateData.PhotoUrl = url
+      url = await storetheimagesintocloudinary(PhotoUrl);
+      updateData.PhotoUrl = url;
     }
 
-    console.log(updateData)
+    console.log(updateData);
 
     await Users.update(updateData, {
       where: {
@@ -58,12 +58,12 @@ const updatetheprofile = async (req: Request, res: Response) => {
 
     return SuccessResponse(
       res,
-      { message: "Successfully updated", updateData },
-      202
+      { message: 'Successfully updated', updateData },
+      202,
     );
   } catch (error) {
     console.error(error);
-    return RejectResponse(res, "Internal server error", 500);
+    return RejectResponse(res, 'Internal server error', 500);
   }
 };
 export { updatetheprofile };

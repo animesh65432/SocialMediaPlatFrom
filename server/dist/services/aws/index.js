@@ -46,9 +46,9 @@ var Config_1 = __importDefault(require("../../Config"));
 var s3client = new client_s3_1.S3Client({
     region: process.env.AWS_REGION || 'us-east-1',
     credentials: {
-        secretAccessKey: Config_1.default.S3SERECTACESSKEY || "",
-        accessKeyId: Config_1.default.S3ACESSKEYID || "",
-    }
+        secretAccessKey: Config_1.default.S3SERECTACESSKEY || '',
+        accessKeyId: Config_1.default.S3ACESSKEYID || '',
+    },
 });
 var gethefile = function (key) { return __awaiter(void 0, void 0, void 0, function () {
     var command, url, error_1;

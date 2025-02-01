@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addfollowers = exports.Others_Peoples_See = exports.logintheuser = exports.createtheuser = void 0;
+exports.addfollowers = exports.OthersPeoplesSee = exports.logintheuser = exports.createtheuser = void 0;
 var utils_1 = require("../../utils");
 var Models_1 = require("../../Models");
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -53,7 +53,7 @@ var createtheuser = function (req, res) { return __awaiter(void 0, void 0, void 
                 _b.trys.push([0, 4, , 5]);
                 _a = req.body, Name = _a.Name, Email = _a.Email, Password = _a.Password;
                 if (!Name || !Email || !Password) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "invaild credationals", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'invaild credationals', 400)];
                 }
                 return [4 /*yield*/, Models_1.Users.findOne({
                         where: { Email: Email },
@@ -61,7 +61,7 @@ var createtheuser = function (req, res) { return __awaiter(void 0, void 0, void 
             case 1:
                 checktheuser = _b.sent();
                 if (checktheuser) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "user alredy singup", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'user alredy singup', 400)];
                 }
                 return [4 /*yield*/, bcryptjs_1.default.hash(Password, 10)];
             case 2:
@@ -70,17 +70,17 @@ var createtheuser = function (req, res) { return __awaiter(void 0, void 0, void 
                         Name: Name,
                         Email: Email,
                         Password: hashpassword,
-                        PhotoUrl: "https://tg-stockach.de/wp-content/uploads/2020/12/5f4d0f15338e20133dc69e95_dummy-profile-pic-300x300.png",
+                        PhotoUrl: 'https://tg-stockach.de/wp-content/uploads/2020/12/5f4d0f15338e20133dc69e95_dummy-profile-pic-300x300.png',
                     })];
             case 3:
                 newuser = _b.sent();
                 return [2 /*return*/, (0, utils_1.SuccessResponse)(res, {
-                        data: "sucessfully create the user",
+                        data: 'sucessfully create the user',
                     }, 201)];
             case 4:
                 error_1 = _b.sent();
-                console.log(error_1, "Error getting From creating User ..");
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 500)];
+                console.log(error_1, 'Error getting From creating User ..');
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'internal server errors', 500)];
             case 5: return [2 /*return*/];
         }
     });
@@ -94,7 +94,7 @@ var logintheuser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 _b.trys.push([0, 3, , 4]);
                 _a = req.body, Email = _a.Email, Password = _a.Password;
                 if (!Email || !Password) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "invaild credationals", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'invaild credationals', 400)];
                 }
                 return [4 /*yield*/, Models_1.Users.findOne({
                         where: { Email: Email },
@@ -102,30 +102,30 @@ var logintheuser = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 1:
                 user = _b.sent();
                 if (!user) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "user did not signup yet", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'user did not signup yet', 400)];
                 }
                 token = jsonwebtoken_1.default.sign({ Email: Email }, Config_1.default.JSONWEBSECRECT);
                 return [4 /*yield*/, bcryptjs_1.default.compare(Password, user.Password)];
             case 2:
                 checkpassword = _b.sent();
                 if (!checkpassword) {
-                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, "Password is wrong", 400)];
+                    return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'Password is wrong', 400)];
                 }
-                res.cookie("token", token, {
+                res.cookie('token', token, {
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
                 });
-                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: "sucessfully log in", token: token, user: user }, 200)];
+                return [2 /*return*/, (0, utils_1.SuccessResponse)(res, { message: 'sucessfully log in', token: token, user: user }, 200)];
             case 3:
                 error_2 = _b.sent();
-                console.log("error from getting login the user", error_2);
-                return [2 /*return*/, (0, utils_1.RejectResponse)(res, "internal server errors", 500)];
+                console.log('error from getting login the user', error_2);
+                return [2 /*return*/, (0, utils_1.RejectResponse)(res, 'internal server errors', 500)];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.logintheuser = logintheuser;
-var Others_Peoples_See = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var OthersPeoplesSee = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, user, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -134,31 +134,31 @@ var Others_Peoples_See = function (req, res) { return __awaiter(void 0, void 0, 
                 userId = req.params.userId;
                 if (!userId) {
                     return [2 /*return*/, res.status(400).json({
-                            message: "userId is required"
+                            message: 'userId is required',
                         })];
                 }
                 return [4 /*yield*/, Models_1.Users.findOne({
                         where: {
-                            Id: userId
+                            Id: userId,
                         },
-                        attributes: ["Id", "Name", "PhotoUrl", "followers", "Gender", "Email"]
+                        attributes: ['Id', 'Name', 'PhotoUrl', 'followers', 'Gender', 'Email'],
                     })];
             case 1:
                 user = _a.sent();
                 return [2 /*return*/, res.status(200).json({
-                        user: user
+                        user: user,
                     })];
             case 2:
                 error_3 = _a.sent();
                 console.log(error_3, "errors in Others Peoples see");
                 return [2 /*return*/, res.status(5000).json({
-                        message: "internal server errors"
+                        message: "internal server errors",
                     })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.Others_Peoples_See = Others_Peoples_See;
+exports.OthersPeoplesSee = OthersPeoplesSee;
 var addfollowers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, count, connvertuserIdtoNumber, error_4;
     return __generator(this, function (_a) {
@@ -169,26 +169,26 @@ var addfollowers = function (req, res) { return __awaiter(void 0, void 0, void 0
                 console.log(userId, req.user.followers);
                 if (userId === undefined || req.user.followers === undefined) {
                     return [2 /*return*/, res.status(400).json({
-                            message: "userId and user is undefined"
+                            message: 'userId and user is undefined',
                         })];
                 }
                 count = req.user.followers += 1;
                 connvertuserIdtoNumber = Number(userId);
                 return [4 /*yield*/, Models_1.Users.update({ followers: count }, {
                         where: {
-                            Id: connvertuserIdtoNumber
-                        }
+                            Id: connvertuserIdtoNumber,
+                        },
                     })];
             case 1:
                 _a.sent();
                 return [2 /*return*/, res.status(200).json({
-                        messages: "sucessfully update it"
+                        messages: 'sucessfully update it',
                     })];
             case 2:
                 error_4 = _a.sent();
                 console.log(error_4, "errors in addfollowers");
                 res.status(500).json({
-                    message: "internal server errors"
+                    message: 'internal server errors',
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

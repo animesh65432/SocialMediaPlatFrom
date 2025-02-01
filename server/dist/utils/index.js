@@ -39,12 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreatedummyUser = exports.store_the_videos_into_cloudinary = exports.store_the_images_into_cloudinary = void 0;
+exports.jsonwebtokentoGetUser = exports.storethevideosintocloudinary = exports.storetheimagesintocloudinary = exports.Createdummyuser = void 0;
 exports.SuccessResponse = SuccessResponse;
 exports.RejectResponse = RejectResponse;
 var cloudinary_1 = __importDefault(require("../services/cloudinary"));
 var Models_1 = require("../Models");
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function SuccessResponse(res, data, code, messages) {
     return res.status(code).json({
         sucess: true,
@@ -58,47 +59,47 @@ function RejectResponse(res, messages, code) {
         messages: messages,
     });
 }
-var store_the_images_into_cloudinary = function (images) { return __awaiter(void 0, void 0, void 0, function () {
+var storetheimagesintocloudinary = function (images) { return __awaiter(void 0, void 0, void 0, function () {
     var response, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, cloudinary_1.default.uploader.upload(images, {
-                        folder: "/Videoapplication_images"
+                        folder: "/Videoapplication_images",
                     })];
             case 1:
                 response = _a.sent();
                 return [2 /*return*/, response.url];
             case 2:
                 error_1 = _a.sent();
-                console.log(error_1, "Gettings errors store images into the cloudinary", error_1);
-                return [2 /*return*/, ""];
+                console.log(error_1, 'Gettings errors store images into the cloudinary', error_1);
+                return [2 /*return*/, ''];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.store_the_images_into_cloudinary = store_the_images_into_cloudinary;
-var store_the_videos_into_cloudinary = function (video) { return __awaiter(void 0, void 0, void 0, function () {
+exports.storetheimagesintocloudinary = storetheimagesintocloudinary;
+var storethevideosintocloudinary = function (video) { return __awaiter(void 0, void 0, void 0, function () {
     var response, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, cloudinary_1.default.uploader.upload(video, { resource_type: "video" })];
+                return [4 /*yield*/, cloudinary_1.default.uploader.upload(video, { resource_type: 'video' })];
             case 1:
                 response = _a.sent();
                 return [2 /*return*/, response === null || response === void 0 ? void 0 : response.url];
             case 2:
                 error_2 = _a.sent();
-                console.log("store_the_videos_clodinary_errors", error_2);
-                return [2 /*return*/, ""];
+                console.log('store_the_videos_clodinary_errors', error_2);
+                return [2 /*return*/, ''];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.store_the_videos_into_cloudinary = store_the_videos_into_cloudinary;
-var CreatedummyUser = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
+exports.storethevideosintocloudinary = storethevideosintocloudinary;
+var Createdummyuser = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
     var hashpassword, user, error_3;
     var Name = _b.Name, Email = _b.Email, Password = _b.Password;
     return __generator(this, function (_c) {
@@ -125,4 +126,28 @@ var CreatedummyUser = function (_a) { return __awaiter(void 0, [_a], void 0, fun
         }
     });
 }); };
-exports.CreatedummyUser = CreatedummyUser;
+exports.Createdummyuser = Createdummyuser;
+var jsonwebtokentoGetUser = function (token) { return __awaiter(void 0, void 0, void 0, function () {
+    var Email, user, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                Email = jsonwebtoken_1.default.verify(token, process.env.JSONWEBSECRECT).Email;
+                return [4 /*yield*/, Models_1.Users.findOne({
+                        where: {
+                            Email: Email,
+                        },
+                    })];
+            case 1:
+                user = _a.sent();
+                return [2 /*return*/, user];
+            case 2:
+                error_4 = _a.sent();
+                console.log(error_4, 'errors in jsonwebtoken_to_GetUser');
+                return [2 /*return*/, null];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.jsonwebtokentoGetUser = jsonwebtokentoGetUser;

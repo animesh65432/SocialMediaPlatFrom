@@ -1,13 +1,13 @@
-import database from "../../db";
-import { Model, DataTypes } from "sequelize";
-import { ForgstpasswordAttributes } from "../../types/models/Forgetpassword"
+import database from '../../db';
+import { Model, DataTypes } from 'sequelize';
+import { ForgstpasswordAttributes } from '../../types/models/Forgetpassword';
 
 interface ForgetPasswordInstance
   extends Model<ForgstpasswordAttributes>,
   ForgstpasswordAttributes { }
 
 const ForGetPassword = database.define<ForgetPasswordInstance>(
-  "ForgetPassword",
+  'ForgetPassword',
   {
     id: {
       type: DataTypes.UUID,
@@ -19,7 +19,7 @@ const ForGetPassword = database.define<ForgetPasswordInstance>(
       allowNull: false,
       defaultValue: false,
     },
-  }
+  },
 );
 
 export default ForGetPassword;

@@ -1,15 +1,15 @@
-import { DataTypes, Model, Optional } from "sequelize";
-import database from "../../db";
-import { UserRoomsAttributes } from "../../types/models/UsersRooms"
+import { DataTypes, Model, Optional } from 'sequelize';
+import database from '../../db';
+import { UserRoomsAttributes } from '../../types/models/UsersRooms';
 
 interface UserRoomsCreationAttributes
-  extends Optional<UserRoomsAttributes, "roomid"> { }
+  extends Optional<UserRoomsAttributes, 'roomid'> { }
 
 interface UserRoomsInstance
   extends Model<UserRoomsAttributes, UserRoomsCreationAttributes>,
   UserRoomsAttributes { }
 
-const UserRooms = database.define<UserRoomsInstance>("UserRooms", {
+const UserRooms = database.define<UserRoomsInstance>('UserRooms', {
   roomid: {
     type: DataTypes.UUID,
     allowNull: false,

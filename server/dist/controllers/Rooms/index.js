@@ -52,7 +52,7 @@ var GetalltheRooms = function (req, res) { return __awaiter(void 0, void 0, void
                     })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, res.status(400).json({ message: "internal server errors" })];
+                return [2 /*return*/, res.status(400).json({ message: 'internal server errors' })];
             case 3: return [2 /*return*/];
         }
     });
@@ -73,12 +73,12 @@ var deletetherooms = function (req, res) { return __awaiter(void 0, void 0, void
             case 1:
                 _a.sent();
                 return [2 /*return*/, res.status(200).json({
-                        message: "delete the rooms",
+                        message: 'delete the rooms',
                     })];
             case 2:
                 error_2 = _a.sent();
                 return [2 /*return*/, res.status(400).json({
-                        message: "internal server errors",
+                        message: 'internal server errors',
                     })];
             case 3: return [2 /*return*/];
         }

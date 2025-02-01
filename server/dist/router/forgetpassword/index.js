@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var controllers_1 = __importDefault(require("../../controllers"));
 var forgetPasswordrouter = (0, express_1.Router)();
-forgetPasswordrouter.post("/sent", controllers_1.default.forgetpassword.sendEmail);
-forgetPasswordrouter.post("/update", controllers_1.default.forgetpassword.updatePassword);
+forgetPasswordrouter.post('/sent', controllers_1.default.forgetpassword.sendEmail);
+forgetPasswordrouter.post('/update', controllers_1.default.forgetpassword.updatePassword);
 exports.default = forgetPasswordrouter;

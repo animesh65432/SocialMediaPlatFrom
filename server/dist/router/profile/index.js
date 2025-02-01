@@ -7,5 +7,5 @@ var express_1 = require("express");
 var controllers_1 = __importDefault(require("../../controllers"));
 var middlewares_1 = __importDefault(require("../../middlewares"));
 var profilerouter = (0, express_1.Router)();
-profilerouter.put("/update", middlewares_1.default, controllers_1.default.Profile.updatetheprofile);
+profilerouter.put('/update', middlewares_1.default, controllers_1.default.Profile.updatetheprofile);
 exports.default = profilerouter;

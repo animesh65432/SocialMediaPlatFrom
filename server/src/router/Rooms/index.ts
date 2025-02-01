@@ -1,9 +1,9 @@
-import controllers from "../../controllers";
-import middleware from "../../middlewares";
-import { Router } from "express";
+import controllers from '../../controllers';
+import middleware from '../../middlewares';
+import { Router } from 'express';
 
 const router = Router();
 
-router.get("/Get", middleware, controllers.Room.GetalltheRooms);
-router.delete("/delete/:Id", middleware, controllers.Room.deletetherooms);
+router.get('/Get', middleware, controllers.Room.GetalltheRooms);
+router.delete('/delete/:Id', middleware, controllers.Room.deletetherooms);
 export default router;

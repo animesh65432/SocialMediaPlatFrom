@@ -4,6 +4,6 @@ export interface UserAttributes {
     Email: string;
     Password: string;
     PhotoUrl?: string;
-    Gender?: "Male" | "Female";
+    Gender?: 'Male' | 'Female';
     followers?: number;
 }

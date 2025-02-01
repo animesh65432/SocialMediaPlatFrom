@@ -1,28 +1,28 @@
-import { Request, Response } from "express";
-import { RejectResponse, SuccessResponse } from "../../utils";
-import { Posts } from "../../Models";
-import database from "../../db";
-import { store_the_images_into_cloudinary, store_the_videos_into_cloudinary } from "../../utils"
-import { Users } from "../../Models"
+import { Request, Response } from 'express';
+import { RejectResponse, SuccessResponse } from '../../utils';
+import { Posts } from '../../Models';
+import database from '../../db';
+import { storetheimagesintocloudinary, storethevideosintocloudinary } from '../../utils';
+import { Users } from '../../Models';
 const createthepost = async (req: Request, res: Response) => {
   try {
     const { img, title, video } = req.body;
-    let user = req.user;
+    const user = req.user;
 
     if (!title || !user) {
-      return RejectResponse(res, "invaild credatonals", 400);
+      return RejectResponse(res, 'invaild credatonals', 400);
     }
-    let newpost
+    let newpost;
     let url;
     if (!video) {
-      url = await store_the_images_into_cloudinary(img)
+      url = await storetheimagesintocloudinary(img);
       newpost = await Posts.create({
         UserId: user.Id,
         img: url,
-        title
+        title,
       });
     } else if (!img) {
-      url = await store_the_videos_into_cloudinary(video)
+      url = await storethevideosintocloudinary(video);
       newpost = await Posts.create({
         title,
         UserId: user.Id,
@@ -32,25 +32,25 @@ const createthepost = async (req: Request, res: Response) => {
 
     return SuccessResponse(
       res,
-      { message: "sucessfully create the post", url },
-      201
+      { message: 'sucessfully create the post', url },
+      201,
     );
   } catch (error) {
-    console.log("getting errors from createing the post", error);
-    return RejectResponse(res, "internal server errors", 500);
+    console.log('getting errors from createing the post', error);
+    return RejectResponse(res, 'internal server errors', 500);
   }
 };
 const deletethepost = async (req: Request, res: Response) => {
   const t = await database.transaction();
   try {
     const { id } = req.params;
-    let UserId = req.user?.Id;
+    const UserId = req.user?.Id;
 
     if (!id || !UserId) {
-      return RejectResponse(res, "invaild credationals", 400);
+      return RejectResponse(res, 'invaild credationals', 400);
     }
 
-    let post = await Posts.findOne({
+    const post = await Posts.findOne({
       where: {
         id,
         UserId,
@@ -59,20 +59,20 @@ const deletethepost = async (req: Request, res: Response) => {
     });
 
     if (!post) {
-      return RejectResponse(res, "did not find the post", 400);
+      return RejectResponse(res, 'did not find the post', 400);
     }
     await post.destroy({ transaction: t });
     await t.commit();
     return SuccessResponse(
       res,
-      { message: "suceesfully delete the post" },
-      200
+      { message: 'suceesfully delete the post' },
+      200,
     );
   } catch (error) {
     await t.rollback();
-    console.log("getting errors from deletepost", error);
+    console.log('getting errors from deletepost', error);
 
-    return RejectResponse(res, "internal server errors", 500);
+    return RejectResponse(res, 'internal server errors', 500);
   }
 };
 const getthepost = async (req: Request, res: Response) => {
@@ -80,13 +80,13 @@ const getthepost = async (req: Request, res: Response) => {
     const posts = await Posts.findAll({
       include: {
         model: Users,
-        attributes: ["Name", "PhotoUrl", "Id"]
-      }
-    })
+        attributes: ['Name', 'PhotoUrl', 'Id'],
+      },
+    });
     return SuccessResponse(res, { data: posts }, 202);
   } catch (error) {
-    console.log("getting errors from get the posts");
-    return RejectResponse(res, "internal server errors", 5000);
+    console.log('getting errors from get the posts');
+    return RejectResponse(res, 'internal server errors', 5000);
   }
 };
 
@@ -97,7 +97,7 @@ const updatePost = async (req: Request, res: Response) => {
     const { title, video, img } = req.body;
 
     if (!title) {
-      return RejectResponse(res, "atleast change the title", 400);
+      return RejectResponse(res, 'atleast change the title', 400);
     }
 
     const post = await Posts.findOne({
@@ -109,13 +109,13 @@ const updatePost = async (req: Request, res: Response) => {
     });
 
     if (!post) {
-      return RejectResponse(res, "Post not found", 400);
+      return RejectResponse(res, 'Post not found', 400);
     }
 
     let url;
 
     if (video) {
-      url = await store_the_videos_into_cloudinary(video)
+      url = await storethevideosintocloudinary(video);
 
       if (title) {
         await post.update({ video: url, title }, { transaction: t });
@@ -123,7 +123,7 @@ const updatePost = async (req: Request, res: Response) => {
         await post.update({ video: url }, { transaction: t });
       }
     } else if (img) {
-      url = await store_the_images_into_cloudinary(img)
+      url = await storetheimagesintocloudinary(img);
       if (title) {
         await post.update({ img: url, title }, { transaction: t });
       } else {
@@ -132,11 +132,11 @@ const updatePost = async (req: Request, res: Response) => {
     }
 
     await t.commit();
-    return SuccessResponse(res, { message: "Successfully updated", url }, 202);
+    return SuccessResponse(res, { message: 'Successfully updated', url }, 202);
   } catch (error) {
     await t.rollback();
-    console.error("Error updating post:", error);
-    return RejectResponse(res, "Internal server error", 500);
+    console.error('Error updating post:', error);
+    return RejectResponse(res, 'Internal server error', 500);
   }
 };
 
