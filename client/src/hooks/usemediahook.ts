@@ -1,21 +1,18 @@
-import { useDispatch } from "react-redux";
-import { fetchUserFeed } from "../store/slices/SocketSlices";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 const useUserMedia = () => {
-  const dispatch = useDispatch();
-
+  const [stream, setstream] = useState<MediaStream | null>(null)
   const fetchUserAudio = useCallback(async () => {
     try {
-      const userStream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       });
-      dispatch(fetchUserFeed(userStream));
+      setstream(stream)
     } catch (error) {
       console.error("Error fetching user media:", error);
     }
-  }, [dispatch]);
+  }, []);
 
   const removeUserAudio = useCallback(async () => {
     try {
@@ -28,9 +25,9 @@ const useUserMedia = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch]);
+  }, []);
 
-  return { fetchUserAudio, removeUserAudio };
+  return { fetchUserAudio, removeUserAudio, stream };
 };
 
 export default useUserMedia;

@@ -4,6 +4,7 @@ type userTypes = {
   Name: string;
   Gender?: string;
   PhotoUrl: string;
+  Id: number
 };
 
 type OthersUsersTypes = {

@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { Routes, Route, Navigate } from "react-router-dom";
 import {
@@ -11,26 +11,14 @@ import {
   ResetPassword,
   Header,
   UpdateProfile,
-  Join,
-  Roomid,
+  Room,
   MobileNavbar,
-  Others
-} from "./components";
-
-
-import { createthepeer } from "./store/slices/SocketSlices";
-
+  Others,
+  CreateRoom
+} from "./components"
 const App: React.FC = () => {
   const idtoken = useSelector((state: RootState) => state.user.idtoken);
-  console.log(idtoken)
   const isLogin = !!idtoken;
-  const dispatch = useDispatch();
-  const color = useSelector((state: RootState) => state.color.color);
-  console.log(color, isLogin);
-
-  useEffect(() => {
-    dispatch(createthepeer());
-  }, [idtoken, isLogin]);
 
   return (
     <div className="bg-slate-300 font-mono h-[100vh]">
@@ -45,8 +33,8 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Profile" element={<Others />}></Route>
-            <Route path="/video" element={<Join />}></Route>
-            <Route path="/Rooms/:roomid" element={<Roomid />}></Route>
+            <Route path="/video" element={<CreateRoom />}></Route>
+            <Route path="/Rooms/:roomId" element={<Room />}></Route>
             <Route path="/updateprofile" element={<UpdateProfile />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

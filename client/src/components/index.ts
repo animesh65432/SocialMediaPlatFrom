@@ -7,10 +7,10 @@ import ResetPassword from "./ResetPassword";
 import Header from "./authenticated/Header";
 import Footer from "./authenticated/Footer";
 import UpdateProfile from "./authenticated/Profile/UpdateProfile";
-import Join from "../components/authenticated/videos/Join";
-import Roomid from "./authenticated/videos/Roomid";
+import Room from "@/components/authenticated/videos/Room";
 import MobileNavbar from "./authenticated/MobileNavbar";
 import Others from "./authenticated/Others";
+import CreateRoom from "@/components/authenticated/videos/CreateRoom"
 export {
   Singin,
   Home,
@@ -21,8 +21,8 @@ export {
   Header,
   Footer,
   UpdateProfile,
-  Join,
-  Roomid,
+  Room,
   MobileNavbar,
-  Others
+  Others,
+  CreateRoom
 };
