@@ -34,17 +34,15 @@ const SocketProvider: React.FC<props> = ({ children }) => {
         if (!peer) {
             setpeer(newpeer)
         }
+        fetchUserAudio()
         const enterroom = ({ roomId }: { roomId: string }) => {
             naviagte(`Rooms/${roomId}`)
         }
-        fetchUserAudio()
         socket.on("room-created", enterroom)
     }, [])
     useEffect(() => {
 
-
         if (!peer || !stream || !roomId) return;
-
         socket.on("user-joined", ({ peerId }) => {
             console.log(`call`, peerId)
             const call = peer.call(peerId, stream);

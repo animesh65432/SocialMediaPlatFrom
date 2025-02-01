@@ -1,29 +1,27 @@
 import { Sequelize } from 'sequelize';
 
 const database = new Sequelize(
-  'meetup', // Database name
-  'postgres', // Username
-  'new_password', // Password
+  process.env.DIRECT_URL as string,
   {
-    host: 'localhost', // Database host
-    dialect: 'postgres', // Dialect
-    logging: console.log, // Enable logging for debugging
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 60000, // Increase this value (in milliseconds)
-      idle: 10000,
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
-  },
-
+    logging: false,
+  }
 );
+const testConnection = async () => {
+  try {
+    await database.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
 
-// Test the connection
-database.authenticate()
-  .then(() => {
-    console.log('Connection to the database has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+testConnection();
+
 export default database;
