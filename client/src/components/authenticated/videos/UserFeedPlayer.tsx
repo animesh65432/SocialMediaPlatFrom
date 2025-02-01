@@ -8,8 +8,8 @@ type Props = {
 const UserFeedPlayer: React.FC<Props> = ({ stream }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(false);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
 
   useEffect(() => {
     if (videoRef.current && stream) {
@@ -50,7 +50,7 @@ const UserFeedPlayer: React.FC<Props> = ({ stream }) => {
   };
 
   return (
-    <div className="relative w-[50vw] h-[250px]  overflow-hidden rounded-lg shadow-md bg-black ">
+    <div className="relative w-[20vw] h-[25vh]  overflow-hidden rounded-lg shadow-md bg-black ">
       <video
         ref={videoRef}
         className="w-full h-full object-cover"

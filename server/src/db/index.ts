@@ -5,7 +5,7 @@ const database = new Sequelize(
   'postgres', // Username
   'new_password', // Password
   {
-    host: 'database', // Database host
+    host: 'localhost', // Database host
     dialect: 'postgres', // Dialect
     logging: console.log, // Enable logging for debugging
     pool: {

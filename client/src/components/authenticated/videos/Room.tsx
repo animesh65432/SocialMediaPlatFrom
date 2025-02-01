@@ -9,6 +9,7 @@ import { removePeerAction, resetPeersAction } from "@/Actions/PeerAction"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { frontendurl } from "@/utils"
+import YourFeedPlayer from './YourFeedPlayer'
 
 
 const Room: React.FC = () => {
@@ -63,13 +64,15 @@ const Room: React.FC = () => {
         <Input value={url}></Input>
         <Button onClick={copytheurl}>copy url</Button>
       </div>
-      <div className='flex flex-col items-center gap-4  h-[70vh] overflow- '>
-
-        <UserFeedPlayer stream={stream} />
-
-        {peers[roomId] && Object.keys(peers[roomId]).map((peerId) => (
-          <UserFeedPlayer key={peerId} stream={peers[roomId][peerId].stream} />
-        ))}
+      <div className='flex justify-between'>
+        <div> <YourFeedPlayer stream={stream} />
+          You</div>
+        <div className='flex flex-col items-center gap-4  h-[70vh] overflow-auto '>
+          Users
+          {peers[roomId] && Object.keys(peers[roomId]).map((peerId) => (
+            <UserFeedPlayer key={peerId} stream={peers[roomId][peerId].stream} />
+          ))}
+        </div>
       </div>
 
     </div>
