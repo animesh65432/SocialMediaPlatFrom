@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from "react-redux"
 import { RootState } from "@/store/index"
 import { Card } from "@/components/ui/card"
-import { Avatar } from "@mui/material"
+import { Avatar, CircularProgress } from "@mui/material"
 import { Button } from "@/components/ui/button"
 import { useUpdatefollowers } from "@/hooks/customhooks"
 const Others: React.FC = () => {
@@ -15,6 +15,11 @@ const Others: React.FC = () => {
         } catch (error) {
             console.log(error)
         }
+    }
+    if (loading) {
+        return <div className="flex items-center justify-center">
+            <CircularProgress />
+        </div>
     }
     return (
         <div className='h-[80vh] flex  items-center justify-center'>

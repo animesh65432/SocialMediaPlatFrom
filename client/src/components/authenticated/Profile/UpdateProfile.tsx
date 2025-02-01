@@ -95,7 +95,7 @@ const UpdateProfile: React.FC = () => {
               <FormField
                 control={form.control}
                 name="PhotoUrl"
-                render={({ field }) => (
+                render={({ }) => (
                   <FormItem>
                     <FormLabel>Photo</FormLabel>
                     <FormControl>

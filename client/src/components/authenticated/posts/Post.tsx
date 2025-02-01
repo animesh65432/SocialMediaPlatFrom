@@ -5,7 +5,7 @@ import { RootState } from "../../../store";
 import useDeleteThePost from "../../../hooks/useDeleteThePost";
 import useUpatePost from "../../../hooks/useUpatePost";
 import PostUpdate from "./PostUpdate";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, CircularProgress } from "@mui/material";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import { format } from "date-fns";
 import {
@@ -48,6 +48,12 @@ const Post: React.FC = () => {
   const handle_see_the_other_peoples = async (userId: number) => {
     see_the_other_peoples(userId)
     navigate(`/Profile`)
+  }
+
+  if (loading) {
+    return <div className="flex items-center justify-center">
+      <CircularProgress />
+    </div>
   }
 
   return (
