@@ -52,13 +52,13 @@ var corn_1 = __importDefault(require("./corn"));
 var utils_1 = require("./utils");
 var app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTENDURL,
     credentials: true,
 }));
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL,
+        origin: process.env.FRONTENDURL,
         credentials: true,
         methods: ['GET', 'POST'],
     },

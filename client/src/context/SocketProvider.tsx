@@ -26,7 +26,8 @@ const SocketProvider: React.FC<props> = ({ children }) => {
     const { stream, fetchUserAudio } = useUserMedia()
     const newpeer = new Peer(peerid, {
         host: 'peerserver-7lhp.onrender.com',
-        port: 443,
+        // host: "localhost",
+        // port: 9000,
         secure: true,
         path: "/myapp"
     })

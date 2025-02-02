@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize';
 const database = new Sequelize(
   process.env.DIRECT_URL as string,
   {
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: {
       ssl: {
         require: true,
@@ -11,7 +11,7 @@ const database = new Sequelize(
       },
     },
     logging: false,
-  }
+  },
 );
 const testConnection = async () => {
   try {
@@ -23,5 +23,16 @@ const testConnection = async () => {
 };
 
 testConnection();
+
+// const database = new Sequelize('meetup', 'postgres', 'new_password', {
+//   dialect: 'postgres',
+//   logging: false,
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//   },
+// });
 
 export default database;

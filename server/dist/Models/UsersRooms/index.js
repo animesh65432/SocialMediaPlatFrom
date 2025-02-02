@@ -14,5 +14,9 @@ var UserRooms = db_1.default.define('UserRooms', {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
+    peerId: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
 });
 exports.default = UserRooms;

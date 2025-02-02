@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var sequelize_1 = require("sequelize");
 var database = new sequelize_1.Sequelize(process.env.DIRECT_URL, {
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: {
         ssl: {
             require: true,
@@ -67,4 +67,14 @@ var testConnection = function () { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 testConnection();
+// const database = new Sequelize('meetup', 'postgres', 'new_password', {
+//   dialect: 'postgres',
+//   logging: false,
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//   },
+// });
 exports.default = database;

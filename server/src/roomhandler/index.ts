@@ -30,6 +30,10 @@ export const roomHandler = (socket: Socket) => {
     const t = await database.transaction();
     try {
       console.log(`new user joined in these room roomid:${roomId} peerId :${peerId} userId ${userId}`);
+      const user = await Users.findByPk(userId);
+      if (!user) {
+        throw new Error(`User with id ${userId} does not exist.`);
+      }
 
       const room = await Room.findOne({
         where: {
@@ -50,7 +54,7 @@ export const roomHandler = (socket: Socket) => {
       if (checkuserroomalredypresent) {
         throw new Error('user alredy present');
       }
-      const userrooms = await UserRooms.upsert({ roomid: roomId, userid: userId }, { transaction: t });
+      const userrooms = await UserRooms.upsert({ roomid: roomId, userid: userId, peerId }, { transaction: t });
 
 
       const users = await UserRooms.findAll({
@@ -103,12 +107,13 @@ export const roomHandler = (socket: Socket) => {
         where: {
           roomid: roomId,
           userid: userId,
+          peerId,
         },
         transaction: t,
       });
 
       const users = await UserRooms.findAll({
-        where: { roomid: roomId },
+        where: { roomid: roomId, userid: { [Op.ne]: userId } },
         include: {
           model: Users,
           attributes: ['Id', 'Name', 'PhotoUrl'],

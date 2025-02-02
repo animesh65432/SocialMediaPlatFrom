@@ -18,6 +18,11 @@ const UserRooms = database.define<UserRoomsInstance>('UserRooms', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  peerId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
 });
 
 export default UserRooms;
