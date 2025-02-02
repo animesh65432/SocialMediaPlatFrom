@@ -19,7 +19,7 @@ import { Createdummyuser } from './utils';
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTENDURL,
     credentials: true,
   }),
 );
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTENDURL,
     credentials: true,
     methods: ['GET', 'POST'],
   },
