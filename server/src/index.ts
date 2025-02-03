@@ -53,7 +53,7 @@ app.use('/Room', RoomRouter);
 job.start();
 
 database
-  .sync({ force: true })
+  .sync()
   .then(async () => {
     await Createdummyuser({
       Name: 'testname',

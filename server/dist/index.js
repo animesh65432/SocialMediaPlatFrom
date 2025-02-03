@@ -79,7 +79,7 @@ app.use('/profile', router_1.profilerouter);
 app.use('/Room', router_1.RoomRouter);
 corn_1.default.start();
 db_1.default
-    .sync({ force: true })
+    .sync()
     .then(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
