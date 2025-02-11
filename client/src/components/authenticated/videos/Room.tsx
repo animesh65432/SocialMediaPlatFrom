@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { frontendurl } from "@/utils"
 import YourFeedPlayer from './YourFeedPlayer'
+import toast, { Toaster } from "react-hot-toast";
 
 const Room: React.FC = () => {
   const { roomId } = useParams()
@@ -53,14 +54,20 @@ const Room: React.FC = () => {
     }
   }, [peer, roomId])
 
-  const copytheurl = () => {
-    seturl(`${frontendurl}/Rooms/${roomId}`)
+  const copytheurl = async () => {
+    try {
+      await navigator.clipboard.writeText(`${frontendurl}/Rooms/${roomId}`);
+      toast.success("Sucessfully copied it")
+    } catch (err) {
+      toast.error("please try again later")
+    }
+
   }
 
   return (
     <div className='h-[90vh] p-4 bg-white flex flex-col gap-2'>
       <div className='flex justify-end gap-2'>
-        <Input value={url}></Input>
+        <Input value={url} onChange={(e) => seturl(e.target.value)}></Input>
         <Button onClick={copytheurl}>copy url</Button>
       </div>
       <div className='flex justify-between'>
@@ -73,7 +80,7 @@ const Room: React.FC = () => {
           ))}
         </div>
       </div>
-
+      <Toaster />
     </div>
   )
 }
