@@ -84,7 +84,7 @@ var roomHandler = function (socket) {
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
-                    console.log(userId, "get called");
+                    console.log(userId, 'get called');
                     return [4 /*yield*/, db_1.default.transaction()];
                 case 1:
                     t = _d.sent();

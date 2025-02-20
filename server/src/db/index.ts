@@ -13,7 +13,7 @@ const database = new Sequelize(
     logging: false,
   },
 );
-
+console.log(process.env.DIRECT_URL);
 
 // const database = new Sequelize('meetup', 'postgres', 'new_password', {
 //   dialect: 'postgres',

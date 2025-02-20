@@ -37,29 +37,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var sequelize_1 = require("sequelize");
-// const database = new Sequelize(
-//   process.env.DIRECT_URL as string,
-//   {
-//     dialect: 'postgres',
-//     dialectOptions: {
-//       ssl: {
-//         require: true,
-//         rejectUnauthorized: false,
-//       },
-//     },
-//     logging: false,
-//   },
-// );
-var database = new sequelize_1.Sequelize('meetup', 'postgres', 'new_password', {
+var database = new sequelize_1.Sequelize(process.env.DIRECT_URL, {
     dialect: 'postgres',
-    logging: false,
     dialectOptions: {
         ssl: {
             require: true,
             rejectUnauthorized: false,
         },
     },
+    logging: false,
 });
+console.log(process.env.DIRECT_URL);
+// const database = new Sequelize('meetup', 'postgres', 'new_password', {
+//   dialect: 'postgres',
+//   logging: false,
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       rejectUnauthorized: false,
+//     },
+//   },
+// });
 var testConnection = function () { return __awaiter(void 0, void 0, void 0, function () {
     var error_1;
     return __generator(this, function (_a) {

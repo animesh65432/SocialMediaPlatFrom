@@ -27,7 +27,7 @@ export const roomHandler = (socket: Socket) => {
   };
 
   const joinedroom = async ({ roomId, userId, peerId }: joinedtheroomtypes) => {
-    console.log(userId, "get called")
+    console.log(userId, 'get called');
     const t = await database.transaction();
     try {
       console.log(`new user joined in these room roomid:${roomId} peerId :${peerId} userId ${userId}`);
