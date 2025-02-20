@@ -13,16 +13,7 @@ const database = new Sequelize(
     logging: false,
   },
 );
-const testConnection = async () => {
-  try {
-    await database.authenticate();
-    console.log('Database connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-};
 
-testConnection();
 
 // const database = new Sequelize('meetup', 'postgres', 'new_password', {
 //   dialect: 'postgres',
@@ -34,5 +25,15 @@ testConnection();
 //     },
 //   },
 // });
+const testConnection = async () => {
+  try {
+    await database.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+};
+
+testConnection();
 
 export default database;

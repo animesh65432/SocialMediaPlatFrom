@@ -8,7 +8,7 @@ export const peerReducer = (state: PeerState, action: PeerAction) => {
             return {
                 ...state,
                 [action.payload.roomId]: {
-                    ...state[action.payload.roomId], // Keep existing peers
+                    ...state[action.payload.roomId],
                     [action.payload.peerId]: { stream: action.payload.stream }
                 }
             };

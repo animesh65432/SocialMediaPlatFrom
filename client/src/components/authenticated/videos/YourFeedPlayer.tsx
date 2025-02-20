@@ -57,7 +57,6 @@ const YourFeedPlayer: React.FC<Props> = ({ stream }) => {
                 muted
                 autoPlay
             />
-            <audio ref={audioRef} autoPlay />
 
             <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-4">
                 <button

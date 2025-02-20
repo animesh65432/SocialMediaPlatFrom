@@ -78,17 +78,19 @@ var roomHandler = function (socket) {
         });
     }); };
     var joinedroom = function (_a) { return __awaiter(void 0, [_a], void 0, function (_b) {
-        var t, user, room, checkuserroomalredypresent, userrooms, users, error_2;
+        var t, user, room, users, error_2;
         var _c;
         var roomId = _b.roomId, userId = _b.userId, peerId = _b.peerId;
         return __generator(this, function (_d) {
             switch (_d.label) {
-                case 0: return [4 /*yield*/, db_1.default.transaction()];
+                case 0:
+                    console.log(userId, "get called");
+                    return [4 /*yield*/, db_1.default.transaction()];
                 case 1:
                     t = _d.sent();
                     _d.label = 2;
                 case 2:
-                    _d.trys.push([2, 9, , 11]);
+                    _d.trys.push([2, 8, , 10]);
                     console.log("new user joined in these room roomid:".concat(roomId, " peerId :").concat(peerId, " userId ").concat(userId));
                     return [4 /*yield*/, Models_1.Users.findByPk(userId)];
                 case 3:
@@ -106,20 +108,9 @@ var roomHandler = function (socket) {
                     room = _d.sent();
                     if (!room)
                         throw new Error('Room did not found');
-                    return [4 /*yield*/, Models_1.UserRooms.findOne({
-                            where: {
-                                roomid: roomId,
-                                userid: userId,
-                            },
-                        })];
-                case 5:
-                    checkuserroomalredypresent = _d.sent();
-                    if (checkuserroomalredypresent) {
-                        throw new Error('user alredy present');
-                    }
                     return [4 /*yield*/, Models_1.UserRooms.upsert({ roomid: roomId, userid: userId, peerId: peerId }, { transaction: t })];
-                case 6:
-                    userrooms = _d.sent();
+                case 5:
+                    _d.sent();
                     return [4 /*yield*/, Models_1.UserRooms.findAll({
                             where: {
                                 roomid: roomId,
@@ -131,7 +122,7 @@ var roomHandler = function (socket) {
                             },
                             transaction: t,
                         })];
-                case 7:
+                case 6:
                     users = _d.sent();
                     socket.join(roomId);
                     socket.on('ready', function () {
@@ -141,17 +132,17 @@ var roomHandler = function (socket) {
                     socket.emit('Get-Users', { users: users });
                     socket.to(roomId).emit('Get-Users', { userId: userId, peerId: peerId });
                     return [4 /*yield*/, t.commit()];
-                case 8:
+                case 7:
                     _d.sent();
-                    return [3 /*break*/, 11];
-                case 9:
+                    return [3 /*break*/, 10];
+                case 8:
                     error_2 = _d.sent();
                     console.error('Error in joinedroom function:', error_2);
                     return [4 /*yield*/, t.rollback()];
-                case 10:
+                case 9:
                     _d.sent();
-                    return [3 /*break*/, 11];
-                case 11: return [2 /*return*/];
+                    return [3 /*break*/, 10];
+                case 10: return [2 /*return*/];
             }
         });
     }); };

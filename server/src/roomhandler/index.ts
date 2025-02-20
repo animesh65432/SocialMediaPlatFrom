@@ -27,6 +27,7 @@ export const roomHandler = (socket: Socket) => {
   };
 
   const joinedroom = async ({ roomId, userId, peerId }: joinedtheroomtypes) => {
+    console.log(userId, "get called")
     const t = await database.transaction();
     try {
       console.log(`new user joined in these room roomid:${roomId} peerId :${peerId} userId ${userId}`);
@@ -43,18 +44,7 @@ export const roomHandler = (socket: Socket) => {
       });
 
       if (!room) throw new Error('Room did not found');
-
-      const checkuserroomalredypresent = await UserRooms.findOne({
-        where: {
-          roomid: roomId,
-          userid: userId,
-        },
-      });
-
-      if (checkuserroomalredypresent) {
-        throw new Error('user alredy present');
-      }
-      const userrooms = await UserRooms.upsert({ roomid: roomId, userid: userId, peerId }, { transaction: t });
+      await UserRooms.upsert({ roomid: roomId, userid: userId, peerId }, { transaction: t });
 
 
       const users = await UserRooms.findAll({

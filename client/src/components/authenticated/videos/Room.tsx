@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { RootState } from "@/store"
@@ -7,7 +7,6 @@ import { useUserMedia } from "@/hooks/customhooks"
 import UserFeedPlayer from "@/components/authenticated/videos/UserFeedPlayer"
 import { removePeerAction, resetPeersAction } from "@/Actions/PeerAction"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { frontendurl } from "@/utils"
 import YourFeedPlayer from './YourFeedPlayer'
 import toast, { Toaster } from "react-hot-toast";
@@ -17,8 +16,6 @@ const Room: React.FC = () => {
   const userId = useSelector((state: RootState) => state.user.user.Id)
   const { socket, peer, peers, dispatch, setroomId } = useContext(Socketcontext)
   const { fetchUserAudio, stream } = useUserMedia()
-  const [url, seturl] = useState("")
-
   if (!roomId) return
 
   console.log(userId)
@@ -64,10 +61,11 @@ const Room: React.FC = () => {
 
   }
 
+  console.log(peers)
+
   return (
     <div className='h-[90vh] p-4 bg-white flex flex-col gap-2'>
       <div className='flex justify-end gap-2'>
-        <Input value={url} onChange={(e) => seturl(e.target.value)}></Input>
         <Button onClick={copytheurl}>copy url</Button>
       </div>
       <div className='flex justify-between'>
